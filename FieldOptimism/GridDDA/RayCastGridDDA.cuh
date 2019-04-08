@@ -6,4 +6,5 @@
 
 __global__ void rayCastGridDDACore(float3 dir, HeliostatDeviceArgument helio_device_args, LayoutDeviceArgument l_args, DeviceList<int2>* d_related_grid_list, bool shadowDir);
 
+
 void rayCastGridDDA(Vector3d dir, HeliostatDeviceArgument helio_device_args, LayoutDeviceArgument l_args, DeviceList<int2>* d_related_grid_list, bool shadowDir);

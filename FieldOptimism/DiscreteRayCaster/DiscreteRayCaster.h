@@ -1,13 +1,12 @@
 #pragma once
 #include "../DataStructure/SolarScene.h"
-
+#include "../GridDDA/GridDDA.h"
+#include "RayCasterCore.cuh"
 
 class DiscreteRayCaster {
 public:
-	DiscreteRayCaster(SolarScene* _solar_scene) :solar_scene(_solar_scene) {}
 	void clearArguments();
-	void rayCasting();
+	void rayCasting(SolarScene* solar_sene);
 
 private:
-	SolarScene* solar_scene;
 };

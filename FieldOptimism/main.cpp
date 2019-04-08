@@ -2,7 +2,7 @@
 #include "./sdbkCalculator/sdbkCalculator.h"
 #include "./DataStructure/SunRay.h"
 #include "./LSPIA/LSF.h"
-#include "./GridDDA/GridDDA.h"
+#include "./DiscreteRayCaster/DiscreteRayCaster.h"
 #include "./DataStructure/Timer.h"
 
 
@@ -71,9 +71,10 @@ int main(int argc, char** argv) {
 	// test gpu dda
 	sunray_dir = sunray.changeSunRay({ 3, 21, 8, 0 });
 	solar_scene->changeSolarScene(sunray_dir);
-	GridDDA ddaHandler;
-	ddaHandler.testHandler(solar_scene);
-
+	//GridDDA ddaHandler;
+	//ddaHandler.testHandler(solar_scene);
+	DiscreteRayCaster rayCaster;
+	rayCaster.rayCasting(solar_scene);
 
 	SdBkCalcCreator sdbk_calc_creator;
 	SdBkCalc* sdbk_calc = sdbk_calc_creator.getSdBkCalc(solar_scene, gl);

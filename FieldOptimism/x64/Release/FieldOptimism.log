@@ -1,81 +1,16 @@
-﻿  Compiling CUDA source file GridDDA\RayCastGridDDA.cu...
-  
-  E:\xjYuan\003 ZJU\002 Solar\004 Codes\190326_Solar\FieldOptimism\FieldOptimism>"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v10.1\bin\nvcc.exe" -gencode=arch=compute_35,code=\"sm_35,compute_35\" --use-local-env -ccbin "D:\Visual Studio\VC\bin\x86_amd64" -x cu  -I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v10.1\include" -I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v10.1\include"     --keep-dir x64\Release -maxrregcount=0  --machine 64 --compile -cudart static --expt-relaxed-constexpr    -DWIN32 -DWIN64 -DNDEBUG -D_CONSOLE -D_MBCS -Xcompiler "/EHsc /W3 /nologo /O2 /Fdx64\Release\vc140.pdb /FS /Zi  /MD " -o x64\Release\RayCastGridDDA.cu.obj "E:\xjYuan\003 ZJU\002 Solar\004 Codes\190326_Solar\FieldOptimism\FieldOptimism\GridDDA\RayCastGridDDA.cu" 
-c:\program files\nvidia gpu computing toolkit\cuda\v10.1\include\crt\math_functions.h : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
-c:\program files\nvidia gpu computing toolkit\cuda\v10.1\include\crt\math_functions.h(825): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
-c:\program files\nvidia gpu computing toolkit\cuda\v10.1\include\crt\math_functions.h(1760): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
-c:\program files\nvidia gpu computing toolkit\cuda\v10.1\include\crt\math_functions.h(2622): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
-c:\program files\nvidia gpu computing toolkit\cuda\v10.1\include\crt\math_functions.h(3461): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
-c:\program files\nvidia gpu computing toolkit\cuda\v10.1\include\crt\math_functions.h(4404): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
-c:\program files\nvidia gpu computing toolkit\cuda\v10.1\include\crt\math_functions.h(5302): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
-c:\program files\nvidia gpu computing toolkit\cuda\v10.1\include\crt\math_functions.h(6213): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
-c:\program files\nvidia gpu computing toolkit\cuda\v10.1\include\crt\math_functions.h(7094): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
-c:\program files\nvidia gpu computing toolkit\cuda\v10.1\include\crt\math_functions.h(7893): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
-c:\program files\nvidia gpu computing toolkit\cuda\v10.1\include\crt/device_functions.h : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
-c:\program files\nvidia gpu computing toolkit\cuda\v10.1\include\crt/device_functions.h(774): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
-c:\program files\nvidia gpu computing toolkit\cuda\v10.1\include\crt/device_functions.h(1629): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
-c:\program files\nvidia gpu computing toolkit\cuda\v10.1\include\crt\device_double_functions.h : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
-c:\program files\nvidia gpu computing toolkit\cuda\v10.1\include\sm_20_intrinsics.h : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
-c:\program files\nvidia gpu computing toolkit\cuda\v10.1\include\sm_20_intrinsics.h(926): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
-C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v10.1\include\cuda_fp16.h : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
-e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\3rdparty\eigen\src/Core/arch/CUDA/Half.h(302): warning : calling a __host__ function from a __host__ __device__ function is not allowed
-e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\3rdparty\eigen\src/Core/arch/CUDA/Half.h(305): warning : calling a __host__ function from a __host__ __device__ function is not allowed
-e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\3rdparty\eigen\src/Core/products/Parallelizer.h(20): warning : variable "m_maxThreads" was set but never used
-e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\3rdparty\eigen\src/Core/ArrayWrapper.h(94): warning : __declspec attributes ignored
-e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\../DataStructure/Heliostat.h(40): warning : delete of pointer to incomplete class
-E:/xjYuan/003 ZJU/002 Solar/004 Codes/190326_Solar/FieldOptimism/FieldOptimism/GridDDA/RayCastGridDDA.cu(42): warning : variable "helio_col" was declared but never referenced
-E:/xjYuan/003 ZJU/002 Solar/004 Codes/190326_Solar/FieldOptimism/FieldOptimism/GridDDA/RayCastGridDDA.cu(43): warning : variable "helio_row" was declared but never referenced
-e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\3rdparty\eigen\src/Core/AssignEvaluator.h(836): warning : calling a __host__ function from a __host__ __device__ function is not allowed
-e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\3rdparty\eigen\src/Core/AssignEvaluator.h(836): warning : calling a __host__ function from a __host__ __device__ function is not allowed
-c:\program files\nvidia gpu computing toolkit\cuda\v10.1\include\crt\math_functions.h : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
-c:\program files\nvidia gpu computing toolkit\cuda\v10.1\include\crt\math_functions.h(825): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
-c:\program files\nvidia gpu computing toolkit\cuda\v10.1\include\crt\math_functions.h(1760): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
-c:\program files\nvidia gpu computing toolkit\cuda\v10.1\include\crt\math_functions.h(2622): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
-c:\program files\nvidia gpu computing toolkit\cuda\v10.1\include\crt\math_functions.h(3461): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
-c:\program files\nvidia gpu computing toolkit\cuda\v10.1\include\crt\math_functions.h(4404): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
-c:\program files\nvidia gpu computing toolkit\cuda\v10.1\include\crt\math_functions.h(5302): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
-c:\program files\nvidia gpu computing toolkit\cuda\v10.1\include\crt\math_functions.h(6213): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
-c:\program files\nvidia gpu computing toolkit\cuda\v10.1\include\crt\math_functions.h(7094): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
-c:\program files\nvidia gpu computing toolkit\cuda\v10.1\include\crt\math_functions.h(7893): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
-c:\program files\nvidia gpu computing toolkit\cuda\v10.1\include\crt/device_functions.h : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
-c:\program files\nvidia gpu computing toolkit\cuda\v10.1\include\crt/device_functions.h(774): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
-c:\program files\nvidia gpu computing toolkit\cuda\v10.1\include\crt/device_functions.h(1629): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
-c:\program files\nvidia gpu computing toolkit\cuda\v10.1\include\crt\device_double_functions.h : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
-c:\program files\nvidia gpu computing toolkit\cuda\v10.1\include\sm_20_intrinsics.h : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
-c:\program files\nvidia gpu computing toolkit\cuda\v10.1\include\sm_20_intrinsics.h(926): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
-C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v10.1\include\cuda_fp16.h : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
-e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\3rdparty\eigen\src/Core/ArrayWrapper.h(94): warning : __declspec attributes ignored
-e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\../DataStructure/Heliostat.h(40): warning : delete of pointer to incomplete class
-  RayCastGridDDA.cu
-  host_defines.h is an internal header file and must not be used directly.  This file will be removed in a future CUDA release.  Please use cuda_runtime_api.h or cuda_runtime.h instead.
-e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\../Common/global_function.cuh(120): warning C4267: “初始化”: 从“size_t”转换到“int”，可能丢失数据
-e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\../Common/global_function.cuh(175): warning C4244: “参数”: 从“const double”转换到“float”，可能丢失数据
-e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\../Common/global_function.cuh(179): warning C4244: “参数”: 从“const double”转换到“float”，可能丢失数据
+﻿  RayCastingArgument.cpp
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\../Common/global_function.cuh(27): warning C4244: “参数”: 从“const double”转换到“float”，可能丢失数据
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\../Common/global_function.cuh(31): warning C4244: “参数”: 从“const double”转换到“float”，可能丢失数据
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\../Common/global_function.cuh(50): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\../Common/global_function.cuh(164): warning C4267: “初始化”: 从“size_t”转换到“int”，可能丢失数据
 e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\../DataStructure/Heliostat.h(40): warning C4150: 删除指向不完整“SubHelio”类型的指针；没有调用析构函数
   e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\../DataStructure/Heliostat.h(19): note: 参见“SubHelio”的声明
-c:\program files\nvidia gpu computing toolkit\cuda\v10.1\include\crt\math_functions.h : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
-c:\program files\nvidia gpu computing toolkit\cuda\v10.1\include\crt\math_functions.h(825): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
-c:\program files\nvidia gpu computing toolkit\cuda\v10.1\include\crt\math_functions.h(1760): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
-c:\program files\nvidia gpu computing toolkit\cuda\v10.1\include\crt\math_functions.h(2622): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
-c:\program files\nvidia gpu computing toolkit\cuda\v10.1\include\crt\math_functions.h(3461): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
-c:\program files\nvidia gpu computing toolkit\cuda\v10.1\include\crt\math_functions.h(4404): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
-c:\program files\nvidia gpu computing toolkit\cuda\v10.1\include\crt\math_functions.h(5302): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
-c:\program files\nvidia gpu computing toolkit\cuda\v10.1\include\crt\math_functions.h(6213): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
-c:\program files\nvidia gpu computing toolkit\cuda\v10.1\include\crt\math_functions.h(7094): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
-c:\program files\nvidia gpu computing toolkit\cuda\v10.1\include\crt\math_functions.h(7893): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
-  GridDDA_cpu.cpp
-e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\../Common/global_function.cuh(120): warning C4267: “初始化”: 从“size_t”转换到“int”，可能丢失数据
-e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\../Common/global_function.cuh(175): warning C4244: “参数”: 从“const double”转换到“float”，可能丢失数据
-e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\../Common/global_function.cuh(179): warning C4244: “参数”: 从“const double”转换到“float”，可能丢失数据
-e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\../DataStructure/Heliostat.h(40): warning C4150: 删除指向不完整“SubHelio”类型的指针；没有调用析构函数
-  e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\../DataStructure/Heliostat.h(19): note: 参见“SubHelio”的声明
-GridDDA\GridDDA_cpu.cpp(16): warning C4101: “t”: 未引用的局部变量
-GridDDA\GridDDA_cpu.cpp(78): warning C4101: “t”: 未引用的局部变量
+RayCastingArgument\RayCastingArgument.cpp(55): warning C4267: “=”: 从“size_t”转换到“int”，可能丢失数据
     正在创建库 E:\xjYuan\003 ZJU\002 Solar\004 Codes\190326_Solar\FieldOptimism\x64\Release\FieldOptimism.lib 和对象 E:\xjYuan\003 ZJU\002 Solar\004 Codes\190326_Solar\FieldOptimism\x64\Release\FieldOptimism.exp
   正在生成代码
-  145 of 5566 functions ( 2.6%) were compiled, the rest were copied from previous compilation.
-    0 functions were new in current compilation
-    36 functions had inline decision re-evaluated but remain unchanged
+  28 of 5458 functions ( 0.5%) were compiled, the rest were copied from previous compilation.
+    3 functions were new in current compilation
+    17 functions had inline decision re-evaluated but remain unchanged
   已完成代码的生成
   FieldOptimism.vcxproj -> E:\xjYuan\003 ZJU\002 Solar\004 Codes\190326_Solar\FieldOptimism\x64\Release\FieldOptimism.exe
   FieldOptimism.vcxproj -> E:\xjYuan\003 ZJU\002 Solar\004 Codes\190326_Solar\FieldOptimism\x64\Release\FieldOptimism.pdb (Full PDB)

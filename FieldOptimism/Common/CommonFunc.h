@@ -17,11 +17,13 @@ using namespace std;
 #include "../3rdparty/Eigen/Core"
 #include "../3rdparty/Eigen/LU"
 //#include "../3rdparty/Eigen/Geometry"
-#include "../3rdparty/Eigen_dev/src/Geometry/OrthoMethods.h"
+#include "../3rdparty/Eigen/src/Geometry/OrthoMethods.h"
 using namespace Eigen;
 
-#include "cuda_runtime.h"
+//#include "cuda_runtime.h"
+#include "../Common/vector_arithmetic.cuh"
 #include <device_launch_parameters.h>
+#include <device_atomic_functions.h>
 
 
 #define Epsilon		1e-6

@@ -23,12 +23,38 @@ namespace GeometryFunc
 
 	}
 
-	inline double calcIntersection(const Vector3d& normal, const Vector3d& origin_p, const Vector3d& v, const Vector3d& dir, Vector3d& inter_v) {
-		double div = dir.dot(normal);
-		double t = (origin_p - v).dot(normal) / div;
+	inline float3 convert3(const Vector3d& a) {
+		return make_float3(a.x(), a.y(), a.z());
+	}
+
+	inline float2 convert2(const Vector2d& a) {
+		return make_float2(a.x(), a.y());
+	}
+
+	inline int2 convert2(const Vector2i& a) {
+		return make_int2(a.x(), a.y());
+	}
+
+	inline Vector2d fminf(const Vector2d& a, const Vector2d& b) {
+		return Vector2d(min(a.x(), b.x()), min(a.y(), b.y()));
+	}
+
+	inline Vector2d fmaxf(const Vector2d& a, const Vector2d& b) {
+		return Vector2d(max(a.x(), b.x()), max(a.y(), b.y()));
+	}
+
+	__device__ __host__
+		inline double calcIntersection(float3& normal, float3& origin, float3& v, float3& dir, float3& inter_v) {
+		double div = dot(dir, normal);
+		double t = dot(origin - v, normal) / div;
 		inter_v = v + dir*t;
 		return t;
 	}
+
+	inline double calcIntersection(const Vector3d& normal, const Vector3d& origin_p, const Vector3d& v, const Vector3d& dir, Vector3d& inter_v) {
+		return calcIntersection(convert3(normal), convert3(origin_p), convert3(v), convert3(dir), convert3(inter_v));
+	}
+
 
 	inline bool inProjArea(const vector<Vector3d>& v, const Vector3d& p) {
 		Vector3d pre_n, cur_n, edg, line;
@@ -41,6 +67,24 @@ namespace GeometryFunc
 			}
 			cur_n = edg.cross(line);
 			if (pre_n.dot(cur_n) < Epsilon)
+				return false;
+			pre_n = cur_n;
+		}
+		return true;
+	}
+
+	__device__ __host__ 
+	inline bool inProjArea(const float3* v, const float3& p) {
+		float3 pre_n, cur_n, edg, line;
+		for (int l = 0; l < 4; l++) {
+			edg = v[(l + 1) % 4] - v[l];
+			line = p - v[l];
+			if (l == 0) {
+				pre_n = cross(edg, line);
+				continue;
+			}
+			cur_n = cross(edg, line);
+			if (dot(pre_n, cur_n) < Epsilon)
 				return false;
 			pre_n = cur_n;
 		}
@@ -171,17 +215,6 @@ namespace GeometryFunc
 		return a < b ? b : a;
 	}
 
-	inline float3 convert3(const Vector3d& a) {
-		return make_float3(a.x(), a.y(), a.z());
-	}
-
-	inline float2 convert2(const Vector2d& a) {
-		return make_float2(a.x(), a.y());
-	}
-
-	inline int2 convert2(const Vector2i& a) {
-		return make_int2(a.x(), a.y());
-	}
 	
 };
 

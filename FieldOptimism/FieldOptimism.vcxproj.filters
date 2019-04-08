@@ -10,6 +10,9 @@
     <CudaCompile Include="GridDDA\RayCastGridDDA.cu">
       <Filter>GridDDA</Filter>
     </CudaCompile>
+    <CudaCompile Include="DiscreteRayCaster\RayCasterCore.cu">
+      <Filter>DiscreteRayCaster</Filter>
+    </CudaCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Common">
@@ -100,6 +103,9 @@
     </ClInclude>
     <ClInclude Include="Common\vector_arithmetic.cuh">
       <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="DiscreteRayCaster\RayCasterCore.cuh">
+      <Filter>DiscreteRayCaster</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

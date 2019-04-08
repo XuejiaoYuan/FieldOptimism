@@ -12,13 +12,13 @@ public:
 	DeviceList(int _list_size = DEVICE_LIST_SIZE) :d_list(nullptr), backup_list(nullptr), listLength(0), listSize(_list_size) {
 		if (_list_size <= 0)
 			listSize = DEVICE_LIST_SIZE;
-		//cudaMallocManaged(&d_list, listSize * sizeof(T));
-		cudaMalloc((void**)&d_list, listSize * sizeof(T));
+		cudaMallocManaged(&d_list, listSize * sizeof(T));
+		//cudaMalloc((void**)&d_list, listSize * sizeof(T));
 	};
 	void mallocBackupSpace(int _backup_size = DEVICE_BACKUP_SIZE) {
 		if (!backup_list) {
-			//cudaMallocManaged(&backup_list, _backup_size * sizeof(T));
-			cudaMalloc((void**)&backup_list, _backup_size * sizeof(T));
+			cudaMallocManaged(&backup_list, _backup_size * sizeof(T));
+			//cudaMalloc((void**)&backup_list, _backup_size * sizeof(T));
 			backupSize = _backup_size;
 		}
 	};
@@ -35,8 +35,8 @@ public:
 	}
 	void* operator new(size_t size) {
 		void * ptr;
-		//cudaMallocManaged(&ptr, size);
-		cudaMalloc((void**)&ptr, size);
+		cudaMallocManaged(&ptr, size);
+		//cudaMalloc((void**)&ptr, size);
 		return ptr;
 	}
 	void operator delete(void* ptr) {
@@ -45,8 +45,8 @@ public:
 	}
 	void* operator new[](size_t size) {
 		void* ptr;
-		//cudaMallocManaged(&ptr, size);
-		cudaMalloc((void**)&ptr, size);
+		cudaMallocManaged(&ptr, size);
+		//cudaMalloc((void**)&ptr, size);
 		return ptr;
 	}
 		void operator delete[](void* ptr) {
