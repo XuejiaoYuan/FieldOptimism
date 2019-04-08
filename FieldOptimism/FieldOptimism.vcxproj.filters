@@ -1,0 +1,150 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <CudaCompile Include="sdbkCalculator\skbkCalculator.cu">
+      <Filter>SdBkCalculator</Filter>
+    </CudaCompile>
+    <CudaCompile Include="DataStructure\DeviceList.cu">
+      <Filter>DataStructure</Filter>
+    </CudaCompile>
+    <CudaCompile Include="GridDDA\RayCastGridDDA.cu">
+      <Filter>GridDDA</Filter>
+    </CudaCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Common">
+      <UniqueIdentifier>{c41a8ca0-f1f7-409b-bbbf-e91775dc3c0b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DataStructure">
+      <UniqueIdentifier>{efddbb5a-f866-4b6c-82e9-321226a566ff}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GaussLegendre">
+      <UniqueIdentifier>{998796af-076f-4e79-9853-62d635f8ead2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="SdBkCalculator">
+      <UniqueIdentifier>{acbaae4e-6b46-4b72-99f4-7641e91dd241}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DataStructure\Clipper">
+      <UniqueIdentifier>{7db42207-2033-4467-b99f-5c5bf7a16525}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DiscreteRayCaster">
+      <UniqueIdentifier>{07ebda66-1407-4c1d-921d-8e742026db65}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GridDDA">
+      <UniqueIdentifier>{0d0db5ad-7a3e-4a91-9b24-124fa518c313}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="RayCastingArgument">
+      <UniqueIdentifier>{64643333-159f-4579-b6b4-a73bc94d94fc}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="DataStructure\Clipper\clipper.hpp">
+      <Filter>DataStructure\Clipper</Filter>
+    </ClInclude>
+    <ClInclude Include="DataStructure\Timer.h">
+      <Filter>DataStructure</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\CommonFunc.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\utils.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="DataStructure\Heliostat.h">
+      <Filter>DataStructure</Filter>
+    </ClInclude>
+    <ClInclude Include="DataStructure\Layout.h">
+      <Filter>DataStructure</Filter>
+    </ClInclude>
+    <ClInclude Include="DataStructure\LsfFieldSegment.h">
+      <Filter>DataStructure</Filter>
+    </ClInclude>
+    <ClInclude Include="DataStructure\Receiver.h">
+      <Filter>DataStructure</Filter>
+    </ClInclude>
+    <ClInclude Include="DataStructure\SolarScene.h">
+      <Filter>DataStructure</Filter>
+    </ClInclude>
+    <ClInclude Include="DataStructure\SPA.h">
+      <Filter>DataStructure</Filter>
+    </ClInclude>
+    <ClInclude Include="DataStructure\SunRay.h">
+      <Filter>DataStructure</Filter>
+    </ClInclude>
+    <ClInclude Include="GaussLegendre\GaussLegendre.h">
+      <Filter>GaussLegendre</Filter>
+    </ClInclude>
+    <ClInclude Include="sdbkCalculator\sdbkCalculator.h">
+      <Filter>SdBkCalculator</Filter>
+    </ClInclude>
+    <ClInclude Include="sdbkCalculator\sdbkCalculator.cuh">
+      <Filter>SdBkCalculator</Filter>
+    </ClInclude>
+    <ClInclude Include="DiscreteRayCaster\DiscreteRayCaster.h">
+      <Filter>DiscreteRayCaster</Filter>
+    </ClInclude>
+    <ClInclude Include="GridDDA\GridDDA.h">
+      <Filter>GridDDA</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\global_function.cuh">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="RayCastingArgument\RayCastingArgument.h">
+      <Filter>RayCastingArgument</Filter>
+    </ClInclude>
+    <ClInclude Include="GridDDA\RayCastGridDDA.cuh">
+      <Filter>GridDDA</Filter>
+    </ClInclude>
+    <ClInclude Include="DataStructure\DeviceList.cuh">
+      <Filter>DataStructure</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\vector_arithmetic.cuh">
+      <Filter>Common</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="DataStructure\Clipper\clipper.cpp">
+      <Filter>DataStructure\Clipper</Filter>
+    </ClCompile>
+    <ClCompile Include="DataStructure\Timer.cpp">
+      <Filter>DataStructure</Filter>
+    </ClCompile>
+    <ClCompile Include="DataStructure\Heliostat.cpp">
+      <Filter>DataStructure</Filter>
+    </ClCompile>
+    <ClCompile Include="DataStructure\Layout.cpp">
+      <Filter>DataStructure</Filter>
+    </ClCompile>
+    <ClCompile Include="DataStructure\LsfFieldSegment.cpp">
+      <Filter>DataStructure</Filter>
+    </ClCompile>
+    <ClCompile Include="DataStructure\Receiver.cpp">
+      <Filter>DataStructure</Filter>
+    </ClCompile>
+    <ClCompile Include="DataStructure\SolarScene.cpp">
+      <Filter>DataStructure</Filter>
+    </ClCompile>
+    <ClCompile Include="DataStructure\SPA.cpp">
+      <Filter>DataStructure</Filter>
+    </ClCompile>
+    <ClCompile Include="DataStructure\SunRay.cpp">
+      <Filter>DataStructure</Filter>
+    </ClCompile>
+    <ClCompile Include="GaussLegendre\GaussLegendre.cpp">
+      <Filter>GaussLegendre</Filter>
+    </ClCompile>
+    <ClCompile Include="sdbkCalculator\sdbkCalculator.cpp">
+      <Filter>SdBkCalculator</Filter>
+    </ClCompile>
+    <ClCompile Include="DiscreteRayCaster\DiscreteRayCaster.cpp">
+      <Filter>DiscreteRayCaster</Filter>
+    </ClCompile>
+    <ClCompile Include="RayCastingArgument\RayCastingArgument.cpp">
+      <Filter>RayCastingArgument</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="GridDDA\GridDDA_cpu.cpp">
+      <Filter>GridDDA</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

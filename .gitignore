@@ -30,3 +30,9 @@
 *.exe
 *.out
 *.app
+
+FieldOptimism/crossField_res/
+FieldOptimism/fermatField_res/
+FieldOptimism/matlab/
+FieldOptimism/SdBkRes/
+
