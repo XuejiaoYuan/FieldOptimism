@@ -1,5 +1,4 @@
 #include "GridDDA.h"
-#include "RayCastGridDDA.cuh"
 
 
 void GridDDA::predictRelatedHelio(SolarScene* solar_scene, HeliostatDeviceArgument& h_args, bool shadowDir)
@@ -8,9 +7,6 @@ void GridDDA::predictRelatedHelio(SolarScene* solar_scene, HeliostatDeviceArgume
 	Vector3d &sunray_dir = solar_scene->sunray_dir;
 	vector<Heliostat*>& helios = solar_scene->helios;
 	int* h_rela_index = new int[helios.size()*h_args.helio_list_size];
-	//DeviceList<int>*& d_related_index = shadowDir ? d_shadow_related_index : d_block_related_index;
-	//if (!d_related_index)
-	//	d_related_index = new DeviceList<int>[h_args.numberOfHeliostats];
 
 	// 1. 計算定日鏡的相關定日鏡
 	Timer t;
@@ -18,10 +14,8 @@ void GridDDA::predictRelatedHelio(SolarScene* solar_scene, HeliostatDeviceArgume
 	for (int i = 0; i < helios.size(); ++i) {
 		unordered_set<int> helio_label;
 		rayCastGridDDA(solar_scene, helios[i], -sunray_dir, helio_label, shadowDir);
-		//d_related_index[i].listLength = 0;
 		int j = 0;
 		for (auto& iter : helio_label) {
-			//d_related_index[i].d_list[d_related_index[i].listLength++] = iter;
 			h_rela_index[i*h_args.helio_list_size + j] = iter;
 			++j;
 		}
@@ -37,8 +31,8 @@ void GridDDA::predictRelatedHelio(SolarScene* solar_scene, HeliostatDeviceArgume
 	cudaMemcpy(d_rela_index, h_rela_index, sizeof(int)*helios.size()*h_args.helio_list_size, cudaMemcpyHostToDevice);
 	t.printDuration("copy data");
 
-	string fileName = shadowDir ? "SdBkRes/DDA_shadow" : "SdBkRes/DDA_block";
-	saveTestRes(fileName, h_args.numberOfHeliostats, h_rela_index, h_args.helio_list_size);
+	//string fileName = shadowDir ? "SdBkRes/DDA_shadow" : "SdBkRes/DDA_block";
+	//saveTestRes(fileName, h_args.numberOfHeliostats, h_rela_index, h_args.helio_list_size);
 	delete[] h_rela_index;
 }
 
@@ -60,26 +54,8 @@ void GridDDA::testHandler(SolarScene* solar_scene)
 	Timer t;
 	HeliostatDeviceArgument h_args;
 	h_args.setHelioDeviceOrigins(100, 100);		// 第一次调用cuda程序耗时较长
-	t.printDuration("set origins");
-
-	t.resetStart();
 	h_args.setHelioDevicePos(solar_scene->helios);
-	t.printDuration("set pos");
-
-	t.resetStart();
 	h_args.setHelioDeviceArguments(solar_scene->helios);
-	t.printDuration("set helio device argument");
-
-	t.resetStart();
-	auto layout = solar_scene->layouts[0];
-	LayoutDeviceArgument l_args(
-		GeometryFunc::convert3(layout->layout_size), 
-		GeometryFunc::convert3(layout->layout_bound_pos),
-		GeometryFunc::convert3(layout->helio_interval),
-		GeometryFunc::convert3(layout->layout_first_helio_center), 
-		GeometryFunc::convert2(layout->layout_row_col)
-	);
-	t.printDuration("set layout device argument");
 
 	predictRelatedHelio(solar_scene, h_args, true);
 	predictRelatedHelio(solar_scene, h_args, false);

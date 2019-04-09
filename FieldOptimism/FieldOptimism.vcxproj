@@ -87,8 +87,6 @@
   <ItemGroup>
     <CudaCompile Include="DataStructure\DeviceList.cu" />
     <CudaCompile Include="DiscreteRayCaster\RayCasterCore.cu" />
-    <CudaCompile Include="GridDDA\RayCastGridDDA.cu" />
-    <CudaCompile Include="sdbkCalculator\skbkCalculator.cu" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Common\CommonFunc.h" />
@@ -109,9 +107,7 @@
     <ClInclude Include="DiscreteRayCaster\RayCasterCore.cuh" />
     <ClInclude Include="GaussLegendre\GaussLegendre.h" />
     <ClInclude Include="GridDDA\GridDDA.h" />
-    <ClInclude Include="GridDDA\RayCastGridDDA.cuh" />
     <ClInclude Include="RayCastingArgument\RayCastingArgument.h" />
-    <ClInclude Include="sdbkCalculator\sdbkCalculator.cuh" />
     <ClInclude Include="sdbkCalculator\sdbkCalculator.h" />
   </ItemGroup>
   <ItemGroup>

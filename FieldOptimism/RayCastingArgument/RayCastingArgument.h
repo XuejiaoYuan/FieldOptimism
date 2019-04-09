@@ -20,12 +20,12 @@ public:
 	int helio_list_size;	
 	float2 helio_size;
 	HeliostatDeviceArgument() : d_helio_origins(nullptr), d_helio_normals(nullptr), d_helio_vertexes(nullptr), d_helio_pos(nullptr),
-		d_rela_shadow_helio_index(nullptr), d_rela_block_helio_index(nullptr),
+		d_rela_shadow_helio_index(nullptr), d_rela_block_helio_index(nullptr), d_hit_cnt(nullptr),
 		numberOfHeliostats(0), numberOfOrigions(HELIOSTAT_SLICE_LENGTH* HELIOSTAT_SLICE_WIDTH), 
 		helio_slice_length(HELIOSTAT_SLICE_LENGTH), helio_slice_width(HELIOSTAT_SLICE_WIDTH), helio_list_size(DEVICE_LIST_SIZE){}
 	HeliostatDeviceArgument(int nOfHelios, int slice_length, int slice_width, float2& helio_size, int helio_list_size):
 		d_helio_origins(nullptr), d_helio_normals(nullptr), d_helio_vertexes(nullptr), d_helio_pos(nullptr),
-		d_rela_shadow_helio_index(nullptr), d_rela_block_helio_index(nullptr),
+		d_rela_shadow_helio_index(nullptr), d_rela_block_helio_index(nullptr), d_hit_cnt(nullptr),
 		numberOfHeliostats(nOfHelios), numberOfOrigions(slice_length*slice_width), 
 		helio_slice_length(slice_length), helio_slice_width(slice_width), helio_size(helio_size), helio_list_size(helio_list_size) {}
 	void setHelioDeviceOrigins(const int slice_length, const int slice_width);

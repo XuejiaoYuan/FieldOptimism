@@ -12,13 +12,17 @@ vector<double> rayCastCore(Vector3d sunray_dir, HeliostatDeviceArgument& h_args)
 
 	GeometryFunc::setThreadsBlocks(nBlocks, nThreads, h_args.numberOfHeliostats * h_args.numberOfOrigions);
 	rayCollisionCalc << <nBlocks, nThreads >> > (GeometryFunc::convert3(sunray_dir), h_args);
+	cudaDeviceSynchronize();
+
 	cudaMemcpy(h_hit_cnt, h_args.d_hit_cnt, sizeof(unsigned int)*h_args.numberOfHeliostats, cudaMemcpyDeviceToHost);
 
 	vector<double> sdbk_res;
-
-	for (int i = 0; i < h_args.numberOfHeliostats; ++i) {
+	for (int i = 0; i < h_args.numberOfHeliostats; ++i)
 		sdbk_res.push_back(h_hit_cnt[i] / (double)h_args.numberOfOrigions);
-	}
+
+	delete[] h_hit_cnt;
+	cudaFree(h_args.d_hit_cnt);
+	h_args.d_hit_cnt = nullptr;
 	return sdbk_res;
 }
 
@@ -40,7 +44,7 @@ __global__ void rayCollisionCalc(float3 ray_dir, HeliostatDeviceArgument h_args)
 
 	float3 rowGap = (vertexes[1] - vertexes[0]) / h_args.helio_slice_length;
 	float3 colGap = (vertexes[3] - vertexes[0]) / h_args.helio_slice_width;
-	float3 originPos = vertexes[0] + originRowCol.x*rowGap + originRowCol.y*colGap;
+	float3 originPos = vertexes[0] + (0.5+originRowCol.x)*rowGap + (0.5+originRowCol.y)*colGap;
 
 	if (collision(helioIndex, originPos, ray_dir, h_args, true))
 		return;
@@ -65,8 +69,7 @@ __device__ bool collision(int helioIndex, float3 originPos, float3 sunray_dir, H
 			double t = GeometryFunc::calcIntersection(relaNormal, relaPos, originPos, ray_dir, inter_v);
 			if (t < Epsilon) continue;
 			if (GeometryFunc::inProjArea(&h_args.d_helio_vertexes[4 * relaIndex], inter_v)) {
-				atomicAdd(h_args.d_hit_cnt + helioIndex, 1);
-				__syncthreads();
+				atomicAdd(&(h_args.d_hit_cnt[helioIndex]), 1);
 				return true;
 			}
 		}

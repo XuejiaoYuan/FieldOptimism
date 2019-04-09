@@ -9,25 +9,14 @@ void HeliostatDeviceArgument::setHelioDeviceOrigins(const int width_slice, const
 		(d_helio_origins && numberOfOrigions != helio_slice_length * helio_slice_width)) {
 		if(d_helio_origins) cudaFree(d_helio_origins);
 		numberOfOrigions = helio_slice_length * helio_slice_width;
-		//cudaMallocManaged(&d_helio_origins, sizeof(float3)*numberOfOrigions);
-		//cudaMalloc((void**)&d_helio_origins, sizeof(float3)*numberOfOrigions);
 		cudaMalloc((void**)&d_helio_origins, sizeof(int2)*numberOfOrigions);
 	}
 
-	//double length_interval = helio_size.x / helio_slice_length;
-	//double width_interval = helio_size.y / helio_slice_width;
-
-	//double start_x = -helio_size.x / 2.0;
-	//double start_y = -helio_size.y / 2.0;
-	//float3* host_origins = new float3[numberOfOrigions];
 	int2* host_origins = new int2[numberOfOrigions];
 	for (int i = 0; i < helio_slice_length; ++i)
 		for (int j = 0; j < helio_slice_width; ++j)
-			//d_helio_origins[i*helio_slice_width + j] = make_float3(start_x + i*length_interval, start_y + j*width_interval, 0);
-			//host_origins[i*helio_slice_width + j] = make_float3(start_x + i*length_interval, start_y + j*width_interval, 0);
 			host_origins[i*helio_slice_width + j] = make_int2(i, j);
 
-	//cudaMemcpy(d_helio_origins, host_origins, sizeof(float3)*numberOfOrigions, cudaMemcpyHostToDevice);
 	cudaMemcpy(d_helio_origins, host_origins, sizeof(int2)*numberOfOrigions, cudaMemcpyHostToDevice);
 
 	delete[] host_origins;

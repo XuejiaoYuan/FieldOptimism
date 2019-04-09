@@ -1,14 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <CudaCompile Include="sdbkCalculator\skbkCalculator.cu">
-      <Filter>SdBkCalculator</Filter>
-    </CudaCompile>
     <CudaCompile Include="DataStructure\DeviceList.cu">
       <Filter>DataStructure</Filter>
-    </CudaCompile>
-    <CudaCompile Include="GridDDA\RayCastGridDDA.cu">
-      <Filter>GridDDA</Filter>
     </CudaCompile>
     <CudaCompile Include="DiscreteRayCaster\RayCasterCore.cu">
       <Filter>DiscreteRayCaster</Filter>
@@ -80,9 +74,6 @@
     <ClInclude Include="sdbkCalculator\sdbkCalculator.h">
       <Filter>SdBkCalculator</Filter>
     </ClInclude>
-    <ClInclude Include="sdbkCalculator\sdbkCalculator.cuh">
-      <Filter>SdBkCalculator</Filter>
-    </ClInclude>
     <ClInclude Include="DiscreteRayCaster\DiscreteRayCaster.h">
       <Filter>DiscreteRayCaster</Filter>
     </ClInclude>
@@ -94,9 +85,6 @@
     </ClInclude>
     <ClInclude Include="RayCastingArgument\RayCastingArgument.h">
       <Filter>RayCastingArgument</Filter>
-    </ClInclude>
-    <ClInclude Include="GridDDA\RayCastGridDDA.cuh">
-      <Filter>GridDDA</Filter>
     </ClInclude>
     <ClInclude Include="DataStructure\DeviceList.cuh">
       <Filter>DataStructure</Filter>
