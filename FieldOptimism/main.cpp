@@ -71,14 +71,14 @@ int main(int argc, char** argv) {
 	// test gpu dda
 	sunray_dir = sunray.changeSunRay({ 3, 21, 8, 0 });
 	solar_scene->changeSolarScene(sunray_dir);
-	//GridDDA ddaHandler;
-	//ddaHandler.testHandler(solar_scene);
+
 	DiscreteRayCaster rayCaster;
 	rayCaster.rayCasting(solar_scene);
 
 	SdBkCalcCreator sdbk_calc_creator;
 	SdBkCalc* sdbk_calc = sdbk_calc_creator.getSdBkCalc(solar_scene, gl);
-
+	sdbk_calc->calcTotalShadowBlock();
+	sdbk_calc->calcTotalEnergy(sunray.current_DNI);
 
 	//vector<vector<int>> daily = {
 	//	{ 3,21 },		// ´º·Ö

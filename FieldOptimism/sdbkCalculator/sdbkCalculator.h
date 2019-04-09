@@ -2,7 +2,7 @@
 #include "../Common/CommonFunc.h"
 #include "../DataStructure/SolarScene.h"
 #include "../DataStructure/Clipper/clipper.hpp"
-#include "../GaussLegendre/GaussLegendre.h"
+#include "../GaussLegendre/GaussLegendre.cuh"
 #include "../DataStructure/FieldSegment.h"
 #include "../GridDDA/GridDDA.h"
 using namespace ClipperLib;
@@ -24,6 +24,7 @@ public:
 	double calcSingleShadowBlock(int helio_index);
 	double calcSingleFluxSum(int helio_index, const double DNI);
 	double calcTotalEnergy(const double DNI);
+	void calcTotalShadowBlock();
 	void calcSampleEnergy(int sample_row, int sample_col, const double DNI);
 	void saveCalcRes(const string s);
 
@@ -36,7 +37,6 @@ protected:
 	double helioClipper(Heliostat*helio, const vector<Vector3d>&dir, const vector<set<vector<int>>>& estimate_grid);
 	void calcIntersection3DDDA(Heliostat* helio, const Vector3d&dir, set<vector<int>> & relative_grid_label);			// using 3DDDA for relative grid's prediction
 	double checkForRelativeHelio(const set<vector<int>>& accurate_grid, const set<vector<int>>& estimate_grid);
-	//double calcIntersectionPoint(const Vector3d&orig, const Vector3d&dir, const Vector3d&A, const Vector3d&B, const Vector3d&C);
 	double calcFluxMap(Heliostat*helio, const double DNI);
 	double _calc_flux_sum(vector<Vector2d>& proj_v, const int rows, const int cols, Heliostat* helio, const double cos_phi, const double DNI);
 	double _calc_flux_sum(vector<Vector2d>& proj_v, Heliostat* helio, const double cos_phi, const double DNI);

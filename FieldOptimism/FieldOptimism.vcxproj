@@ -87,6 +87,8 @@
   <ItemGroup>
     <CudaCompile Include="DataStructure\DeviceList.cu" />
     <CudaCompile Include="DiscreteRayCaster\RayCasterCore.cu" />
+    <CudaCompile Include="GaussLegendre\GaussLegendre.cu" />
+    <CudaCompile Include="HelioEnergy\FluxIntegral.cu" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Common\CommonFunc.h" />
@@ -105,8 +107,10 @@
     <ClInclude Include="DataStructure\Timer.h" />
     <ClInclude Include="DiscreteRayCaster\DiscreteRayCaster.h" />
     <ClInclude Include="DiscreteRayCaster\RayCasterCore.cuh" />
-    <ClInclude Include="GaussLegendre\GaussLegendre.h" />
+    <ClInclude Include="GaussLegendre\GaussLegendre.cuh" />
     <ClInclude Include="GridDDA\GridDDA.h" />
+    <ClInclude Include="HelioEnergy\FluxIntegral.cuh" />
+    <ClInclude Include="HelioEnergy\HelioEnergy.h" />
     <ClInclude Include="RayCastingArgument\RayCastingArgument.h" />
     <ClInclude Include="sdbkCalculator\sdbkCalculator.h" />
   </ItemGroup>
@@ -121,8 +125,8 @@
     <ClCompile Include="DataStructure\SunRay.cpp" />
     <ClCompile Include="DataStructure\Timer.cpp" />
     <ClCompile Include="DiscreteRayCaster\DiscreteRayCaster.cpp" />
-    <ClCompile Include="GaussLegendre\GaussLegendre.cpp" />
     <ClCompile Include="GridDDA\GridDDA_cpu.cpp" />
+    <ClCompile Include="HelioEnergy\HelioEnergy.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="RayCastingArgument\RayCastingArgument.cpp" />
     <ClCompile Include="sdbkCalculator\sdbkCalculator.cpp" />

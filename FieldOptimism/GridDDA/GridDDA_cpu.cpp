@@ -10,6 +10,7 @@ void GridDDA::predictRelatedHelio(SolarScene* solar_scene, HeliostatDeviceArgume
 
 	// 1. 計算定日鏡的相關定日鏡
 	Timer t;
+	t.resetStart();
 #pragma omp parallel for
 	for (int i = 0; i < helios.size(); ++i) {
 		unordered_set<int> helio_label;
@@ -19,7 +20,7 @@ void GridDDA::predictRelatedHelio(SolarScene* solar_scene, HeliostatDeviceArgume
 			h_rela_index[i*h_args.helio_list_size + j] = iter;
 			++j;
 		}
-		if (j < h_args.helio_list_size) h_rela_index[i*h_args.helio_list_size + j] = -1;		// 设置停止标识
+		if (j < h_args.helio_list_size) h_rela_index[i*h_args.helio_list_size + j] = -1;		// 设置相关定日镜个数
 	}
 
 	t.printDuration("grid dda");

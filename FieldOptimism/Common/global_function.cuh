@@ -52,7 +52,10 @@ namespace GeometryFunc
 	}
 
 	inline double calcIntersection(const Vector3d& normal, const Vector3d& origin_p, const Vector3d& v, const Vector3d& dir, Vector3d& inter_v) {
-		return calcIntersection(convert3(normal), convert3(origin_p), convert3(v), convert3(dir), convert3(inter_v));
+		double div = dir.dot(normal);
+		double t = (origin_p - v).dot(normal) / div;
+		inter_v = v + dir*t;
+		return t;
 	}
 
 

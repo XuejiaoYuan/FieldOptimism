@@ -7,6 +7,12 @@
     <CudaCompile Include="DiscreteRayCaster\RayCasterCore.cu">
       <Filter>DiscreteRayCaster</Filter>
     </CudaCompile>
+    <CudaCompile Include="GaussLegendre\GaussLegendre.cu">
+      <Filter>GaussLegendre</Filter>
+    </CudaCompile>
+    <CudaCompile Include="HelioEnergy\FluxIntegral.cu">
+      <Filter>HelioEnergy</Filter>
+    </CudaCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Common">
@@ -32,6 +38,9 @@
     </Filter>
     <Filter Include="RayCastingArgument">
       <UniqueIdentifier>{64643333-159f-4579-b6b4-a73bc94d94fc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="HelioEnergy">
+      <UniqueIdentifier>{d22e7846-3625-4cbf-b51f-50f182dbe922}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -68,9 +77,6 @@
     <ClInclude Include="DataStructure\SunRay.h">
       <Filter>DataStructure</Filter>
     </ClInclude>
-    <ClInclude Include="GaussLegendre\GaussLegendre.h">
-      <Filter>GaussLegendre</Filter>
-    </ClInclude>
     <ClInclude Include="sdbkCalculator\sdbkCalculator.h">
       <Filter>SdBkCalculator</Filter>
     </ClInclude>
@@ -94,6 +100,15 @@
     </ClInclude>
     <ClInclude Include="DiscreteRayCaster\RayCasterCore.cuh">
       <Filter>DiscreteRayCaster</Filter>
+    </ClInclude>
+    <ClInclude Include="HelioEnergy\HelioEnergy.h">
+      <Filter>HelioEnergy</Filter>
+    </ClInclude>
+    <ClInclude Include="GaussLegendre\GaussLegendre.cuh">
+      <Filter>GaussLegendre</Filter>
+    </ClInclude>
+    <ClInclude Include="HelioEnergy\FluxIntegral.cuh">
+      <Filter>HelioEnergy</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -124,9 +139,6 @@
     <ClCompile Include="DataStructure\SunRay.cpp">
       <Filter>DataStructure</Filter>
     </ClCompile>
-    <ClCompile Include="GaussLegendre\GaussLegendre.cpp">
-      <Filter>GaussLegendre</Filter>
-    </ClCompile>
     <ClCompile Include="sdbkCalculator\sdbkCalculator.cpp">
       <Filter>SdBkCalculator</Filter>
     </ClCompile>
@@ -139,6 +151,9 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="GridDDA\GridDDA_cpu.cpp">
       <Filter>GridDDA</Filter>
+    </ClCompile>
+    <ClCompile Include="HelioEnergy\HelioEnergy.cpp">
+      <Filter>HelioEnergy</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
