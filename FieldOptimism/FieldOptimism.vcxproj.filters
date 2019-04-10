@@ -13,6 +13,9 @@
     <CudaCompile Include="HelioEnergy\FluxIntegral.cu">
       <Filter>HelioEnergy</Filter>
     </CudaCompile>
+    <CudaCompile Include="HelioEnergy\HelioEnergy.cu">
+      <Filter>HelioEnergy</Filter>
+    </CudaCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Common">
@@ -101,14 +104,17 @@
     <ClInclude Include="DiscreteRayCaster\RayCasterCore.cuh">
       <Filter>DiscreteRayCaster</Filter>
     </ClInclude>
-    <ClInclude Include="HelioEnergy\HelioEnergy.h">
-      <Filter>HelioEnergy</Filter>
-    </ClInclude>
     <ClInclude Include="GaussLegendre\GaussLegendre.cuh">
       <Filter>GaussLegendre</Filter>
     </ClInclude>
     <ClInclude Include="HelioEnergy\FluxIntegral.cuh">
       <Filter>HelioEnergy</Filter>
+    </ClInclude>
+    <ClInclude Include="HelioEnergy\HelioEnergy.cuh">
+      <Filter>HelioEnergy</Filter>
+    </ClInclude>
+    <ClInclude Include="GaussLegendre\GaussLegendre.h">
+      <Filter>GaussLegendre</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -152,8 +158,8 @@
     <ClCompile Include="GridDDA\GridDDA_cpu.cpp">
       <Filter>GridDDA</Filter>
     </ClCompile>
-    <ClCompile Include="HelioEnergy\HelioEnergy.cpp">
-      <Filter>HelioEnergy</Filter>
+    <ClCompile Include="GaussLegendre\GaussLegendre.cpp">
+      <Filter>GaussLegendre</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

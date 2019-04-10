@@ -1,15 +1,16 @@
 #pragma once
 #include "../Common/CommonFunc.h"
 
-class GaussLegendre {
+class GaussLegendreCPU {
 public:
-	void calcNodeWeight(const int N, const int M) {
+	GaussLegendreCPU(const int M, const int N) {
 		node.clear();
 		weight.clear();
 		node.resize(2);
 		weight.resize(2);
-		CalcWeight(N, node[0], weight[0]);
-		CalcWeight(M, node[1], weight[1]);
+
+		CalcWeight(M, node[0], weight[0]);
+		CalcWeight(N, node[1], weight[1]);
 	}
 
 	vector<VectorXd> getX() { return node; }

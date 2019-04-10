@@ -24,6 +24,7 @@ using namespace Eigen;
 #include "../Common/vector_arithmetic.cuh"
 #include <device_launch_parameters.h>
 #include <device_atomic_functions.h>
+#include <vector_types.h>
 
 
 #define Epsilon		1e-6

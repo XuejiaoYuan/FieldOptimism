@@ -1,5 +1,14 @@
 #include "GaussLegendre.cuh"
 
+void GaussLegendre::initNodeWeight(const int _M, const int _N)
+{
+	M = _M;
+	N = _N;
+
+	calcWeight(M, d_node_row, d_weight_row);
+	calcWeight(N, d_node_col, d_weight_col);
+}
+
 __device__ __host__
 double GaussLegendre::calcInte(const float4& x, const float4& y, const double sigma, const double ratio)
 {
@@ -36,7 +45,7 @@ void GaussLegendre::legendre(const double t, const double m, double&p, double& d
 //	:param x : 求积分公式的坐标点
 //	:param w : 求积分公式的权重
 //	:param n : 高斯积分阶数
-void GaussLegendre::calcWeight(const int n, float* x, float* w, const double a, const double b) {
+void GaussLegendre::calcWeight(const int n, float*& x, float*& w, const double a, const double b) {
 	float * h_node = new float[n];
 	float * h_weight = new float[n];
 	cudaMalloc((void**)&x, sizeof(float)*n);

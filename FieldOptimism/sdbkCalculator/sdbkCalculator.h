@@ -2,7 +2,7 @@
 #include "../Common/CommonFunc.h"
 #include "../DataStructure/SolarScene.h"
 #include "../DataStructure/Clipper/clipper.hpp"
-#include "../GaussLegendre/GaussLegendre.cuh"
+#include "../GaussLegendre/GaussLegendre.h"
 #include "../DataStructure/FieldSegment.h"
 #include "../GridDDA/GridDDA.h"
 using namespace ClipperLib;
@@ -16,10 +16,9 @@ typedef enum {
 class SdBkCalc
 {
 public:
-	SdBkCalc(const FieldType& _field_type, SolarScene* _solar_scene, GaussLegendre* _gl) {
+	SdBkCalc(const FieldType& _field_type, SolarScene* _solar_scene) {
 		this->field_type = _field_type;
 		this->solar_scene = _solar_scene;
-		this->gl = _gl;
 	}
 	double calcSingleShadowBlock(int helio_index);
 	double calcSingleFluxSum(int helio_index, const double DNI);
@@ -30,7 +29,7 @@ public:
 
 	FieldType field_type;
 	SolarScene* solar_scene;
-	GaussLegendre* gl;
+	GaussLegendreCPU* gl;
 
 protected:
 	double helioClipper(Heliostat*helio, const Vector3d&dir, const set<vector<int>>& estimate_grid);
@@ -46,49 +45,49 @@ protected:
 	double _helio_calc(int index, int DNI);
 
 	void flux_sum_matrix_grid(vector<Vector3d>& _recv_v, vector<Vector2d>& proj_v, const int rows, const int cols, Heliostat* helio, const double cos_phi, const double DNI);
-	void flux_sum_matrix_inte(Vector3d& recv_normal, Vector3d& fc, vector<Vector3d>& _recv_v, Matrix4d& local2world, vector<Vector2d>& proj_v, Heliostat * helio, const double cos_phi, const double DNI);
+	//void flux_sum_matrix_inte(Vector3d& recv_normal, Vector3d& fc, vector<Vector3d>& _recv_v, Matrix4d& local2world, vector<Vector2d>& proj_v, Heliostat * helio, const double cos_phi, const double DNI);
 
 };
 
 class RectSdBkCalc :public SdBkCalc {
 public:
-	RectSdBkCalc(SolarScene* _solar_scene, GaussLegendre* _gl) : SdBkCalc(RectFieldType, _solar_scene, _gl) {}
+	RectSdBkCalc(SolarScene* _solar_scene) : SdBkCalc(RectFieldType, _solar_scene) {}
 
 };
 
 class CrossRectSdBkCalc :public SdBkCalc {
 public:
-	CrossRectSdBkCalc(SolarScene* _solar_scene, GaussLegendre* _gl) :SdBkCalc(CrossRectFieldType, _solar_scene, _gl) {}
+	CrossRectSdBkCalc(SolarScene* _solar_scene) :SdBkCalc(CrossRectFieldType, _solar_scene) {}
 	void save_clipper_res(const string save_path, int month, int day, int hour, int minute);
 
 };
 
 class FermatSdBkCalc :public SdBkCalc {
 public:
-	FermatSdBkCalc(SolarScene* _solar_scene, GaussLegendre* _gl):SdBkCalc(FermatFieldType, _solar_scene, _gl){}
+	FermatSdBkCalc(SolarScene* _solar_scene):SdBkCalc(FermatFieldType, _solar_scene){}
 	void save_clipper_res(const string save_path, int month, int day, int hour, int minute);
 
 };
 
 class RadialFieldCalc :public SdBkCalc {
 public:
-	RadialFieldCalc(SolarScene* _solar_scene, GaussLegendre* _gl):SdBkCalc(RadialFieldType, _solar_scene, _gl){}
+	RadialFieldCalc(SolarScene* _solar_scene):SdBkCalc(RadialFieldType, _solar_scene){}
 
 };
 
 class SdBkCalcCreator {
 public:
-	SdBkCalc* getSdBkCalc(SolarScene* _solar_scene, GaussLegendre* _gl=NULL) {
+	SdBkCalc* getSdBkCalc(SolarScene* _solar_scene) {
 		switch (_solar_scene->layouts[0]->layout_type)
 		{
 		case RectLayoutType:
-			return new RectSdBkCalc(_solar_scene, _gl);
+			return new RectSdBkCalc(_solar_scene);
 		case CrossRectLayoutType:
-			return new CrossRectSdBkCalc(_solar_scene, _gl);
+			return new CrossRectSdBkCalc(_solar_scene);
 		case FermatLayoutType:
-			return new FermatSdBkCalc(_solar_scene, _gl);
+			return new FermatSdBkCalc(_solar_scene);
 		case RadialLayoutType:
-			return new RadialFieldCalc(_solar_scene, _gl);
+			return new RadialFieldCalc(_solar_scene);
 		default:
 			return nullptr;
 		}
@@ -97,7 +96,7 @@ public:
 
 class SdBkCalcTest:public SdBkCalc{
 public:
-	SdBkCalcTest(SolarScene* solar_scene, GaussLegendre* gl):SdBkCalc((FieldType)solar_scene->layouts[0]->layout_type, solar_scene, gl) {}
+	SdBkCalcTest(SolarScene* solar_scene):SdBkCalc((FieldType)solar_scene->layouts[0]->layout_type, solar_scene) {}
 	void readRayTracingRes();
 	void readRayTracingRes(int index);
 	void rayTracingSdBk();

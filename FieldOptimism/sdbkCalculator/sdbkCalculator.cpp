@@ -447,7 +447,7 @@ double SdBkCalc::calcFluxMap(Heliostat * helio, const double DNI)
 				proj_v.push_back(Vector2d(inter_v.x(), inter_v.z()));
 			
 			}
-			_flux_sum += _multi_inte_flux_sum(proj_v, 2, helio, helio->cos_phi[i], DNI);;
+			_flux_sum += _multi_inte_flux_sum(proj_v, 3, helio, helio->cos_phi[i], DNI);;
 		}
 	}
 
@@ -623,15 +623,15 @@ double SdBkCalc::_calc_flux_sum(vector<Vector2d>& proj_v, const int rows, const 
 //
 double SdBkCalc::_calc_flux_sum(vector<Vector2d>& proj_v, Heliostat * helio, const double cos_phi, const double DNI)
 {
-	float4 x, y;
-	x.x = proj_v[0].x();
-	y.x = proj_v[0].y();
-	x.y = proj_v[3].x();
-	y.y = proj_v[3].y();
-	x.z = proj_v[2].x();
-	y.z = proj_v[2].y();
-	x.w = proj_v[1].x();
-	y.w = proj_v[1].y();
+	Vector4d x, y;
+	x(0) = proj_v[0].x();
+	y(0) = proj_v[0].y();
+	x(1) = proj_v[3].x();
+	y(1) = proj_v[3].y();
+	x(2) = proj_v[2].x();
+	y(2) = proj_v[2].y();
+	x(3) = proj_v[1].x();
+	y(3) = proj_v[1].y();
 
 	double sum = gl->calcInte(x, y, helio->sigma, helio->l_w_ratio);
 	sum *= helio->flux_param *  DNI * cos_phi;
@@ -646,22 +646,22 @@ double SdBkCalc::_multi_inte_flux_sum(vector<Vector2d>& proj_v, int n, Heliostat
 	Vector2d row_gap = (proj_v[3] - proj_v[0]) / n;
 	Vector2d col_gap = (proj_v[1] - proj_v[0]) / n;
 
-	float4 tmp_x, tmp_y;
+	Vector4d tmp_x, tmp_y;
 	double sum = 0.0;
 
 	for (int i = 0; i < n; i++) {
 		for (int j = 0; j < n; j++) {
-			tmp_x.x = (proj_v[0] + i*row_gap + j*col_gap).x();
-			tmp_y.x = (proj_v[0] + i*row_gap + j*col_gap).y();
-			tmp_x.y = (proj_v[0] + (i + 1)*row_gap + j*col_gap).x();
-			tmp_y.y = (proj_v[0] + (i + 1)*row_gap + j*col_gap).y();
-			tmp_x.z = (proj_v[0] + (i + 1)*row_gap + (j + 1)*col_gap).x();
-			tmp_y.z = (proj_v[0] + (i + 1)*row_gap + (j + 1)*col_gap).y();
-			tmp_x.w = (proj_v[0] + i*row_gap + (j + 1)*col_gap).x();
-			tmp_y.w = (proj_v[0] + i*row_gap + (j + 1)*col_gap).y();
+			tmp_x(0) = (proj_v[0] + i*row_gap + j*col_gap).x();
+			tmp_y(0) = (proj_v[0] + i*row_gap + j*col_gap).y();
+			tmp_x(1) = (proj_v[0] + (i + 1)*row_gap + j*col_gap).x();
+			tmp_y(1) = (proj_v[0] + (i + 1)*row_gap + j*col_gap).y();
+			tmp_x(2) = (proj_v[0] + (i + 1)*row_gap + (j + 1)*col_gap).x();
+			tmp_y(2) = (proj_v[0] + (i + 1)*row_gap + (j + 1)*col_gap).y();
+			tmp_x(3) = (proj_v[0] + i*row_gap + (j + 1)*col_gap).x();
+			tmp_y(3) = (proj_v[0] + i*row_gap + (j + 1)*col_gap).y();
 			sum += gl->calcInte(tmp_x, tmp_y, helio->sigma, helio->l_w_ratio);
 		}
-	}	
+	}
 	sum = sum * helio->flux_param *  DNI * cos_phi;
 	return sum;
 }
@@ -829,8 +829,6 @@ double SdBkCalc::calcSingleFluxSum(int helio_index, const double DNI) {
 //
 double SdBkCalc::calcTotalEnergy(const double DNI)
 {
-	Timer t;
-	t.resetStart();
 	vector<Heliostat*> helios = solar_scene->helios;
 	double sum = 0.0;
 #ifdef READFILE
@@ -888,7 +886,6 @@ double SdBkCalc::calcTotalEnergy(const double DNI)
 #endif // READFILE
 	}
 
-	t.printDuration("calc total energy");
 #ifdef CALC_TIME
 	auto elapsed = chrono::duration_cast<chrono::microseconds>(std::chrono::high_resolution_clock::now() - start);
 	auto time = double(elapsed.count())*chrono::microseconds::period::num / chrono::microseconds::period::den;
@@ -909,20 +906,16 @@ double SdBkCalc::calcTotalEnergy(const double DNI)
 
 void SdBkCalc::calcTotalShadowBlock()
 {
-	Timer t;
-	t.resetStart();
 	vector<Heliostat*> helios = solar_scene->helios;
-	vector<double> res(helios.size());
 #pragma omp parallel for
 	for (int i = 0; i < helios.size(); i++) {
-		res[i] = calcSingleShadowBlock(i);
+		calcSingleShadowBlock(i);
 	}
-	t.printDuration("clipper");
 
-	fstream outFile("SdBkRes/clipper_sdbk.txt", ios_base::out);
-	for (int i = 0; i < res.size(); ++i)
-		outFile << res[i] << endl;
-	outFile.close();
+	//fstream outFile("SdBkRes/clipper_sdbk.txt", ios_base::out);
+	//for (int i = 0; i < res.size(); ++i)
+	//	outFile << res[i] << endl;
+	//outFile.close();
 }
 
 void CrossRectSdBkCalc::save_clipper_res(const string save_path, int month, int day, int hour, int minute)

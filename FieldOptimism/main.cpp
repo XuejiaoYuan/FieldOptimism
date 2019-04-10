@@ -4,6 +4,7 @@
 #include "./LSPIA/LSF.h"
 #include "./DiscreteRayCaster/DiscreteRayCaster.h"
 #include "./DataStructure/Timer.h"
+#include "./HelioEnergy/HelioEnergy.cuh"
 
 
 int main(int argc, char** argv) {
@@ -37,14 +38,6 @@ int main(int argc, char** argv) {
 	SolarScene* solar_scene = new SolarScene();
 	solar_scene->initFieldParam(scene_filepath);
 
-	// Gauss-Legendre参数预计算
-	int N = solar_scene->recvs[0]->recv_size.x() / RECEIVER_SLICE;
-	int M = solar_scene->recvs[0]->recv_size.z() / RECEIVER_SLICE;
-	GaussLegendre* gl = new GaussLegendre();
-	N = 8;
-	M = 8;
-	gl->calcNodeWeight(N, M);
-
 	// TODO 镜场参数优化
 	vector<vector<double>*> field_args;
 	switch (solar_scene->layouts[0]->layout_type)
@@ -70,15 +63,17 @@ int main(int argc, char** argv) {
 
 	// test gpu dda
 	sunray_dir = sunray.changeSunRay({ 3, 21, 8, 0 });
+	Timer::resetStart();
 	solar_scene->changeSolarScene(sunray_dir);
+	Timer::printDuration("change solar scene");
 
-	DiscreteRayCaster rayCaster;
-	rayCaster.rayCasting(solar_scene);
+	//DiscreteRayCaster rayCaster;
+	//rayCaster.rayCasting(solar_scene);
 
 	SdBkCalcCreator sdbk_calc_creator;
-	SdBkCalc* sdbk_calc = sdbk_calc_creator.getSdBkCalc(solar_scene, gl);
-	sdbk_calc->calcTotalShadowBlock();
-	sdbk_calc->calcTotalEnergy(sunray.current_DNI);
+	SdBkCalc* sdbk_calc = sdbk_calc_creator.getSdBkCalc(solar_scene);
+	HelioEnergy e_handler(solar_scene, 8, 8, 3, 3);
+	sdbk_calc->gl = new GaussLegendreCPU(8, 8);
 
 	//vector<vector<int>> daily = {
 	//	{ 3,21 },		// 春分
@@ -86,8 +81,8 @@ int main(int argc, char** argv) {
 	//	{ 9,23 },		// 秋分
 	//	{ 12,22 }		// 冬至
 	//};
+	fstream outFile("energy_calc_t_g3x3_n8x8_3.txt", ios_base::out);
 	vector<int> sample_hour = { 8, 10, 12, 14, 16 };
-	fstream outFile(save_path + "/time_res.txt", ios_base::out);
 	vector<int> time_param(4);
 	for (int month = 1; month <= 12; month++) {
 		for (int day = 1; day < 29; day += 3) {
@@ -100,8 +95,17 @@ int main(int argc, char** argv) {
 					time_param[3] = min;
 					sunray_dir = sunray.changeSunRay(time_param);
 					solar_scene->changeSolarScene(sunray_dir);
-					double res = sdbk_calc->calcTotalEnergy(sunray.current_DNI);
-					outFile << setprecision(12) << sunray.current_altitude << ' ' << sunray.current_azimuth << ' ' << res << endl;
+					
+					// 1. CPU计算能量
+					Timer::resetStart();
+					sdbk_calc->calcTotalEnergy(1);
+					outFile << Timer::getDuration() << ' ';
+					
+					// 2. GPU计算能量
+					Timer::resetStart();
+					sdbk_calc->calcTotalShadowBlock();
+					e_handler.calcHelioEnergy(1.31, SunUpdateMode);
+					outFile << Timer::getDuration() << endl;
 				}
 			}
 		}
@@ -113,7 +117,7 @@ int main(int argc, char** argv) {
 	//vector<int> time_param = { 1,22, 8, 0 };
 	sunray_dir = sunray.changeSunRay(time_param);
 	solar_scene->changeSolarScene(sunray_dir);
-	SdBkCalcTest sdbk_test_handler(solar_scene, gl);
+	SdBkCalcTest sdbk_test_handler(solar_scene);
 	sdbk_test_handler.totalHeliosTest("SdBkRes");
 
 	// LSF采样并拟合曲面

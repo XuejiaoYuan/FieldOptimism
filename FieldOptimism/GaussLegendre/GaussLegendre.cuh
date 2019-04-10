@@ -4,13 +4,8 @@
 class GaussLegendre {
 public:
 	GaussLegendre() : d_node_row(nullptr), d_node_col(nullptr), d_weight_row(nullptr), d_weight_col(nullptr) {}
-	void initNodeWeight(const int _M, const int _N) {
-		M = _M;
-		N = _N;
-		calcWeight(M, d_node_row, d_weight_row);
-		calcWeight(N, d_node_col, d_weight_col);
-	}
-	void calcWeight(const int n, float* x, float* w, const double a = -1, const double b = 1);
+	void initNodeWeight(const int _M, const int _N);
+	void calcWeight(const int n, float*& x, float*& w, const double a = -1, const double b = 1);
 	__device__ __host__
 	double calcInte(const float4& x, const float4& y, const double sigma, const double ratio);
 	__device__ __host__
@@ -27,4 +22,15 @@ public:
 	float* d_node_row, *d_node_col;
 	float* d_weight_row, *d_weight_col;
 	int M, N;
+	~GaussLegendre() {
+		cudaFree(d_node_row);
+		cudaFree(d_node_col);
+		cudaFree(d_weight_row);
+		cudaFree(d_weight_col);
+
+		d_node_row = nullptr;
+		d_node_col = nullptr;
+		d_weight_row = nullptr;
+		d_weight_col = nullptr;
+	}
 };

@@ -14,7 +14,7 @@ void DiscreteRayCaster::clearArguments()
 void DiscreteRayCaster::rayCasting(SolarScene* solar_scene)
 {
 	// 1. 预计算相关定日镜
-	HeliostatDeviceArgument h_args;
+	RayCastHelioDeviceArgument h_args;
 	h_args.setHelioDeviceOrigins(150, 150);
 	h_args.setHelioDevicePos(solar_scene->helios);
 	h_args.setHelioDeviceArguments(solar_scene->helios);

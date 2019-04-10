@@ -1,7 +1,7 @@
 #include "GaussLegendre.h"
 
 
-double GaussLegendre::calcInte(const Vector4d & x, const Vector4d & y, const double sigma, const double ratio)
+double GaussLegendreCPU::calcInte(const Vector4d & x, const Vector4d & y, const double sigma, const double ratio)
 {
 	Vector2d map_v;
 	double sum = 0.0;
@@ -14,7 +14,7 @@ double GaussLegendre::calcInte(const Vector4d & x, const Vector4d & y, const dou
 	return sum;
 }
 
-void GaussLegendre::legendre(const double t, const double m, double&p, double& dp)
+void GaussLegendreCPU::legendre(const double t, const double m, double&p, double& dp)
 {
 	double p0 = 1.0;
 	double p1 = t;
@@ -35,7 +35,7 @@ void GaussLegendre::legendre(const double t, const double m, double&p, double& d
 //	:param w : 求积分公式的权重
 //	:param n : 高斯积分阶数
 ///
-void GaussLegendre::CalcWeight(const int m, VectorXd& x, VectorXd&w, const double a, const double b)
+void GaussLegendreCPU::CalcWeight(const int m, VectorXd& x, VectorXd&w, const double a, const double b)
 {
 	x.resize(m);
 	w.resize(m);
@@ -58,7 +58,7 @@ void GaussLegendre::CalcWeight(const int m, VectorXd& x, VectorXd&w, const doubl
 	}
 }
 
-inline double GaussLegendre::jacobi(const Vector4d& x, const Vector4d& y, double s, double t) {
+inline double GaussLegendreCPU::jacobi(const Vector4d& x, const Vector4d& y, double s, double t) {
 	double J00 = -(1.0 - t) * x[0] + (1.0 - t) * x[1] + (1.0 + t) * x[2] - (1.0 + t) * x[3];
 	double J01 = -(1.0 - t) * y[0] + (1.0 - t) * y[1] + (1.0 + t) * y[2] - (1.0 + t) * y[3];
 	double J10 = -(1.0 - s) * x[0] - (1.0 + s) * x[1] + (1.0 + s) * x[2] + (1.0 - s) * x[3];
@@ -66,7 +66,7 @@ inline double GaussLegendre::jacobi(const Vector4d& x, const Vector4d& y, double
 	return (J00*J11 - J01*J10) / 16.0;
 }
 
-inline Vector2d GaussLegendre::map(const Vector4d&x, const Vector4d&y, double s, double t) {
+inline Vector2d GaussLegendreCPU::map(const Vector4d&x, const Vector4d&y, double s, double t) {
 	Vector4d N;
 	N(0) = (1.0 - s)*(1.0 - t) / 4.0;
 	N(1) = (1.0 + s)*(1.0 - t) / 4.0;

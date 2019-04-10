@@ -1,16 +1,17 @@
 #include "RayCastingArgument.h"
 
-void HeliostatDeviceArgument::setHelioDeviceOrigins(const int width_slice, const int length_slice) {
+void RayCastHelioDeviceArgument::setHelioDeviceOrigins(const int width_slice, const int length_slice, bool update) {
 	
 	helio_slice_length = length_slice <= 0 ? HELIOSTAT_SLICE_LENGTH : length_slice;
 	helio_slice_width = width_slice <= 0 ? HELIOSTAT_SLICE_WIDTH : width_slice;
 
-	if (!d_helio_origins || 
-		(d_helio_origins && numberOfOrigions != helio_slice_length * helio_slice_width)) {
-		if(d_helio_origins) cudaFree(d_helio_origins);
-		numberOfOrigions = helio_slice_length * helio_slice_width;
-		cudaMalloc((void**)&d_helio_origins, sizeof(int2)*numberOfOrigions);
+	if ( update && d_helio_origins) {
+		cudaFree(d_helio_origins);
+		d_helio_origins = nullptr;
 	}
+	numberOfOrigions = helio_slice_length * helio_slice_width;
+	cudaMalloc((void**)&d_helio_origins, sizeof(int2)*numberOfOrigions);
+
 
 	int2* host_origins = new int2[numberOfOrigions];
 	for (int i = 0; i < helio_slice_length; ++i)
@@ -22,13 +23,17 @@ void HeliostatDeviceArgument::setHelioDeviceOrigins(const int width_slice, const
 	delete[] host_origins;
 }
 
-void HeliostatDeviceArgument::setHelioDevicePos(vector<Heliostat*>& helios)
+void HeliostatDeviceArgument::setHelioDevicePos(vector<Heliostat*>& helios, bool update)
 {
-	if (d_helio_pos) cudaFree(d_helio_pos);
-	
-	cudaMalloc((void**)&d_helio_pos, sizeof(float3)*helios.size());
+	if (update && d_helio_pos) {
+		cudaFree(d_helio_pos);
+		d_helio_pos = nullptr;
+	}
+	if(!d_helio_pos)
+		cudaMalloc((void**)&d_helio_pos, sizeof(float3)*helios.size());
 	
 	float3* h_helio_pos = new float3[helios.size()];
+#pragma omp parallel for
 	for (int i=0; i<helios.size(); ++i)
 		h_helio_pos[i] = GeometryFunc::convert3(helios[i]->helio_pos);
 	cudaMemcpy(d_helio_pos, h_helio_pos, sizeof(float3)*helios.size(), cudaMemcpyHostToDevice);
@@ -36,46 +41,80 @@ void HeliostatDeviceArgument::setHelioDevicePos(vector<Heliostat*>& helios)
 	delete[]h_helio_pos;
 }
 
-void HeliostatDeviceArgument::setHelioDeviceArguments(vector<Heliostat*>& helios, Receiver& recv)
+void HeliostatDeviceArgument::setHelioDeviceArguments(vector<Heliostat*>& helios, bool update)
 {
-	if (!d_helio_normals ||
-		(d_helio_normals && numberOfHeliostats != helios.size())) {
-		if (d_helio_normals) cudaFree(d_helio_normals);
+	if (update && d_helio_normals) {
+		cudaFree(d_helio_normals);
+		d_helio_normals = nullptr;
+	}
+	if (!d_helio_normals) {
 		numberOfHeliostats = helios.size();
 		cudaMalloc((void**)&d_helio_normals, sizeof(float3)*numberOfHeliostats);
 		cudaMalloc((void**)&d_helio_vertexes, sizeof(float3) * 4 * numberOfHeliostats);
-		cudaMalloc((void**)&d_focus_index, sizeof(int)*numberOfHeliostats);
-		cudaMalloc((void**)&d_imgplane_proj, sizeof(float2) * 4 * recv.recv_vertex.size()* numberOfHeliostats);
 	}
 
 	float3* h_helio_normals = new float3[numberOfHeliostats];
 	float3* h_helio_vertexes = new float3[4 * numberOfHeliostats];
 	int* h_focus_index = new int[numberOfHeliostats];
 	float4* h_imgplane_world2local = new float4[4 * numberOfHeliostats];
+	Vector3d focus_center, reverse_dir;
+	Matrix4d world2localM, local2worldM;
+#pragma omp parallel for
 	for (int i = 0; i < helios.size(); ++i) {
 		h_helio_normals[i] = GeometryFunc::convert3(helios[i]->helio_normal);
 		h_focus_index[i] = helios[i]->focus_center_index;
 		for (int j = 0; j < 4; ++j)
 			h_helio_vertexes[4 * i + j] = GeometryFunc::convert3(helios[i]->vertex[j]);
+	}
+	cudaMemcpy(d_helio_normals, h_helio_normals, sizeof(float3)*numberOfHeliostats, cudaMemcpyHostToDevice);
+	cudaMemcpy(d_helio_vertexes, h_helio_vertexes, sizeof(float3) * 4 * numberOfHeliostats, cudaMemcpyHostToDevice);
 
+	delete[] h_helio_normals;
+	delete[] h_helio_vertexes;
+}
 
+void IntegralHelioDeviceArgumet::setHelioRecvArguments(vector<Heliostat*>& helios, Receiver& recv, bool update)
+{
+	if ( update && d_focus_index) {
+		clearArguments();
+	}
+	if (!d_focus_index) {
+		cudaMalloc((void**)&d_focus_index, sizeof(int)*numberOfHeliostats);
+		cudaMalloc((void**)&d_imgplane_world2local, sizeof(float4) * 4 * numberOfHeliostats);
+		cudaMalloc((void**)&d_lw_ratio, sizeof(float)*numberOfHeliostats);
+		cudaMalloc((void**)&d_factor, sizeof(float)*numberOfHeliostats);
+	}
 
-		Vector3d focus_center = recv.focus_center[h_focus_index[i]];
-		Vector3d reverse_dir = (helios[i]->helio_pos - focus_center).normalized();		// The normal of image plane
-		Matrix4d world2localM, local2worldM;
+	int* h_focus_index = new int[numberOfHeliostats];
+	float4* h_imgplane_world2local = new float4[4 * numberOfHeliostats];
+	float* h_lw_ratio = new float[numberOfHeliostats];
+	float* h_factor = new float[numberOfHeliostats];
+	float* h_total_energy = new float;
+	Vector3d focus_center, reverse_dir;
+	Matrix4d world2localM, local2worldM;
+	*h_total_energy = 0;
+#pragma omp parallel for
+	for (int i = 0; i < helios.size(); ++i) {
+		h_focus_index[i] = helios[i]->focus_center_index;
+		h_lw_ratio[i] = helios[i]->l_w_ratio;
+		h_factor[i] = helios[i]->flux_param * (1 - helios[i]->sd_bk);
+
+		focus_center = recv.focus_center[h_focus_index[i]];
+		reverse_dir = (helios[i]->helio_pos - focus_center).normalized();		// The normal of image plane
 		GeometryFunc::getImgPlaneMatrixs(reverse_dir, focus_center, local2worldM, world2localM, 1);
 		for (int j = 0; j < 4; ++j)		// TODO: check whether the matrix is right
 			h_imgplane_world2local[4 * i + j] = make_float4(world2localM(j, 0), world2localM(j, 1), world2localM(j, 2), world2localM(j, 3));
 	}
-	cudaMemcpy(d_helio_normals, h_helio_normals, sizeof(float3)*numberOfHeliostats, cudaMemcpyHostToDevice);
-	cudaMemcpy(d_helio_vertexes, h_helio_vertexes, sizeof(float3) * 4 * numberOfHeliostats, cudaMemcpyHostToDevice);
 	cudaMemcpy(d_focus_index, h_focus_index, sizeof(int)*numberOfHeliostats, cudaMemcpyHostToDevice);
-	cudaMemcpy(d_imgplane_proj, h_imgplane_world2local, sizeof(float2) * 4 * recv.recv_vertex.size()* numberOfHeliostats, cudaMemcpyHostToDevice);
+	cudaMemcpy(d_imgplane_world2local, h_imgplane_world2local, sizeof(float4) * 4 * numberOfHeliostats, cudaMemcpyHostToDevice);
+	cudaMemcpy(d_lw_ratio, h_lw_ratio, sizeof(float)*numberOfHeliostats, cudaMemcpyHostToDevice);
+	cudaMemcpy(d_factor, h_factor, sizeof(float)*numberOfHeliostats, cudaMemcpyHostToDevice);
 
-	delete[] h_helio_normals;
-	delete[] h_helio_vertexes;
 	delete[] h_focus_index;
 	delete[] h_imgplane_world2local;
+	delete[] h_lw_ratio;
+	delete[] h_factor;
+	delete h_total_energy;
 }
 
 void ReceiverDeviceArgument::setRecvDeviceArguments(Receiver& recv)

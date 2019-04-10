@@ -1,6 +1,6 @@
 #include "RayCasterCore.cuh"
 
-vector<double> rayCastCore(Vector3d sunray_dir, HeliostatDeviceArgument& h_args) {
+vector<double> rayCastCore(Vector3d sunray_dir, RayCastHelioDeviceArgument& h_args) {
 	unsigned int* h_hit_cnt = new unsigned int[h_args.numberOfHeliostats];
 	for (int i = 0; i < h_args.numberOfHeliostats; ++i) h_hit_cnt[i] = 0;
 
@@ -26,7 +26,7 @@ vector<double> rayCastCore(Vector3d sunray_dir, HeliostatDeviceArgument& h_args)
 	return sdbk_res;
 }
 
-__global__ void rayCollisionCalc(float3 ray_dir, HeliostatDeviceArgument h_args) {
+__global__ void rayCollisionCalc(float3 ray_dir, RayCastHelioDeviceArgument h_args) {
 	long long myId = GeometryFunc::getThreadId();
 
 	if (myId >= h_args.numberOfHeliostats*h_args.numberOfOrigions) return;
@@ -53,7 +53,7 @@ __global__ void rayCollisionCalc(float3 ray_dir, HeliostatDeviceArgument h_args)
 }
 
 
-__device__ bool collision(int helioIndex, float3 originPos, float3 sunray_dir, HeliostatDeviceArgument& h_args, bool shadowDir) {
+__device__ bool collision(int helioIndex, float3 originPos, float3 sunray_dir, RayCastHelioDeviceArgument& h_args, bool shadowDir) {
 	int i = 0;
 	float3 curNormal = h_args.d_helio_normals[helioIndex];
 	float3 ray_dir = shadowDir ? -sunray_dir : reflect(sunray_dir, curNormal);

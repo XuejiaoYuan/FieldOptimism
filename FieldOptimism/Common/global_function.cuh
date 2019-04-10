@@ -23,6 +23,18 @@ namespace GeometryFunc
 
 	}
 
+	__device__ 
+		inline float3 multMatrix(const float3& vertex, const float4* matrix, bool point = true) {
+		double v[4] = { vertex.x, vertex.y, vertex.z, point ? 1 : 0 };
+		float4 res = make_float4(0,0,0,0);
+
+		for (int i = 0; i < 4; ++i)		// TODO check wether right
+			res += v[i] * matrix[i];
+
+		if (res.w > Epsilon) res /= res.w;
+		return make_float3(res.x, res.y, res.z);
+	}
+
 	inline float3 convert3(const Vector3d& a) {
 		return make_float3(a.x(), a.y(), a.z());
 	}

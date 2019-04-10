@@ -1,7 +1,7 @@
 #include "GridDDA.h"
 
 
-void GridDDA::predictRelatedHelio(SolarScene* solar_scene, HeliostatDeviceArgument& h_args, bool shadowDir)
+void GridDDA::predictRelatedHelio(SolarScene* solar_scene, RayCastHelioDeviceArgument& h_args, bool shadowDir)
 {
 	// 0. 参数准备
 	Vector3d &sunray_dir = solar_scene->sunray_dir;
@@ -53,7 +53,7 @@ void GridDDA::testHandler(SolarScene* solar_scene)
 {
 
 	Timer t;
-	HeliostatDeviceArgument h_args;
+	RayCastHelioDeviceArgument h_args;
 	h_args.setHelioDeviceOrigins(100, 100);		// 第一次调用cuda程序耗时较长
 	h_args.setHelioDevicePos(solar_scene->helios);
 	h_args.setHelioDeviceArguments(solar_scene->helios);

@@ -9,55 +9,92 @@ public:
 	int2* d_helio_origins;			// 离散网格采样点局部坐标 pixel_width x piexel_height
 	float3* d_helio_normals;		// 各定日镜法向量 heliosNum
 	float3* d_helio_vertexes;		// 各定日镜顶点坐标 heliosNum x 4
-	int* d_focus_index;				// 各定日镜聚焦接收器平面序号 helioNum
-	float2* d_imgplane_proj;		// 各定日镜对应image plane的坐标变换结果
 	float3* d_helio_pos;
-	int* d_rela_shadow_helio_index;		// 各定日镜对应的相关定日镜 helioNum x helioListSize
-	int* d_rela_block_helio_index;		// 各定日镜对应的相关定日镜 helioNum x helioListSize
-	unsigned int* d_hit_cnt;						// 各定日镜上光线被阴影或遮挡的个数
-	int numberOfOrigions;
+	
 	int numberOfHeliostats;
-	int helio_slice_length;
-	int helio_slice_width;
-	int helio_list_size;	
-	float2 helio_size;
+	
 	HeliostatDeviceArgument() : d_helio_origins(nullptr), d_helio_normals(nullptr), d_helio_vertexes(nullptr), d_helio_pos(nullptr),
-		d_rela_shadow_helio_index(nullptr), d_rela_block_helio_index(nullptr), d_hit_cnt(nullptr), d_focus_index(nullptr), d_imgplane_proj(nullptr),
-		numberOfHeliostats(0), numberOfOrigions(HELIOSTAT_SLICE_LENGTH* HELIOSTAT_SLICE_WIDTH), 
-		helio_slice_length(HELIOSTAT_SLICE_LENGTH), helio_slice_width(HELIOSTAT_SLICE_WIDTH), helio_list_size(DEVICE_LIST_SIZE){}
-	HeliostatDeviceArgument(int nOfHelios, int slice_length, int slice_width, float2& helio_size, int helio_list_size):
-		d_helio_origins(nullptr), d_helio_normals(nullptr), d_helio_vertexes(nullptr), d_helio_pos(nullptr), d_focus_index(nullptr),
-		d_rela_shadow_helio_index(nullptr), d_rela_block_helio_index(nullptr), d_hit_cnt(nullptr), d_imgplane_proj(nullptr),
-		numberOfHeliostats(nOfHelios), numberOfOrigions(slice_length*slice_width), 
-		helio_slice_length(slice_length), helio_slice_width(slice_width), helio_size(helio_size), helio_list_size(helio_list_size) {}
-	void setHelioDeviceOrigins(const int slice_length, const int slice_width);
-	void setHelioDevicePos(vector<Heliostat*>& helios);
-	void setHelioDeviceArguments(vector<Heliostat*>& helios, Receiver& recv);
+		numberOfHeliostats(0){}
+	HeliostatDeviceArgument(int nOfHelios, int slice_length, int slice_width, int helio_list_size):
+		d_helio_origins(nullptr), d_helio_normals(nullptr), d_helio_vertexes(nullptr), d_helio_pos(nullptr),
+		numberOfHeliostats(nOfHelios) {}
+	void setHelioDevicePos(vector<Heliostat*>& helios,  bool update = false);
+	void setHelioDeviceArguments(vector<Heliostat*>& helios, bool update = false);
 
 	~HeliostatDeviceArgument() {
 		cudaFree(d_helio_origins);
 		cudaFree(d_helio_normals);
 		cudaFree(d_helio_vertexes);
-		cudaFree(d_focus_index);
-		cudaFree(d_imgplane_proj);
 		cudaFree(d_helio_pos);
-		cudaFree(d_rela_shadow_helio_index);
-		cudaFree(d_rela_block_helio_index);
 
 		d_helio_origins = nullptr;
 		d_helio_normals = nullptr;
 		d_helio_vertexes = nullptr;
-		d_focus_index = nullptr;
-		d_imgplane_proj = nullptr;
 		d_helio_pos = nullptr;
+	}
+
+};
+
+
+class RayCastHelioDeviceArgument :public HeliostatDeviceArgument {
+public:
+	int* d_rela_shadow_helio_index;		// 各定日镜对应的相关定日镜 helioNum x helioListSize
+	int* d_rela_block_helio_index;		// 各定日镜对应的相关定日镜 helioNum x helioListSize
+	unsigned int* d_hit_cnt;						// 各定日镜上光线被阴影或遮挡的个数
+	int numberOfOrigions;
+	int helio_slice_length;
+	int helio_slice_width;
+	int helio_list_size;
+
+	RayCastHelioDeviceArgument() :d_rela_shadow_helio_index(nullptr), d_rela_block_helio_index(nullptr), d_hit_cnt(nullptr), 
+		numberOfOrigions(HELIOSTAT_SLICE_LENGTH* HELIOSTAT_SLICE_WIDTH),
+		helio_slice_length(HELIOSTAT_SLICE_LENGTH), helio_slice_width(HELIOSTAT_SLICE_WIDTH), helio_list_size(DEVICE_LIST_SIZE) {}
+	RayCastHelioDeviceArgument(int slice_length, int slice_width, int helio_list_size) :
+		d_rela_shadow_helio_index(nullptr), d_rela_block_helio_index(nullptr), d_hit_cnt(nullptr),  
+		numberOfOrigions(slice_length*slice_width), helio_slice_length(slice_length), helio_slice_width(slice_width), helio_list_size(helio_list_size) {}
+
+	~RayCastHelioDeviceArgument() {
+		cudaFree(d_rela_shadow_helio_index);
+		cudaFree(d_rela_block_helio_index);
+		if (d_hit_cnt) {
+			cudaFree(d_hit_cnt);
+			d_hit_cnt = nullptr;
+		}
 		d_rela_shadow_helio_index = nullptr;
 		d_rela_block_helio_index = nullptr;
 	}
 
-private:
-	void calcImgPlaneProj();	// TODO
+	void setHelioDeviceOrigins(const int slice_length, const int slice_width, bool update = false);
+
 };
 
+class IntegralHelioDeviceArgumet : public HeliostatDeviceArgument {
+public:
+	int* d_focus_index;					// 各定日镜聚焦接收器平面序号 helioNum
+	float4* d_imgplane_world2local;		// 各定日镜对应image plane的坐标变换结果
+	float* d_lw_ratio;					// 各定日镜在image plane上的边长比
+	float* d_factor;					// 各定日镜各项因子参数
+	float sigma;						// iHFCAL积分参数
+	float DNI;							// 当前时刻DNI
+	IntegralHelioDeviceArgumet() : d_focus_index(nullptr), d_imgplane_world2local(nullptr), 
+		d_lw_ratio(nullptr), d_factor(nullptr){}
+	~IntegralHelioDeviceArgumet() {
+		clearArguments();
+	}
+
+	void setHelioRecvArguments(vector<Heliostat*>& helios, Receiver& recv, bool update = false);
+	void clearArguments() {
+		cudaFree(d_focus_index);
+		cudaFree(d_imgplane_world2local);
+		cudaFree(d_lw_ratio);
+		cudaFree(d_factor);
+
+		d_focus_index = nullptr;
+		d_imgplane_world2local = nullptr;
+		d_lw_ratio = nullptr;
+		d_factor = nullptr;
+	}
+};
 
 class LayoutDeviceArgument {
 public:
