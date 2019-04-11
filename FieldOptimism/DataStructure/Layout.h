@@ -74,9 +74,9 @@ public:
 
 
 private:
+	MatrixXd getCircleHelioIndex(int& start_index, const double R, const double gap, const int rows, const double angle_delta);
 	void setCircleHelios(const int filed_index, const double R, const double gap, const int rows, const double angle_delta, vector<Heliostat*>& helios, const vector<Receiver*>& recvs);
 	void calcCircleParams(vector<double>& recv_dis, vector<int>& n_rows, vector<double>& angle_delta, const vector<vector<double>*>& field_args = {});
-	void getCircleHelioIndex();
 };
 
 class RadialLayout:public Layout{
