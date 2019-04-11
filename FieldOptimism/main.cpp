@@ -119,36 +119,6 @@ int main(int argc, char** argv) {
 	solar_scene->changeSolarScene(sunray_dir);
 	SdBkCalcTest sdbk_test_handler(solar_scene);
 	sdbk_test_handler.totalHeliosTest("SdBkRes");
-
-	// LSF采样并拟合曲面
-	//time_param[0] = 1;
-	//time_param[1] = 1;
-	//time_param[2] = 12;
-	//time_param[3] = 0;
-
-	//Timer::resetStart();
-	//sunray_dir = sunray.changeSunRay(time_param);
-	//solar_scene->changeSolarScene(sunray_dir);
-	//Timer::printDuration("Change Solar Scene");
-
-
-	//if (options == "-s_l") {
-
-	//	Timer::resetStart();
-	//	sdbk_calc->calcSampleEnergy(100, 100, sunray.current_DNI);
-	//	Timer::printDuration("Calculate Sample Heliostats' energy");
-
-	//	Timer::resetStart();
-	//	LSF lsf(50, 50, 100, 100);
-	//	lsf.LSF_surface(solar_scene);
-	//	Timer::printDuration("LSF fitting");
-	//	sdbk_calc->saveCalcRes("lsf_fitting_res.txt");
-
-	//	Timer::resetStart();
-	//	sdbk_calc->calcTotalEnergy(sunray.current_DNI);
-	//	Timer::printDuration("Calculate total heliostats");
-	//	sdbk_calc->saveCalcRes("total_res.txt");
-	//}
 	
 
 	return 1;
