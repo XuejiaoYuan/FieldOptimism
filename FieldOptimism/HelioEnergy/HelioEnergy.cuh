@@ -4,10 +4,6 @@
 #include "../GaussLegendre/GaussLegendre.cuh"
 #include "FluxIntegral.cuh"
 
-enum FieldUpdateMode
-{
-	SunUpdateMode, HelioUpdateMode
-};
 
 class HelioEnergy {
 public:
@@ -19,6 +15,8 @@ public:
 	}
 	void calcHelioEnergy(float sigma, FieldUpdateMode mode);
 	~HelioEnergy() {
+		h_args.clear();
+		gl_handler.clear();
 		cudaFree(d_total_energy);
 		d_total_energy = nullptr;
 	}

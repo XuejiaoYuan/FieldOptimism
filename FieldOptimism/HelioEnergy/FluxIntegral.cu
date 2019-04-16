@@ -1,6 +1,6 @@
 #include "FluxIntegral.cuh"
 
-__global__ void fluxIntegral(IntegralHelioDeviceArgumet h_args, ReceiverDeviceArgument r_args, GaussLegendre gl, float* d_total_energy, const int m, const int n, float* d_flux_sum) {
+__global__ void fluxIntegral(IntegralHelioDeviceArgumet h_args, ReceiverDeviceArgument r_args, GaussLegendre gl, float* d_total_energy, const int m, const int n) {
 	int myId = GeometryFunc::getThreadId();
 	if (myId >= m*n*h_args.numberOfHeliostats*r_args.numberOfReceivers) return;
 
@@ -13,10 +13,10 @@ __global__ void fluxIntegral(IntegralHelioDeviceArgumet h_args, ReceiverDeviceAr
 	float3 recv_pos = r_args.d_recv_focus_pos[recvIndex];
 	float3 recv_normal = r_args.d_recv_normal[recvIndex];
 	float3 imgplane_normal = normalize(h_args.d_helio_pos[helioIndex] - recv_pos);
-	double cos_phi = dot(recv_normal, imgplane_normal);
+	float cos_phi = dot(recv_normal, imgplane_normal);
 	if (cos_phi < Epsilon) return;
 
-	float3 reverse_dir = normalize(h_args.d_helio_pos[helioIndex] - recv_pos);		// The normal of image plane
+	float3 reverse_dir = imgplane_normal;		// The normal of image plane
 	float3* recv_v = r_args.d_recv_vertexes + 4 * recvIndex;
 	float4* imgplane_m = h_args.d_imgplane_world2local + 4 * helioIndex;
 	float2 proj_v[4];
@@ -48,8 +48,4 @@ __global__ void fluxIntegral(IntegralHelioDeviceArgumet h_args, ReceiverDeviceAr
 	float sum = gl.calcInte(tmp_x, tmp_y, h_args.sigma, l_w_ratio) * h_args.d_factor[helioIndex] * cos_phi;
 
 	atomicAdd(d_total_energy, sum);
-	if(d_flux_sum) atomicAdd(d_flux_sum + helioIndex, sum);
-	//sum = sum * helio->flux_param *  h_args.DNI * cos_phi;
-
-
 }

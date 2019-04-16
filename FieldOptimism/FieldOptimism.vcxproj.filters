@@ -45,6 +45,9 @@
     <Filter Include="HelioEnergy">
       <UniqueIdentifier>{d22e7846-3625-4cbf-b51f-50f182dbe922}</UniqueIdentifier>
     </Filter>
+    <Filter Include="TestHandler">
+      <UniqueIdentifier>{cbcabe50-597c-4e9b-87df-732555671a79}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DataStructure\Clipper\clipper.hpp">
@@ -116,6 +119,9 @@
     <ClInclude Include="GaussLegendre\GaussLegendre.h">
       <Filter>GaussLegendre</Filter>
     </ClInclude>
+    <ClInclude Include="TestHandler\TestHandler.h">
+      <Filter>TestHandler</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DataStructure\Clipper\clipper.cpp">
@@ -160,6 +166,9 @@
     </ClCompile>
     <ClCompile Include="GaussLegendre\GaussLegendre.cpp">
       <Filter>GaussLegendre</Filter>
+    </ClCompile>
+    <ClCompile Include="TestHandler\TestHandler.cpp">
+      <Filter>TestHandler</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

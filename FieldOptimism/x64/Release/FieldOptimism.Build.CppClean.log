@@ -1,8 +1,10 @@
 e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\x64\release\vc140.pdb
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\x64\release\testhandler.obj
 e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\x64\release\sdbkcalculator.obj
 e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\x64\release\raycastingargument.obj
 e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\x64\release\main.obj
 e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\x64\release\griddda_cpu.obj
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\x64\release\gausslegendre.obj
 e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\x64\release\discreteraycaster.obj
 e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\x64\release\timer.obj
 e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\x64\release\sunray.obj
@@ -18,6 +20,12 @@ x64\release\raycastercore.cu.obj
 x64\release\gausslegendre.cu.obj
 x64\release\fluxintegral.cu.obj
 x64\release\helioenergy.cu.obj
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\x64\release\fieldoptimism.lib
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\x64\release\fieldoptimism.exp
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\x64\release\fieldoptimism.exe
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\x64\release\fieldoptimism.ipdb
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\x64\release\fieldoptimism.iobj
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\x64\release\fieldoptimism.pdb
 e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\x64\release\devicelist.cu.cache
 e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\x64\release\fluxintegral.cu.cache
 e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\x64\release\gausslegendre.cu.cache
@@ -29,12 +37,12 @@ e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\x
 e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\x64\release\gausslegendre.cu.obj
 e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\x64\release\helioenergy.cu.obj
 e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\x64\release\raycastercore.cu.obj
-e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\x64\release\fieldoptimism.pdb
-e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\x64\release\fieldoptimism.exe
 e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\x64\release\fieldoptimism.tlog\cl.command.1.tlog
 e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\x64\release\fieldoptimism.tlog\cl.read.1.tlog
 e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\x64\release\fieldoptimism.tlog\cl.write.1.tlog
 e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\x64\release\fieldoptimism.tlog\cudacompile.read.1u.tlog
 e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\x64\release\fieldoptimism.tlog\cudacompile.write.1u.tlog
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\x64\release\fieldoptimism.tlog\fieldoptimism.write.1u.tlog
 e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\x64\release\fieldoptimism.tlog\link.command.1.tlog
 e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\x64\release\fieldoptimism.tlog\link.read.1.tlog
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\x64\release\fieldoptimism.tlog\link.write.1.tlog

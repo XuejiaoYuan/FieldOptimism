@@ -244,39 +244,6 @@ double SdBkCalc::helioClipper(Heliostat * helio, const vector<Vector3d>& dir, co
 	sum = fabs(sum*0.5);
 
 	double res = sum / total_area;
-
-
-
-#ifdef OUTPUTRES
-	fstream outFile;
-	outFile.open("sub_clipper.txt", ios_base::out);
-	//outFile << "subj:" << endl;
-	for (auto&tmp : subj[0])
-		outFile << tmp.X / (double)VERTEXSCALE << ' ' << tmp.Y / (double)VERTEXSCALE << endl;
-	outFile.close();
-	//outFile << "clips:" << endl;
-	outFile.open("clips.txt", ios_base::out);
-	for (int i = 0; i < clips.size(); i++)
-		for (int j = 0; j < clips[i].size(); j++)
-			outFile << clips[i][j].X / (double)VERTEXSCALE << ' ' << clips[i][j].Y / (double)VERTEXSCALE << endl;
-	outFile.close();
-	//outFile << "solution:" << endl;
-	outFile.open("solution.txt", ios_base::out);
-	for (int i = 0; i < solution.size(); i++)
-		for (int j = 0; j < solution[i].size(); j++)
-			outFile << solution[i][j].X / (double)VERTEXSCALE << ' ' << solution[i][j].Y / (double)VERTEXSCALE << endl;
-	outFile.close();
-
-#endif // OUTPUTRES
-
-#ifdef CALC_TIME
-	auto elapsed = chrono::duration_cast<chrono::microseconds>(std::chrono::high_resolution_clock::now() - start);
-	auto time = double(elapsed.count())*chrono::microseconds::period::num / chrono::microseconds::period::den;
-	std::cout << "clipper time: " << time << "s." << endl;
-
-#endif // CALC_TIME
-
-
 	return res;
 }
 
@@ -447,7 +414,7 @@ double SdBkCalc::calcFluxMap(Heliostat * helio, const double DNI)
 				proj_v.push_back(Vector2d(inter_v.x(), inter_v.z()));
 			
 			}
-			_flux_sum += _multi_inte_flux_sum(proj_v, 3, helio, helio->cos_phi[i], DNI);;
+			_flux_sum += _multi_inte_flux_sum(proj_v, helio, helio->cos_phi[i], DNI);;
 		}
 	}
 
@@ -642,15 +609,15 @@ double SdBkCalc::_calc_flux_sum(vector<Vector2d>& proj_v, Heliostat * helio, con
 //
 // [卷积计算通量密度] 将区域分割成若干子区域，对每个子区域进行卷积
 //
-double SdBkCalc::_multi_inte_flux_sum(vector<Vector2d>& proj_v, int n, Heliostat* helio, const double cos_phi, const double DNI) {
-	Vector2d row_gap = (proj_v[3] - proj_v[0]) / n;
-	Vector2d col_gap = (proj_v[1] - proj_v[0]) / n;
+double SdBkCalc::_multi_inte_flux_sum(vector<Vector2d>& proj_v, Heliostat* helio, const double cos_phi, const double DNI) {
+	Vector2d row_gap = (proj_v[3] - proj_v[0]) / gl->m;
+	Vector2d col_gap = (proj_v[1] - proj_v[0]) / gl->n;
 
 	Vector4d tmp_x, tmp_y;
 	double sum = 0.0;
 
-	for (int i = 0; i < n; i++) {
-		for (int j = 0; j < n; j++) {
+	for (int i = 0; i < gl->m; i++) {
+		for (int j = 0; j < gl->n; j++) {
 			tmp_x(0) = (proj_v[0] + i*row_gap + j*col_gap).x();
 			tmp_y(0) = (proj_v[0] + i*row_gap + j*col_gap).y();
 			tmp_x(1) = (proj_v[0] + (i + 1)*row_gap + j*col_gap).x();
@@ -816,7 +783,7 @@ double SdBkCalc::calcSingleFluxSum(int helio_index, const double DNI) {
 				proj_v.push_back(Vector2d(inter_v.x(), inter_v.z()));
 
 			}
-			_flux_sum += _multi_inte_flux_sum(proj_v, 2, helio, helio->cos_phi[i], DNI);
+			_flux_sum += _multi_inte_flux_sum(proj_v, helio, helio->cos_phi[i], DNI);
 		}
 	}
 
@@ -831,17 +798,6 @@ double SdBkCalc::calcTotalEnergy(const double DNI)
 {
 	vector<Heliostat*> helios = solar_scene->helios;
 	double sum = 0.0;
-#ifdef READFILE
-	fstream inFile("shadowblock_gt_save.txt", ios_base::in);
-	if (inFile.fail())
-		cout << "Can't open the file!" << endl;
-#endif // READFILE
-
-#ifdef CALC_TIME
-	auto start = std::chrono::high_resolution_clock::now();
-
-#endif // CALC_TIME
-
 	Vector3d reverse_sunray_dir = -solar_scene->sunray_dir;
 #pragma omp parallel for
 	for (int i = 0; i < helios.size(); i++) {
@@ -849,58 +805,8 @@ double SdBkCalc::calcTotalEnergy(const double DNI)
 
 #pragma omp critical
 		sum += res;
-
-#ifdef DEBUG
-		// Ray tracing
-		vector<set<vector<int>>> ray_relative_grids(2);
-		int helio_col = (helio->helio_pos.x() - layouts[0]->layout_first_helio_center.x()) / layouts[0]->helio_interval.x();			// smaller x is, smaller col is
-		int helio_row = (helio->helio_pos.z() - layouts[0]->layout_first_helio_center.z()) / layouts[0]->helio_interval.z();
-
-
-		double ray_res = calcAccurateIntersection(helio, dir, ray_relative_grids);
-		cout << "Heliostat: " << helio->helio_index << ' ' << ray_res << ' ' << helio->sd_bk << endl;		helio->sd_bk = ray_res;
-		
-		//int r1 = (helio->helio_pos.z() - solar_scene->layouts[0]->layout_first_helio_center.z()) / solar_scene->layouts[0]->helio_interval.z();		// smaller x is, smaller col is
-		//int c1 = (helio->helio_pos.x() - solar_scene->layouts[0]->layout_first_helio_center.x()) / solar_scene->layouts[0]->helio_interval.x();		// bigger z is, smaller row is
-		//cout << r1 << ' ' << c1 << endl;
-		//(*raytracing_store)(r,c) = calcAccurateIntersection(helio, dir);
-		//cout << (*raytracing_store)(r, c) - (*sd_bk_res)(r, c) << endl;
-		for (auto&label : ray_relative_grids[0]) {
-			if(shadow_relative_grid_label_3ddda.count(label) == 0)
-				cout << helio_col << ' ' << helio_row << ' ' << helio->helio_index << endl;
-		}
-		for (auto&label : ray_relative_grids[1]) {
-			if (block_relative_grid_label_3ddda.count(label) == 0) {
-				cout << helio_col << ' ' << helio_row << ' ' << helio->helio_index << endl;
-			}
-		}
-#endif // DEBUG
-
-#ifdef READFILE
-		if (helio->helio_label.y() == 0)
-			std::cout << "Heliostat: " << helio->helio_label.x() << endl;
-		inFile >> raytracing_store[i][0] >> raytracing_store[i][1];
-		cout << raytracing_store[i][0] - shadow_helio_ratio << ' ' << raytracing_store[i][1] - block_helio_ratio << endl;
-		gt_field_shadow_ratio += raytracing_store[i][0];
-		gt_field_block_ratio += raytracing_store[i][1];
-#endif // READFILE
 	}
-
-#ifdef CALC_TIME
-	auto elapsed = chrono::duration_cast<chrono::microseconds>(std::chrono::high_resolution_clock::now() - start);
-	auto time = double(elapsed.count())*chrono::microseconds::period::num / chrono::microseconds::period::den;
-	std::cout << "Heliostat total calculate time: " << time << "s." << endl;
-
-#endif // CALC_TIME
 	
-
-#ifdef OUTPUTRES
-	fstream outFile("shadowblock_clipper_save.txt", ios_base::out);
-	for (auto&res : clipper_res_store)
-		outFile << res[0] << ' ' << res[1] << endl;
-	outFile.close();
-
-#endif // OUTPUTRES
 	return  sum;
 }
 
@@ -986,14 +892,13 @@ void SdBkCalcTest::singleHelioTest(const int _helio_index) {
 // [ray tracing] 辅助函数，读取ray tracing文件结果
 //
 void SdBkCalcTest::readRayTracingRes(){
-	readRayTracingCore("/test1/rayTracing_sd_index.txt", v_gt_sd_helio_index);
-	readRayTracingCore("/test1/rayTracing_bk_index.txt", v_gt_bk_helio_index);	
+	readRayTracingCore("/RayCastingGT/rayTracing_sd_index.txt", v_gt_sd_helio_index, v_gt_bk_helio_index);
 }
 
 //
 // [ray tracing] 輔助函數，讀取文件內容
 //
-void SdBkCalcTest::readRayTracingCore(string file_name, vector<set<int>>& index_set) {
+void SdBkCalcTest::readRayTracingCore(string file_name, vector<set<int>>& sd_index_set, vector<set<int>>& bk_index) {
 	fstream inFile(save_path + file_name);
 	string line;
 	while (getline(inFile, line)) {
@@ -1004,7 +909,17 @@ void SdBkCalcTest::readRayTracingCore(string file_name, vector<set<int>>& index_
 		while (getline(ss, word, ' ')) {
 			tmp.insert(stoi(word));
 		}
-		index_set.push_back(tmp);
+		sd_index_set.push_back(tmp);
+
+		getline(inFile, line);
+		ss.str("");
+		ss << line;
+		getline(ss, line, ' ');
+		tmp.clear();
+		while (getline(ss, word, ' ')) {
+			tmp.insert(stoi(word));
+		}
+		bk_index.push_back(tmp);
 	}
 	inFile.close();
 }

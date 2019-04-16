@@ -3,7 +3,7 @@
 
 class GaussLegendreCPU {
 public:
-	GaussLegendreCPU(const int M, const int N) {
+	GaussLegendreCPU(const int M, const int N, const int m, const int n):m(m), n(n) {
 		node.clear();
 		weight.clear();
 		node.resize(2);
@@ -26,4 +26,6 @@ public:
 
 	vector<VectorXd> node;
 	vector<VectorXd> weight;
+	int m;
+	int n;
 };

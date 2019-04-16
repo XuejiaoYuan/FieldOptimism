@@ -116,6 +116,7 @@
     <ClInclude Include="HelioEnergy\HelioEnergy.cuh" />
     <ClInclude Include="RayCastingArgument\RayCastingArgument.h" />
     <ClInclude Include="sdbkCalculator\sdbkCalculator.h" />
+    <ClInclude Include="TestHandler\TestHandler.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DataStructure\Clipper\clipper.cpp" />
@@ -133,6 +134,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="RayCastingArgument\RayCastingArgument.cpp" />
     <ClCompile Include="sdbkCalculator\sdbkCalculator.cpp" />
+    <ClCompile Include="TestHandler\TestHandler.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

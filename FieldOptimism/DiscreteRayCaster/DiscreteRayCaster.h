@@ -5,8 +5,7 @@
 
 class DiscreteRayCaster {
 public:
-	void clearArguments();
-	void rayCasting(SolarScene* solar_sene);
+	void rayCasting(SolarScene* solar_sene, string save_path, CalcMode calc_mode = FastMode);
 
 private:
 };

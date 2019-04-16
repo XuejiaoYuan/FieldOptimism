@@ -76,7 +76,7 @@ public:
 private:
 	void setCircleHelios(const int filed_index, const double R, const double gap, const int rows, const double angle_delta, vector<Heliostat*>& helios, const vector<Receiver*>& recvs);
 	void calcCircleParams(vector<double>& recv_dis, vector<int>& n_rows, vector<double>& angle_delta, const vector<vector<double>*>& field_args = {});
-	//void getCircleHelioIndex();
+	MatrixXd FermatLayout::getCircleHelioIndex(const int start_index, const int rows, const double angle_delta);
 };
 
 class RadialLayout:public Layout{

@@ -1,9 +1,8 @@
 #include "RayCastingArgument.h"
 
-void RayCastHelioDeviceArgument::setHelioDeviceOrigins(const int width_slice, const int length_slice, bool update) {
-	
-	helio_slice_length = length_slice <= 0 ? HELIOSTAT_SLICE_LENGTH : length_slice;
-	helio_slice_width = width_slice <= 0 ? HELIOSTAT_SLICE_WIDTH : width_slice;
+void RayCastHelioDeviceArgument::setHelioDeviceOrigins(const double helio_slice, int helio_length, int helio_width, bool update) {
+	helio_slice_length = helio_length / helio_slice;
+	helio_slice_width = helio_width / helio_slice;
 
 	if ( update && d_helio_origins) {
 		cudaFree(d_helio_origins);
@@ -89,21 +88,22 @@ void IntegralHelioDeviceArgumet::setHelioRecvArguments(vector<Heliostat*>& helio
 	float4* h_imgplane_world2local = new float4[4 * numberOfHeliostats];
 	float* h_lw_ratio = new float[numberOfHeliostats];
 	float* h_factor = new float[numberOfHeliostats];
-	float* h_total_energy = new float;
 	Vector3d focus_center, reverse_dir;
 	Matrix4d world2localM, local2worldM;
-	*h_total_energy = 0;
 #pragma omp parallel for
 	for (int i = 0; i < helios.size(); ++i) {
 		h_focus_index[i] = helios[i]->focus_center_index;
 		h_lw_ratio[i] = helios[i]->l_w_ratio;
 		h_factor[i] = helios[i]->flux_param * (1 - helios[i]->sd_bk);
+	}
 
+	for (int i = 0; i < helios.size(); ++i) {
 		focus_center = recv.focus_center[h_focus_index[i]];
 		reverse_dir = (helios[i]->helio_pos - focus_center).normalized();		// The normal of image plane
 		GeometryFunc::getImgPlaneMatrixs(reverse_dir, focus_center, local2worldM, world2localM, 1);
-		for (int j = 0; j < 4; ++j)		// TODO: check whether the matrix is right
+		for (int j = 0; j < 4; ++j) {
 			h_imgplane_world2local[4 * i + j] = make_float4(world2localM(j, 0), world2localM(j, 1), world2localM(j, 2), world2localM(j, 3));
+		}
 	}
 	cudaMemcpy(d_focus_index, h_focus_index, sizeof(int)*numberOfHeliostats, cudaMemcpyHostToDevice);
 	cudaMemcpy(d_imgplane_world2local, h_imgplane_world2local, sizeof(float4) * 4 * numberOfHeliostats, cudaMemcpyHostToDevice);
@@ -114,7 +114,6 @@ void IntegralHelioDeviceArgumet::setHelioRecvArguments(vector<Heliostat*>& helio
 	delete[] h_imgplane_world2local;
 	delete[] h_lw_ratio;
 	delete[] h_factor;
-	delete h_total_energy;
 }
 
 void ReceiverDeviceArgument::setRecvDeviceArguments(Receiver& recv)
