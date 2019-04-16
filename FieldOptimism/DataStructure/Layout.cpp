@@ -242,26 +242,28 @@ void FermatLayout::calcCircleParams(vector<double>& recv_dis, vector<int>& n_row
 	n_rows.push_back(int(recv_dis[3] - recv_dis[2]) / helio_gap3);
 }
 
-MatrixXd FermatLayout::getCircleHelioIndex(const int start_index, const int rows, const double angle_delta)
+MatrixXd FermatLayout::getCircleHelioIndex(int& start_index, const int rows, const double angle_delta)
 {
 	int h_cnt = 2 * PI / angle_delta;
-	MatrixXd index_m(rows, h_cnt);
+	MatrixXd helio_index_store(rows, h_cnt);
 
 	for (int i = 0; i < rows; i++) 
 		for (int h = 0; h < h_cnt; h++) 
-			index_m(i, h) = start_index + rows*h_cnt + h;
-	return index_m;
+			(helio_index_store)(i, h) = start_index + i*h_cnt;
+	start_index += rows * h_cnt;
+	return helio_index_store;
 }
 
 vector<MatrixXd> FermatLayout::getHelioIndex() {
 	vector<MatrixXd> helio_index_store;
 	vector<double> recv_dis, angle_delta;
 	vector<int> n_rows;
+
+	int start_index = 0;
 	calcCircleParams(recv_dis, n_rows, angle_delta);
-	helio_index_store.push_back(getCircleHelioIndex(0, n_rows[0], angle_delta[0]));
-	helio_index_store.push_back(getCircleHelioIndex(helio_index_store.back().rows() * helio_index_store.back().cols(),
-								n_rows[1], angle_delta[1]));
-	helio_index_store.push_back(getCircleHelioIndex(helio_index_store.back().rows() * helio_index_store.back().cols(),
-								n_rows[2], angle_delta[2]));
+	helio_index_store.push_back(getCircleHelioIndex(start_index, n_rows[0], angle_delta[0]));
+	helio_index_store.push_back(getCircleHelioIndex(start_index, n_rows[1], angle_delta[1]));
+	helio_index_store.push_back(getCircleHelioIndex(start_index, n_rows[2], angle_delta[2]));
+
 	return helio_index_store;
 }
