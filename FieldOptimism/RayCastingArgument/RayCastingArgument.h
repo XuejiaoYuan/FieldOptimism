@@ -47,11 +47,13 @@ public:
 	int helio_list_size;
 
 	RayCastHelioDeviceArgument() :d_rela_shadow_helio_index(nullptr), d_rela_block_helio_index(nullptr), d_hit_cnt(nullptr), 
-		numberOfOrigions(HELIOSTAT_SLICE_LENGTH* HELIOSTAT_SLICE_WIDTH),
-		helio_slice_length(HELIOSTAT_SLICE_LENGTH), helio_slice_width(HELIOSTAT_SLICE_WIDTH), helio_list_size(DEVICE_LIST_SIZE) {}
-	RayCastHelioDeviceArgument(int slice_length, int slice_width, int helio_list_size) :
-		d_rela_shadow_helio_index(nullptr), d_rela_block_helio_index(nullptr), d_hit_cnt(nullptr),  
-		numberOfOrigions(slice_length*slice_width), helio_slice_length(slice_length), helio_slice_width(slice_width), helio_list_size(helio_list_size) {}
+		numberOfOrigions(0), helio_slice_length(0), helio_slice_width(0), helio_list_size(DEVICE_LIST_SIZE) {}
+	RayCastHelioDeviceArgument(double helio_slice, int helio_length, int helio_width, int helio_list_size) :
+		d_rela_shadow_helio_index(nullptr), d_rela_block_helio_index(nullptr), d_hit_cnt(nullptr), helio_list_size(helio_list_size) {
+		helio_slice_length = helio_length / helio_slice;
+		helio_slice_width = helio_width / helio_slice;
+		numberOfOrigions = helio_slice_length * helio_slice_width;
+	}
 
 	~RayCastHelioDeviceArgument() {
 		cudaFree(d_rela_shadow_helio_index);
@@ -64,7 +66,7 @@ public:
 		d_rela_block_helio_index = nullptr;
 	}
 
-	void setHelioDeviceOrigins(const int slice_length, const int slice_width, bool update = false);
+	void setHelioDeviceOrigins(const double helio_slice, int helio_length, int helio_width, bool update = false);
 
 };
 

@@ -4,10 +4,6 @@
 #include "../GaussLegendre/GaussLegendre.cuh"
 #include "FluxIntegral.cuh"
 
-enum FieldUpdateMode
-{
-	SunUpdateMode, HelioUpdateMode
-};
 
 class HelioEnergy {
 public:

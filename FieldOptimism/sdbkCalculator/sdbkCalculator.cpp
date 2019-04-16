@@ -447,7 +447,7 @@ double SdBkCalc::calcFluxMap(Heliostat * helio, const double DNI)
 				proj_v.push_back(Vector2d(inter_v.x(), inter_v.z()));
 			
 			}
-			_flux_sum += _multi_inte_flux_sum(proj_v, 3, helio, helio->cos_phi[i], DNI);;
+			_flux_sum += _multi_inte_flux_sum(proj_v, helio, helio->cos_phi[i], DNI);;
 		}
 	}
 
@@ -642,15 +642,15 @@ double SdBkCalc::_calc_flux_sum(vector<Vector2d>& proj_v, Heliostat * helio, con
 //
 // [卷积计算通量密度] 将区域分割成若干子区域，对每个子区域进行卷积
 //
-double SdBkCalc::_multi_inte_flux_sum(vector<Vector2d>& proj_v, int n, Heliostat* helio, const double cos_phi, const double DNI) {
-	Vector2d row_gap = (proj_v[3] - proj_v[0]) / n;
-	Vector2d col_gap = (proj_v[1] - proj_v[0]) / n;
+double SdBkCalc::_multi_inte_flux_sum(vector<Vector2d>& proj_v, Heliostat* helio, const double cos_phi, const double DNI) {
+	Vector2d row_gap = (proj_v[3] - proj_v[0]) / gl->m;
+	Vector2d col_gap = (proj_v[1] - proj_v[0]) / gl->n;
 
 	Vector4d tmp_x, tmp_y;
 	double sum = 0.0;
 
-	for (int i = 0; i < n; i++) {
-		for (int j = 0; j < n; j++) {
+	for (int i = 0; i < gl->m; i++) {
+		for (int j = 0; j < gl->n; j++) {
 			tmp_x(0) = (proj_v[0] + i*row_gap + j*col_gap).x();
 			tmp_y(0) = (proj_v[0] + i*row_gap + j*col_gap).y();
 			tmp_x(1) = (proj_v[0] + (i + 1)*row_gap + j*col_gap).x();
@@ -816,7 +816,7 @@ double SdBkCalc::calcSingleFluxSum(int helio_index, const double DNI) {
 				proj_v.push_back(Vector2d(inter_v.x(), inter_v.z()));
 
 			}
-			_flux_sum += _multi_inte_flux_sum(proj_v, 2, helio, helio->cos_phi[i], DNI);
+			_flux_sum += _multi_inte_flux_sum(proj_v, helio, helio->cos_phi[i], DNI);
 		}
 	}
 
@@ -911,11 +911,6 @@ void SdBkCalc::calcTotalShadowBlock()
 	for (int i = 0; i < helios.size(); i++) {
 		calcSingleShadowBlock(i);
 	}
-
-	//fstream outFile("SdBkRes/clipper_sdbk.txt", ios_base::out);
-	//for (int i = 0; i < res.size(); ++i)
-	//	outFile << res[i] << endl;
-	//outFile.close();
 }
 
 void CrossRectSdBkCalc::save_clipper_res(const string save_path, int month, int day, int hour, int minute)
@@ -991,14 +986,13 @@ void SdBkCalcTest::singleHelioTest(const int _helio_index) {
 // [ray tracing] 辅助函数，读取ray tracing文件结果
 //
 void SdBkCalcTest::readRayTracingRes(){
-	readRayTracingCore("/test1/rayTracing_sd_index.txt", v_gt_sd_helio_index);
-	readRayTracingCore("/test1/rayTracing_bk_index.txt", v_gt_bk_helio_index);	
+	readRayTracingCore("/RayCastingGT/rayTracing_sd_index.txt", v_gt_sd_helio_index, v_gt_bk_helio_index);
 }
 
 //
 // [ray tracing] 輔助函數，讀取文件內容
 //
-void SdBkCalcTest::readRayTracingCore(string file_name, vector<set<int>>& index_set) {
+void SdBkCalcTest::readRayTracingCore(string file_name, vector<set<int>>& sd_index_set, vector<set<int>>& bk_index) {
 	fstream inFile(save_path + file_name);
 	string line;
 	while (getline(inFile, line)) {
@@ -1009,7 +1003,17 @@ void SdBkCalcTest::readRayTracingCore(string file_name, vector<set<int>>& index_
 		while (getline(ss, word, ' ')) {
 			tmp.insert(stoi(word));
 		}
-		index_set.push_back(tmp);
+		sd_index_set.push_back(tmp);
+
+		getline(inFile, line);
+		ss.str("");
+		ss << line;
+		getline(ss, line, ' ');
+		tmp.clear();
+		while (getline(ss, word, ' ')) {
+			tmp.insert(stoi(word));
+		}
+		bk_index.push_back(tmp);
 	}
 	inFile.close();
 }
@@ -1103,39 +1107,6 @@ bool SdBkCalcTest::calcIntersect(Vector3d& ori_v, Vector3d& dir, set<int>& index
 					hNear = h;
 				}
 			}
-
-			//Vector3d E1 = neigh_v[1] - neigh_v[0];
-			//Vector3d E2 = neigh_v[2] - neigh_v[0];
-			//Vector3d pvec = dir.cross(E2);
-			//double det = E1.dot(pvec);
-
-			//// ray and triangle are parallel if det is close to 0
-			//if (fabsf(det) < Epsilon) continue;
-
-			//double invDet = 1 / det;
-
-			//Vector3d T = ori_v - neigh_v[0];
-			//Vector3d qvec = T.cross(E1);
-
-			//double t = E2.dot(qvec)*invDet;
-			//if (t < Epsilon) continue;
-
-			//Vector3d intersect_v = ori_v + dir*t;
-			//int l;
-			//for (l = 0; l < 4; l++) {
-			//	Vector3d edg = neigh_v[(l + 1) % 4] - neigh_v[l];
-			//	Vector3d line = intersect_v - neigh_v[l];
-			//	Vector3d tmp_n = edg.cross(line);
-			//	if (tmp_n.dot(h->helio_normal) < Epsilon)
-			//		break;
-			//}
-			//if (l != 4)
-			//	continue;
-
-			//if (t < tMin) {
-			//	tMin = t;
-			//	hNear = h;
-			//}
 		}
 	}
 	if (hNear != nullptr) {
@@ -1327,63 +1298,41 @@ void SdBkCalcTest::getStartEndIndex(Heliostat* helio, int& start, int& end) {
 	}
 		
 	case FermatLayoutType: {
-		vector<MatrixXd*>& helio_index_store = solar_scene->layouts[0]->helio_index_store;
+		FermatLayout* layout = dynamic_cast<FermatLayout*>(solar_scene->layouts[0]);
+		vector<MatrixXd> helio_index_store = layout->getHelioIndex();
 		int cur_region = 0;
 		int sum = 0;
 		while (helio->helio_index > sum - 1) {
-			int size = helio_index_store[cur_region]->rows() *helio_index_store[cur_region]->cols();
+			int size = helio_index_store[cur_region].rows() *helio_index_store[cur_region].cols();
 			sum += size;
 			++cur_region;
 		}
-		sum -= helio_index_store[cur_region]->rows() *helio_index_store[cur_region]->cols();
+		sum -= helio_index_store[cur_region].rows() *helio_index_store[cur_region].cols();
 		--cur_region;
 		start = helio->helio_index - sum + 1;
-		int row = start / helio_index_store[cur_region]->cols();
+		int row = start / helio_index_store[cur_region].cols();
 		if (row < 2 && cur_region == 0) start = 0;
 		else {
 			row -= 2;
 			if (row < 0) {
 				--cur_region;
-				row %= helio_index_store[cur_region]->rows();
+				row %= helio_index_store[cur_region].rows();
 			}
-			start = (*helio_index_store[cur_region])(row, 0);
+			start = (helio_index_store[cur_region])(row, 0);
 		}
-		if (row > helio_index_store[cur_region]->rows() - 3 && cur_region == helio_index_store.size() - 1) {
+		if (row > helio_index_store[cur_region].rows() - 3 && cur_region == helio_index_store.size() - 1) {
 			end = helios.size() - 1;
 
 		}
 		else {
 			row += 2;
-			if (row > helio_index_store[cur_region]->rows() - 1) {
-				row %= helio_index_store[cur_region]->rows();
+			if (row > helio_index_store[cur_region].rows() - 1) {
+				row %= helio_index_store[cur_region].rows();
 				++cur_region;
 			}
-			int col = helio_index_store[cur_region]->cols() - 1;
-			end = (*helio_index_store[cur_region])(row, col);
+			int col = helio_index_store[cur_region].cols() - 1;
+			end = (helio_index_store[cur_region])(row, col);
 		}
-		//if (row < 2) {
-		//	if (cur_region == 0)
-		//		start = 0;
-		//	else {
-		//		--cur_region;
-		//		row = helio_index_store[cur_region]->rows() - 2 + row;
-		//		start = (*helio_index_store[cur_region])(row, 0);
-		//	}
-		//}
-		//else
-		//	start = (*helio_index_store[cur_region])(row - 2, 0);
-
-		//if (row > helio_index_store[cur_region]->rows() - 3) {
-		//	if (cur_region == helio_index_store.size() - 1)
-		//		end = helios.size() - 1;
-		//	else {
-		//		row = (row + 2)% helio_index_store[cur_region]->rows();
-		//		++cur_region;
-		//		end = (*helio_index_store[cur_region])(row, helio_index_store[cur_region]->cols() - 1);
-		//	}
-		//}
-		//else
-		//	end = (*helio_index_store)
 		break;
 	}
 		

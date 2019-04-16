@@ -30,6 +30,9 @@ void HelioEnergy::calcHelioEnergy(float sigma, FieldUpdateMode mode)
 	cudaDeviceSynchronize();
 
 	cudaMemcpy(h_total_energy, d_total_energy, sizeof(float), cudaMemcpyDeviceToHost);
+	vector<double> res;
+	for (int i = 0; i < h_args.numberOfHeliostats; ++i)
+		res.push_back(h_total_energy[i]);
 
 	delete h_total_energy;
 }

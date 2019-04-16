@@ -1,9 +1,8 @@
 #include "RayCastingArgument.h"
 
-void RayCastHelioDeviceArgument::setHelioDeviceOrigins(const int width_slice, const int length_slice, bool update) {
-	
-	helio_slice_length = length_slice <= 0 ? HELIOSTAT_SLICE_LENGTH : length_slice;
-	helio_slice_width = width_slice <= 0 ? HELIOSTAT_SLICE_WIDTH : width_slice;
+void RayCastHelioDeviceArgument::setHelioDeviceOrigins(const double helio_slice, int helio_length, int helio_width, bool update) {
+	helio_slice_length = helio_length / helio_slice;
+	helio_slice_width = helio_width / helio_slice;
 
 	if ( update && d_helio_origins) {
 		cudaFree(d_helio_origins);
@@ -102,7 +101,7 @@ void IntegralHelioDeviceArgumet::setHelioRecvArguments(vector<Heliostat*>& helio
 		focus_center = recv.focus_center[h_focus_index[i]];
 		reverse_dir = (helios[i]->helio_pos - focus_center).normalized();		// The normal of image plane
 		GeometryFunc::getImgPlaneMatrixs(reverse_dir, focus_center, local2worldM, world2localM, 1);
-		for (int j = 0; j < 4; ++j)		// TODO: check whether the matrix is right
+		for (int j = 0; j < 4; ++j)	
 			h_imgplane_world2local[4 * i + j] = make_float4(world2localM(j, 0), world2localM(j, 1), world2localM(j, 2), world2localM(j, 3));
 	}
 	cudaMemcpy(d_focus_index, h_focus_index, sizeof(int)*numberOfHeliostats, cudaMemcpyHostToDevice);

@@ -54,7 +54,8 @@ void GridDDA::testHandler(SolarScene* solar_scene)
 
 	Timer t;
 	RayCastHelioDeviceArgument h_args;
-	h_args.setHelioDeviceOrigins(100, 100);		// 第一次调用cuda程序耗时较长
+	Vector3d helio_size = solar_scene->helios[0]->helio_size;
+	h_args.setHelioDeviceOrigins(0.01, helio_size.x(), helio_size.z());		// 第一次调用cuda程序耗时较长
 	h_args.setHelioDevicePos(solar_scene->helios);
 	h_args.setHelioDeviceArguments(solar_scene->helios);
 

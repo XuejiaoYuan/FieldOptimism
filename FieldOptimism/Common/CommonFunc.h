@@ -32,9 +32,8 @@ using namespace Eigen;
 #define PI acos(double(-1))
 #define HELIOSTAT_REFLECTIVITY 0.88 
 #define RECEIVER_SLICE 0.05		// *ATTENTION*: w与l应被RECEIVER_SLICE整除
+#define HELIO_SLICE 0.05		// 以该长度分割定日镜
 
-#define HELIOSTAT_SLICE_WIDTH 10
-#define HELIOSTAT_SLICE_LENGTH 10
 #define DEVICE_LIST_SIZE 10		
 #define DEVICE_BACKUP_SIZE 5
 
@@ -59,3 +58,11 @@ typedef enum {
 	RectLayoutType, CrossRectLayoutType, FermatLayoutType, RadialLayoutType
 }LayoutType;
 
+typedef enum {
+	TestMode, FastMode
+}CalcMode;
+
+enum FieldUpdateMode
+{
+	SunUpdateMode, HelioUpdateMode
+};

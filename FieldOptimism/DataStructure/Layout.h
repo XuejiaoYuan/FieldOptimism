@@ -45,10 +45,6 @@ public:
 	Vector3d helio_size;          //Heliostat's size:length, thickness, width 
 	Vector2d helio_gap;           //Heliostat's slice gap: x, z
 	Vector2i helio_matrix;          //Heliostat's slice matrix: row, col
-	vector<MatrixXd*> helio_index_store;				// Store helio index into matrix, exclude the last helio in every even row
-	//vector<vector<int>> exclude_helio_index;		    // Stote helio index which not included in the helio index matrix
-	//vector<vector<vector<double>>> exclude_helio_res;	// t x field_num x helio_num
-	//vector<MatrixXd*> m_helio_x, m_helio_y;
 };
 
 //
@@ -69,9 +65,18 @@ class FermatLayout:public Layout{
 public:
     FermatLayout():Layout(FermatLayoutType){}
 	void adjustHelioLayout(vector<Heliostat*>& helios, const vector<vector<double>*>& field_args, const vector<Receiver*>& recvs);
+	vector<MatrixXd> getHelioIndex();
+	double dsep;						// 定日镜包围盒安全距离
+	double helio_recv_dis1;				// 第一个同心圆与接收器之间的距离
+	double helio_gap1;					// 第一个同心环中定日镜分布间隔
+	double helio_gap2;					// 第二个同心环中定日镜分布间隔
+	double helio_gap3;					// 第三个同心环中定日镜分布间隔
+
 
 private:
 	void setCircleHelios(const int filed_index, const double R, const double gap, const int rows, const double angle_delta, vector<Heliostat*>& helios, const vector<Receiver*>& recvs);
+	void calcCircleParams(vector<double>& recv_dis, vector<int>& n_rows, vector<double>& angle_delta, const vector<vector<double>*>& field_args = {});
+	MatrixXd FermatLayout::getCircleHelioIndex(const int start_index, const int rows, const double angle_delta);
 };
 
 class RadialLayout:public Layout{
