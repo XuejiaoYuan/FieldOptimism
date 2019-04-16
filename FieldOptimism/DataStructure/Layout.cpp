@@ -83,16 +83,6 @@ void Layout::adjustHelioLayout(vector<Heliostat*>& helios, const vector<vector<d
 	helio_layout.resize(layout_row_col.x(), vector<vector<Heliostat*>>(layout_row_col.y()));
 
 
-	// 2. 调整helio位置参数
-	//bool init = false;
-	//if (helio_index_store.empty()) {
-	//	init = true;
-	//	helio_index_store.push_back(new MatrixXd(row, col));
-	//}
-	//if (init) {
-	//	m_helio_x.push_back(new MatrixXd(row, col));
-	//	m_helio_y.push_back(new MatrixXd(row, col));
-	//}
 
 	int cnt = 0;
 	vector<int> row_col(2, 0);
@@ -103,10 +93,6 @@ void Layout::adjustHelioLayout(vector<Heliostat*>& helios, const vector<vector<d
 			helio = new Heliostat((HelioType)helio_type, helio_gap, helio_matrix, helio_size, helios.size(), Vector3d(x_start, helio_pos.y(), z_start));
 			helio->calcFluxParam(recvs);
 			setHelioLayout(helio);
-			//if(init)
-			//	(*helio_index_store[0])(i, j) = helio->helio_index;
-			//(*m_helio_x.back())(i, j) = helio->helio_pos.x();
-			//(*m_helio_y.back())(i, j) = helio->helio_pos.z();
 			helios.push_back(helio);
 			helio = nullptr;
 			x_start += helio_interval.x();
@@ -141,22 +127,6 @@ void CrossRectLayout::adjustHelioLayout(vector<Heliostat*>& helios, const vector
 	helio_layout.resize(layout_row_col.x(), vector<vector<Heliostat*>>(layout_row_col.y()));
 
 
-	// 2. 调整helio位置参数
-	//bool init = false;
-	//if (helio_index_store.empty()) {
-	//	init = true;
-	//	helio_index_store.push_back(new MatrixXd(row, col - 1));
-	//}
-	//if (!exclude_helio_index.empty()) {
-	//	init = true;
-	//	exclude_helio_index.clear();
-	//}
-	//if (init) {
-	//	exclude_helio_index.push_back(vector<int>());
-	//	m_helio_x.push_back(new MatrixXd(row, col - 1));;
-	//	m_helio_y.push_back(new MatrixXd(row, col - 1));
-	//}
-
 	int cnt = 0;
 	for (int i = 0; i < row; i++) {
 		int tmp_col = col - i % 2;
@@ -167,18 +137,6 @@ void CrossRectLayout::adjustHelioLayout(vector<Heliostat*>& helios, const vector
 			helio->calcFluxParam(recvs);
 			setHelioLayout(helio);
 			helios.push_back(helio);
-
-
-			//if (!(i % 2) && j == tmp_col - 1) {
-			//	if (init)
-			//		exclude_helio_index[0].push_back(helio->helio_index);
-			//}
-			//else {
-			//	if (init)
-			//		(*helio_index_store[0])(i, j) = helio->helio_index;
-			//		(*m_helio_x.back())(i, j) = helio->helio_pos.x();
-			//		(*m_helio_y.back())(i, j) = helio->helio_pos.z();
-			//}
 			helio = nullptr;
 			x_start += helio_interval.x();
 		}
@@ -188,41 +146,19 @@ void CrossRectLayout::adjustHelioLayout(vector<Heliostat*>& helios, const vector
 
 void FermatLayout::adjustHelioLayout(vector<Heliostat*>& helios, const vector<vector<double>*>& field_args, const vector<Receiver*>& recvs)
 {
-	double dsep = (*field_args[0])[0];					// 定日镜包围盒安全距离
-	double dm = sqrt(pow(helio_size.x(), 2) + pow(helio_size.y(), 2))+ dsep;	// 定日镜对角线长度
-	double helio_recv_dis1 = (*field_args[1])[0];		// 第一个同心圆与接收器之间的距离
-	double helio_recv_dis2 = 2 * helio_recv_dis1;		// 第二个同心环最内圈圆与接收器之间的距离
-	double helio_recv_dis3 = 4 * helio_recv_dis1;		// 第三个同心环最内圈圆与接收器之间的距离
-	double helio_recv_dis4 = 8 * helio_recv_dis1;		// 第四个同心环最内圈圆与接收器之间的距离
-	double helio_gap1 = (*field_args[2])[0] * dm;				// 第一个同心环中定日镜分布间隔
-	double helio_gap2 = (*field_args[3])[0] * dm;				// 第二个同心环中定日镜分布间隔
-	double helio_gap3 = (*field_args[4])[0] * dm;				// 第三个同心换中定日镜分布间隔
-	double angle_delta1 = dm / helio_recv_dis1;			// 第一个同心圆环定日镜摆放角度间隔
-	double angle_delta2 = angle_delta1 / 2;				// 第二个同心环定日镜摆放角度间隔
-	double angle_delta3 = angle_delta1 / 4;				// 第三个同心环定日镜摆放角度间隔
-	int n_row1 = int(helio_recv_dis2 - helio_recv_dis1) / helio_gap1;
-	int n_row2 = int(helio_recv_dis3 - helio_recv_dis2) / helio_gap2;
-	int n_row3 = int(helio_recv_dis4 - helio_recv_dis3) / helio_gap3;
-	helio_interval = Vector3d(dm, dm, dm);				// 定日镜包围盒间距
-
-	// 清空镜场布局存储矩阵
-	for (auto&m : helio_index_store) delete m;
-	//for (auto&m : m_helio_x) delete m;
-	//for (auto&m : m_helio_y) delete m;
-	helio_index_store.clear();
-	//m_helio_x.clear();
-	//m_helio_y.clear();
-
+	vector<double> recv_dis, angle_delta;
+	vector<int> n_rows;
+	calcCircleParams(recv_dis, n_rows, angle_delta, field_args);
 	// 调整layout的参数
 	layout_bound_pos = Vector3d(
-		-helio_recv_dis4,
+		-recv_dis.back(),
 		1,
-		-helio_recv_dis4
+		-recv_dis.back()
 	);
 	layout_size = Vector3d(
-		2 * helio_recv_dis4,
+		2 * recv_dis.back(),
 		helio_interval.y(),
-		2 * helio_recv_dis4
+		2 * recv_dis.back()
 	);
 	layout_first_helio_center = layout_bound_pos + 0.5 * helio_interval;
 	layout_row_col.x() = layout_size.z() / helio_interval.z();		//row
@@ -231,9 +167,9 @@ void FermatLayout::adjustHelioLayout(vector<Heliostat*>& helios, const vector<ve
 
 
 	// 调整helio位置参数
-	setCircleHelios(0, helio_recv_dis1, helio_gap1, n_row1, angle_delta1, helios, recvs);
-	setCircleHelios(1, helio_recv_dis2, helio_gap2, n_row2, angle_delta2, helios, recvs);
-	setCircleHelios(2, helio_recv_dis3, helio_gap3, n_row3, angle_delta3, helios, recvs);
+	setCircleHelios(0, recv_dis[0], helio_gap1, n_rows[0], angle_delta[0], helios, recvs);
+	setCircleHelios(1, recv_dis[1], helio_gap2, n_rows[1], angle_delta[1], helios, recvs);
+	setCircleHelios(2, recv_dis[2], helio_gap3, n_rows[2], angle_delta[2], helios, recvs);
 
 
 #ifdef DEBUG
@@ -251,11 +187,7 @@ void FermatLayout::setCircleHelios(const int field_index, const double R, const 
 {
 	Heliostat* helio;
 	int cnt = 0;
-	int h_cnt = 2 * PI / angle_delta;
-	if (helio_index_store.size() == field_index) {
-		helio_index_store.push_back(new MatrixXd(rows, h_cnt));
-	}
-	
+	int h_cnt = 2 * PI / angle_delta;	
 	
 	for (int i = 0; i < rows; i++) {
 		double angle_d = 2 * PI / h_cnt;
@@ -277,13 +209,79 @@ void FermatLayout::setCircleHelios(const int field_index, const double R, const 
 			);
 			helio->calcFluxParam(recvs);
 			setHelioLayout(helio);
-			(*helio_index_store[field_index])(i, h) = helio->helio_index;
-			//(*m_helio_x.back())(i, h) = helio->helio_pos.x();
-			//(*m_helio_y.back())(i, h) = helio->helio_pos.z();
 			helios.push_back(helio);
 			helio = nullptr;
 			cnt++;
 		}
 	}
 	cout << "cnt: " << cnt << endl;
+}
+
+void FermatLayout::calcCircleParams(vector<double>& recv_dis, vector<int>& n_rows, vector<double>& angle_delta, 
+	const vector<vector<double>*>& field_args)
+{
+	double dm = sqrt(pow(helio_size.x(), 2) + pow(helio_size.y(), 2)) + dsep;	// 定日镜对角线长度
+
+	if (!field_args.empty()) {
+		dsep = (*field_args[0])[0];					// 定日镜包围盒安全距离
+		helio_recv_dis1 = (*field_args[1])[0];		// 第一个同心圆与接收器之间的距离
+		helio_gap1 = (*field_args[2])[0] * dm;				// 第一个同心环中定日镜分布间隔
+		helio_gap2 = (*field_args[3])[0] * dm;				// 第二个同心环中定日镜分布间隔
+		helio_gap3 = (*field_args[4])[0] * dm;				// 第三个同心换中定日镜分布间隔
+		helio_interval = Vector3d(dm, dm, dm);				// 定日镜包围盒间距
+	}
+	recv_dis.push_back(helio_recv_dis1);
+	recv_dis.push_back(2 * helio_recv_dis1);
+	recv_dis.push_back(4 * helio_recv_dis1);
+	recv_dis.push_back(8 * helio_recv_dis1);
+	angle_delta.push_back(dm / helio_recv_dis1);
+	angle_delta.push_back(angle_delta.back() / 2);
+	angle_delta.push_back(angle_delta.back() / 4);
+	n_rows.push_back(int(recv_dis[1] - recv_dis[0]) / helio_gap1);
+	n_rows.push_back(int(recv_dis[2] - recv_dis[1]) / helio_gap2);
+	n_rows.push_back(int(recv_dis[3] - recv_dis[2]) / helio_gap3);
+}
+
+//void FermatLayout::getCircleHelioIndex(const int start_index, const double R, const double gap, const int rows, 
+//	const double angle_delta)
+//{
+//	Heliostat* helio;
+//	int cnt = 0;
+//	int h_cnt = 2 * PI / angle_delta;
+//
+//	for (int i = 0; i < rows; i++) {
+//		double angle_d = 2 * PI / h_cnt;
+//		double start_angle = (i + 1) % 2 * (angle_d / 2);
+//		double start_r = R + i * gap;
+//
+//		for (int h = 0; h < h_cnt; h++) {
+//			helio = new Heliostat((HelioType)helio_type, helio_gap, helio_matrix, helio_size, helios.size(),
+//				Vector3d(
+//					sin(start_angle + h*angle_d) * start_r,
+//					helio_pos.y(),
+//					cos(start_angle + h*angle_d) * start_r
+//				),
+//				Vector3d(
+//					start_angle + h*angle_d,
+//					helio_pos.y(),
+//					start_r
+//				)
+//			);
+//			helio->calcFluxParam(recvs);
+//			setHelioLayout(helio);
+//			helios.push_back(helio);
+//			helio = nullptr;
+//			cnt++;
+//		}
+//	}
+//	cout << "cnt: " << cnt << endl;
+//}
+
+vector<MatrixXd> FermatLayout::getHelioIndex() {
+	vector<MatrixXd> helio_index_store;
+	vector<double> recv_dis, angle_delta;
+	vector<int> n_rows;
+	calcCircleParams(recv_dis, n_rows, angle_delta);
+
+	return helio_index_store;
 }

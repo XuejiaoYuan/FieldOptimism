@@ -1,20 +1,39 @@
 #include "RayCasterCore.cuh"
 
 vector<double> rayCastCore(Vector3d sunray_dir, RayCastHelioDeviceArgument& h_args) {
+	cudaError_t cudaStatus;
+	cudaSetDevice(0);
 	unsigned int* h_hit_cnt = new unsigned int[h_args.numberOfHeliostats];
 	for (int i = 0; i < h_args.numberOfHeliostats; ++i) h_hit_cnt[i] = 0;
 
 	int nThreads = 1024;
 	dim3 nBlocks;
 	if (!h_args.d_hit_cnt)
-		cudaMalloc((void**)&h_args.d_hit_cnt, sizeof(unsigned int)*h_args.numberOfHeliostats);
-	cudaMemcpy(h_args.d_hit_cnt, h_hit_cnt, sizeof(unsigned int)*h_args.numberOfHeliostats, cudaMemcpyHostToDevice);
+		cudaStatus = cudaMalloc((void**)&h_args.d_hit_cnt, sizeof(unsigned int)*h_args.numberOfHeliostats);
+	if (cudaStatus != cudaSuccess) {
+		fprintf(stderr, "1 cudamemcpy launch failed: %s\n", cudaGetErrorString(cudaStatus));
+	}
 
+	cudaMemcpy(h_args.d_hit_cnt, h_hit_cnt, sizeof(unsigned int)*h_args.numberOfHeliostats, cudaMemcpyHostToDevice);
+	cudaStatus = cudaGetLastError();
+	if (cudaStatus != cudaSuccess) {
+		fprintf(stderr, "1 cudamemcpy launch failed: %s\n", cudaGetErrorString(cudaStatus));
+	}
+	
 	GeometryFunc::setThreadsBlocks(nBlocks, nThreads, h_args.numberOfHeliostats * h_args.numberOfOrigions);
 	rayCollisionCalc << <nBlocks, nThreads >> > (GeometryFunc::convert3(sunray_dir), h_args);
 	cudaDeviceSynchronize();
+	cudaStatus = cudaGetLastError();
+	if (cudaStatus != cudaSuccess) {
+		fprintf(stderr, "kernel launch failed: %s\n", cudaGetErrorString(cudaStatus));
+	}
 
 	cudaMemcpy(h_hit_cnt, h_args.d_hit_cnt, sizeof(unsigned int)*h_args.numberOfHeliostats, cudaMemcpyDeviceToHost);
+
+	cudaStatus = cudaGetLastError();
+	if (cudaStatus != cudaSuccess) {
+		fprintf(stderr, "cudamemcpy launch failed: %s\n", cudaGetErrorString(cudaStatus));
+	}
 
 	vector<double> sdbk_res;
 	for (int i = 0; i < h_args.numberOfHeliostats; ++i)

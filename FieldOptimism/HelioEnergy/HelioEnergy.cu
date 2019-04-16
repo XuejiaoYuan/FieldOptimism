@@ -31,5 +31,6 @@ void HelioEnergy::calcHelioEnergy(float sigma, FieldUpdateMode mode)
 
 	cudaMemcpy(h_total_energy, d_total_energy, sizeof(float), cudaMemcpyDeviceToHost);
 
+	cout << *h_total_energy << endl;
 	delete h_total_energy;
 }
