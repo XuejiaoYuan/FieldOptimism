@@ -29,6 +29,8 @@ public:
 	bool adjustFieldParam(const vector<vector<double>*>& field_args);
 
 
+	void saveSolarScene(string scene_savepath);
+
     double scene_length;           //heliostat ground's length and width
     double scene_width;
 

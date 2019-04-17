@@ -1,17 +1,13 @@
 #include "RayCasterCore.cuh"
 
 vector<double> rayCastCore(Vector3d sunray_dir, RayCastHelioDeviceArgument& h_args, string save_path, CalcMode calc_mode) {
-	cudaError_t cudaStatus;
 	unsigned int* h_hit_cnt = new unsigned int[h_args.numberOfHeliostats];
 	int* h_hit_index = nullptr;
 	int* d_hit_index = nullptr;
 	for (int i = 0; i < h_args.numberOfHeliostats; ++i) h_hit_cnt[i] = 0;
 
 	if (!h_args.d_hit_cnt)
-		cudaStatus = cudaMalloc((void**)&h_args.d_hit_cnt, sizeof(unsigned int)*h_args.numberOfHeliostats);
-	if (cudaStatus != cudaSuccess) {
-		fprintf(stderr, "1 cudamemcpy launch failed: %s\n", cudaGetErrorString(cudaStatus));
-	}
+		cudaMalloc((void**)&h_args.d_hit_cnt, sizeof(unsigned int)*h_args.numberOfHeliostats);
 
 	if (calc_mode == TestMode) {
 		h_hit_index = new int[2 * h_args.numberOfHeliostats * h_args.numberOfOrigions];
@@ -22,11 +18,16 @@ vector<double> rayCastCore(Vector3d sunray_dir, RayCastHelioDeviceArgument& h_ar
 
 	int nThreads = 1024;
 	dim3 nBlocks;
+	Timer::resetStart();
 	GeometryFunc::setThreadsBlocks(nBlocks, nThreads, h_args.numberOfHeliostats * h_args.numberOfOrigions);
 	rayCollisionCalc << <nBlocks, nThreads >> > (GeometryFunc::convert3(sunray_dir), h_args, d_hit_index);
 	cudaDeviceSynchronize();
 
 	cudaMemcpy(h_hit_cnt, h_args.d_hit_cnt, sizeof(unsigned int)*h_args.numberOfHeliostats, cudaMemcpyDeviceToHost);
+	auto t = Timer::getDuration();
+	fstream outFile("SdBkRes/RC_sdbk_" + to_string(HELIO_SLICE) + "_t.txt", ios_base::app);
+	outFile << t << endl;
+	outFile.close();
 
 	vector<double> sdbk_res;
 	for (int i = 0; i < h_args.numberOfHeliostats; ++i)
@@ -38,18 +39,13 @@ vector<double> rayCastCore(Vector3d sunray_dir, RayCastHelioDeviceArgument& h_ar
 
 	if (calc_mode == TestMode) {
 		cudaMemcpy(h_hit_index, d_hit_index, sizeof(unsigned int)* 2 * h_args.numberOfHeliostats * h_args.numberOfOrigions, cudaMemcpyDeviceToHost);
-		cudaStatus = cudaGetLastError();
-		if (cudaStatus != cudaSuccess) {
-			fprintf(stderr, "cudamemcpy launch failed: %s\n", cudaGetErrorString(cudaStatus));
-		}
-
-		fstream outFile(save_path + "RC_sdbk_gt.txt", ios_base::out);
+		fstream outFile(save_path + "RC_sdbk_index.txt", ios_base::out);
 		for (int i = 0; i < h_args.numberOfHeliostats; ++i) {
 			unordered_set<int> shadow_index, block_index;
 			for(int j=0; j<h_args.helio_slice_length; ++j)
 				for (int k = 0; k < h_args.helio_slice_width; ++k) {
-					int shadow_i = h_hit_index[i*h_args.numberOfOrigions*2 + j*h_args.helio_slice_width*2 + k];
-					int block_i = h_hit_index[i*h_args.numberOfOrigions * 2 + j*h_args.helio_slice_width * 2 + k + 1];
+					int shadow_i = h_hit_index[i*h_args.numberOfOrigions*2 + j*h_args.helio_slice_width*2 + 2*k + 1];
+					int block_i = h_hit_index[i*h_args.numberOfOrigions*2 + j*h_args.helio_slice_width*2 + 2*k];
 					if (shadow_i != -1) 
 						shadow_index.insert(shadow_i);
 					if (block_i != -1) 

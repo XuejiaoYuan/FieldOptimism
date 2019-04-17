@@ -20,6 +20,7 @@ public:
 		this->field_type = _field_type;
 		this->solar_scene = _solar_scene;
 	}
+	void initBlockRelaIndex(const Vector3d& dir);
 	double calcSingleShadowBlock(int helio_index);
 	double calcSingleFluxSum(int helio_index, const double DNI);
 	double calcTotalEnergy(const double DNI);
@@ -30,11 +31,10 @@ public:
 	FieldType field_type;
 	SolarScene* solar_scene;
 	GaussLegendreCPU* gl;
+	vector<unordered_set<int>> rela_block_index;
 
 protected:
-	double helioClipper(Heliostat*helio, const Vector3d&dir, const set<vector<int>>& estimate_grid);
-	double helioClipper(Heliostat*helio, const vector<Vector3d>&dir, const vector<set<vector<int>>>& estimate_grid);
-	void calcIntersection3DDDA(Heliostat* helio, const Vector3d&dir, set<vector<int>> & relative_grid_label);			// using 3DDDA for relative grid's prediction
+	double helioClipper(Heliostat * helio, const vector<Vector3d>& dir, const vector<unordered_set<int>>& estimate_grids);
 	double checkForRelativeHelio(const set<vector<int>>& accurate_grid, const set<vector<int>>& estimate_grid);
 	double calcFluxMap(Heliostat*helio, const double DNI);
 	double _calc_flux_sum(vector<Vector2d>& proj_v, const int rows, const int cols, Heliostat* helio, const double cos_phi, const double DNI);
@@ -43,7 +43,6 @@ protected:
 	double ray_tracing_flux_sum(vector<Vector3d>& recv_v, Vector3d& recv_pos, Vector3d& recv_normal, Heliostat* helio, const Vector3d& dir, const double DNI);
 	double inte_infinite_flux_sum(Heliostat* helio, const Vector3d& recv_pos, const double cos_phi, const double DNI);
 	double _helio_calc(int index, int DNI);
-
 	void flux_sum_matrix_grid(vector<Vector3d>& _recv_v, vector<Vector2d>& proj_v, const int rows, const int cols, Heliostat* helio, const double cos_phi, const double DNI);
 	//void flux_sum_matrix_inte(Vector3d& recv_normal, Vector3d& fc, vector<Vector3d>& _recv_v, Matrix4d& local2world, vector<Vector2d>& proj_v, Heliostat * helio, const double cos_phi, const double DNI);
 
@@ -111,21 +110,21 @@ public:
 	void setTestIndex(const int _helio_index) { helio_index = _helio_index; }
 
 private:
-	void readRayTracingCore(string file_name, vector<set<int>>& sd_index_set, vector<set<int>>& bk_index_set);
-	bool calcIntersect(Vector3d& ori_v, Vector3d& dir, set<int>& index_set);
+	void readRayTracingCore(string file_name, vector<unordered_set<int>>& sd_index_set, vector<unordered_set<int>>& bk_index_set);
+	bool calcIntersect(Vector3d& ori_v, Vector3d& dir, unordered_set<int>& index_set);
 	bool checkHelioDis(Vector3d& dir, Heliostat* helio, Vector3d& Hloc, Vector3d& HIloc);
 	bool checkBoundingBox(Vector3d& Hloc, Vector3d& HIloc, Vector3d& dir, double diameter);
 	void getStartEndIndex(Heliostat* helio, int& start, int& end);
 	bool checkEffectRegion(Vector3d dir, Vector3d& HIloc, Vector3d& Hloc, double diameter);
 	bool checkCenterDist(Heliostat* H, Heliostat* HI, Vector3d& dir);
-	void checkEstimateHelio(Vector3d& dir, set<int>& helio_set, int& ac, set<int>& gt_helio_set);
-	void saveTestRes(const string& file_name, const int sd_ac, const int bk_ac, const set<int>& sd_set, const set<int>& bk_set);
+	void checkEstimateHelio(Vector3d& dir, unordered_set<int>& helio_set, int& ac, unordered_set<int>& gt_helio_set, bool shadowDir);
+	void saveTestRes(const string& file_name, const int sd_ac, const int bk_ac, const unordered_set<int>& sd_set, const unordered_set<int>& bk_set);
 	Vector3d sd_dir, bk_dir;
 	int helio_index;
 	string save_path;
-	set<int> gt_sd_helio_index;		// 通过ray tracing计算得到，实际造成阴影的其他定日镜
-	set<int> gt_bk_helio_index;		// 通过ray tracing计算得到，实际造成遮挡的其他定日镜
+	unordered_set<int> gt_sd_helio_index;		// 通过ray tracing计算得到，实际造成阴影的其他定日镜
+	unordered_set<int> gt_bk_helio_index;		// 通过ray tracing计算得到，实际造成遮挡的其他定日镜
 
-	vector<set<int>> v_gt_sd_helio_index;
-	vector<set<int>> v_gt_bk_helio_index;
+	vector<unordered_set<int>> v_gt_sd_helio_index;
+	vector<unordered_set<int>> v_gt_bk_helio_index;
 };

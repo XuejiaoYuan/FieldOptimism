@@ -1,13 +1,13 @@
 #include "HelioEnergy.cuh"
 
 
-void HelioEnergy::calcHelioEnergy(float sigma, FieldUpdateMode mode)
+float HelioEnergy::calcHelioEnergy(float sigma, FieldUpdateMode mode)
 {
 	int helioNum = solar_scene->helios.size();
 	float* h_total_energy = new float;
 	*h_total_energy = 0;
 
-	int nThreads = 512;
+	int nThreads = 1024;
 	dim3 nBlocks;
 	GeometryFunc::setThreadsBlocks(nBlocks, nThreads, r_args.numberOfReceivers*m*n*helioNum);
 
@@ -29,6 +29,8 @@ void HelioEnergy::calcHelioEnergy(float sigma, FieldUpdateMode mode)
 	cudaDeviceSynchronize();
 	cudaMemcpy(h_total_energy, d_total_energy, sizeof(float), cudaMemcpyDeviceToHost);
 
+	float res = *h_total_energy;
 	delete h_total_energy;
 	h_total_energy = nullptr;
+	return res;
 }

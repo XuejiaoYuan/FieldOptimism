@@ -13,7 +13,7 @@ public:
 		cudaMalloc((void**)&d_total_energy, sizeof(float));
 		h_args.setHelioDevicePos(solar_scene->helios);
 	}
-	void calcHelioEnergy(float sigma, FieldUpdateMode mode);
+	float calcHelioEnergy(float sigma, FieldUpdateMode mode);
 	~HelioEnergy() {
 		h_args.clear();
 		gl_handler.clear();

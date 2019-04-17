@@ -9,8 +9,6 @@ void GridDDA::predictRelatedHelio(SolarScene* solar_scene, RayCastHelioDeviceArg
 	int* h_rela_index = new int[helios.size()*h_args.helio_list_size];
 
 	// 1. 計算定日鏡的相關定日鏡
-	Timer t;
-	t.resetStart();
 #pragma omp parallel for
 	for (int i = 0; i < helios.size(); ++i) {
 		unordered_set<int> helio_label;
@@ -23,17 +21,10 @@ void GridDDA::predictRelatedHelio(SolarScene* solar_scene, RayCastHelioDeviceArg
 		if (j < h_args.helio_list_size) h_rela_index[i*h_args.helio_list_size + j] = -1;		// 设置相关定日镜个数
 	}
 
-	t.printDuration("grid dda");
-
 	// 2. 将数据拷贝至GPU用于后续ray cast计算
-	t.resetStart();
 	int*& d_rela_index = shadowDir ? h_args.d_rela_shadow_helio_index : h_args.d_rela_block_helio_index;
 	cudaMalloc((void**)&d_rela_index, sizeof(int)*helios.size()*h_args.helio_list_size);
 	cudaMemcpy(d_rela_index, h_rela_index, sizeof(int)*helios.size()*h_args.helio_list_size, cudaMemcpyHostToDevice);
-	t.printDuration("copy data");
-
-	//string fileName = shadowDir ? "SdBkRes/DDA_shadow" : "SdBkRes/DDA_block";
-	//saveTestRes(fileName, h_args.numberOfHeliostats, h_rela_index, h_args.helio_list_size);
 	delete[] h_rela_index;
 }
 
@@ -52,7 +43,6 @@ bool GridDDA::checkBoundingBox(const Vector3d & Hloc, const Vector3d & Hnormal, 
 void GridDDA::testHandler(SolarScene* solar_scene)
 {
 
-	Timer t;
 	RayCastHelioDeviceArgument h_args;
 	Vector3d helio_size = solar_scene->helios[0]->helio_size;
 	h_args.setHelioDeviceOrigins(0.01, helio_size.x(), helio_size.z());		// 第一次调用cuda程序耗时较长

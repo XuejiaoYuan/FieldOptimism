@@ -26,9 +26,14 @@ int main(int argc, char** argv) {
 
 	TestHandler t_handler(30);
 	t_handler.initSolarScene(scene_filepath, sunray_filepath);
-	t_handler.testRayCasting();
-	t_handler.testHelioPredict();
-	t_handler.testEnergyCalc(8, 8, 2, 2);
 
-	return 1;
+	// 1. ÒõÓ°ÕÚµ²²âÊÔ
+	t_handler.testRayCasting();
+	//t_handler.testHelioPredict();
+	//t_handler.testPolygonClipping();
+
+	// 2. ÄÜÁ¿²âÊÔ
+	//t_handler.testEnergyCalc(8, 8, 2, 2);
+
+ 	return 1;
 }

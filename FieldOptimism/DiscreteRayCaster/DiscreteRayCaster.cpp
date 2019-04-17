@@ -19,12 +19,9 @@ void DiscreteRayCaster::rayCasting(SolarScene* solar_scene, string save_path, Ca
 
 
 	// 2. ÀëÉ¢¹âÏß¸ú×Ù
-	Timer t;
-	t.resetStart();
 	vector<double> sdbk_res = rayCastCore(solar_scene->sunray_dir, h_args, save_path, calc_mode);
-	t.printDuration("ray casting");
 
-	fstream outFile(save_path + "rayCasting_" + to_string(h_args.helio_slice_length) + "_" + to_string(h_args.helio_slice_width) + ".txt", ios_base::out);
+	fstream outFile(save_path + "RC_sdbk_" + to_string(h_args.helio_slice_length) + "_" + to_string(h_args.helio_slice_width) + ".txt", ios_base::out);
 	for (int i = 0; i < sdbk_res.size(); ++i)
 		outFile << setprecision(12) <<  sdbk_res[i] << endl;
 	outFile.close();

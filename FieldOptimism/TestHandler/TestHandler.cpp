@@ -32,6 +32,23 @@ void TestHandler::createSolarScene(string scene_filepath)
 		break;
 	}
 	solar_scene->adjustFieldParam(field_args);
+	solar_scene->saveSolarScene("SdBkRes/");
+}
+
+void TestHandler::testSunRay()
+{
+	fstream outFile("SdBkRes/sunray_dir.txt", ios_base::out);
+	Vector3d sunray_dir;
+	for (auto& day : sample_day) {
+		for (auto& hour : sample_hour) {
+			for (int minute = 0; minute < 60; minute += minute_inter) {
+				vector<int> time_param = { day.x, day.y, hour, minute };
+				sunray_dir = sunray.changeSunRay(time_param);
+				outFile << sunray_dir.x() << ' ' << sunray_dir.y() << ' ' << sunray_dir.z() << endl;
+			}
+		}
+	}
+	outFile.close();
 }
 
 void TestHandler::testHelioPredict()
@@ -44,7 +61,7 @@ void TestHandler::testHelioPredict()
 				sunray_dir = sunray.changeSunRay(time_param);
 				solar_scene->changeSolarScene(sunray_dir);
 				SdBkCalcTest sdbk_test_handler(solar_scene);
-				string path = "SdBkRes/MM" + to_string(day.x) + "DD" + to_string(day.y) + "HH" + to_string(hour) + "mm" + to_string(minute);
+				string path = "SdBkRes/M" + to_string(day.x) + "D" + to_string(day.y) + "H" + to_string(hour) + "m" + to_string(minute);
 				_mkdir(path.c_str());
 				sdbk_test_handler.totalHeliosTest(path + "/");
 			}
@@ -64,9 +81,44 @@ void TestHandler::testRayCasting()
 				sunray_dir = sunray.changeSunRay(time_param);
 				solar_scene->changeSolarScene(sunray_dir);
 				SdBkCalcTest sdbk_test_handler(solar_scene);
-				string path = "SdBkRes/M" + to_string(day.x) + "D" + to_string(day.y) + "H" + to_string(hour) + "m" + to_string(minute) + "/";
+				string path = "SdBkRes/M" + to_string(day.x) + "D" + to_string(day.y) + "H" + to_string(hour) + "m" + to_string(minute);
 				_mkdir(path.c_str());
-				rayCaster.rayCasting(solar_scene, path, TestMode);
+				rayCaster.rayCasting(solar_scene, path + "/", TestMode);
+			}
+		}
+	}
+}
+
+void TestHandler::testPolygonClipping()
+{
+	SdBkCalcCreator sdbk_calc_creator;
+	SdBkCalc* sdbk_calc = sdbk_calc_creator.getSdBkCalc(solar_scene);
+	Vector3d sunray_dir = sunray.changeSunRay({ 6, 21, 12, 0 });
+	solar_scene->changeSolarScene(sunray_dir);
+	sdbk_calc->initBlockRelaIndex(sunray_dir);
+
+	fstream outFile;
+	for (auto& day : sample_day) {
+		for (auto& hour : sample_hour) {
+			for (int minute = 0; minute < 60; minute += minute_inter) {
+				vector<int> time_param = { day.x, day.y, hour, minute };
+				sunray_dir = sunray.changeSunRay(time_param);
+				solar_scene->changeSolarScene(sunray_dir);
+
+				string path = "SdBkRes/M" + to_string(day.x) + "D" + to_string(day.y) + "H" + to_string(hour) + "m" + to_string(minute);
+				_mkdir(path.c_str());
+
+				Timer::resetStart();
+				sdbk_calc->calcTotalShadowBlock();
+				auto t = Timer::getDuration();
+				outFile.open("SdBkRes/PC_sdbk_t.txt", ios_base::app);
+				outFile << t << endl;
+				outFile.close();
+
+				outFile.open(path + "/PC_sdbk.txt", ios_base::out);
+				for (int i = 0; i < solar_scene->helios.size(); ++i)
+					outFile << solar_scene->helios[i]->sd_bk << endl;
+				outFile.close();
 			}
 		}
 	}
@@ -80,8 +132,12 @@ void TestHandler::testEnergyCalc(int M, int N, int m, int n)
 	SdBkCalc* sdbk_calc = sdbk_calc_creator.getSdBkCalc(solar_scene);
 	HelioEnergy e_handler(solar_scene, M, N, m, n);
 	sdbk_calc->gl = new GaussLegendreCPU(M, N, m, n);
+	sunray_dir = sunray.changeSunRay({ 6, 21, 12, 0 });
+	solar_scene->changeSolarScene(sunray_dir);
+	sdbk_calc->initBlockRelaIndex(sunray_dir);
 	
-	fstream outFile("SdBkRes/energy_calc_t_g" + to_string(M) + "x" + to_string(N) + "_n" + to_string(m) + "x" + to_string(n) + ".txt", ios_base::out);
+	string path = "SdBkRes/";
+	fstream outFile;
 	for (auto& day : sample_day) {
 		for (auto& hour : sample_hour) {
 			for (int minute = 0; minute < 60; minute += minute_inter) {
@@ -89,20 +145,33 @@ void TestHandler::testEnergyCalc(int M, int N, int m, int n)
 				sunray_dir = sunray.changeSunRay(time_param);
 				solar_scene->changeSolarScene(sunray_dir);
 				
-				// 1. CPU计算能量
-				Timer::resetStart();
-				sdbk_calc->calcTotalEnergy(1);
-				outFile << Timer::getDuration() << ' ';
+				double cpu_min_t = INT_MAX;
+				double gpu_min_t = INT_MAX;
+				for (int i = 0; i < 5; ++i) {
+					// 1. CPU计算能量
+					Timer::resetStart();
+					double cpu_res = sdbk_calc->calcTotalEnergy(1);
+					cpu_min_t = min(cpu_min_t, Timer::getDuration());
+					
 
-				// 2. GPU计算能量
-				Timer::resetStart();
-				sdbk_calc->calcTotalShadowBlock();
-				e_handler.calcHelioEnergy(1.31, SunUpdateMode);
-				outFile << Timer::getDuration() << endl;
+					// 2. GPU计算能量
+					Timer::resetStart();
+					sdbk_calc->calcTotalShadowBlock();
+					double gpu_res = e_handler.calcHelioEnergy(1.31, SunUpdateMode);
+					gpu_min_t = min(gpu_min_t, Timer::getDuration());
+
+				}
+				
+				outFile.open(path + "calc_energy_t.txt", ios_base::app);
+				outFile << cpu_min_t << ' ' << gpu_min_t << endl;
+				outFile.close();
+				
+				//outFile.open(path + "calc_energy.txt", ios_base::app);
+				//outFile << cpu_res << ' ' << gpu_res << endl;
+				//outFile.close();
 			}
 		}
 	}
-	outFile.close();
 }
 
 
