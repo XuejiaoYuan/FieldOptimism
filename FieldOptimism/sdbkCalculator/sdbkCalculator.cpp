@@ -34,19 +34,13 @@ void SdBkCalc::saveCalcRes(const string s)
 double SdBkCalc::_helio_calc(int index, int DNI)
 {
 	Heliostat* helio = solar_scene->helios[index];
-	//set<vector<int>> shadow_relative_grid_label_3ddda, block_relative_grid_label_3ddda;
 	unordered_set<int> rela_shadow_index;
 	int fc_index = solar_scene->helios[index]->focus_center_index;
 	Vector3d reflect_dir = (solar_scene->recvs[0]->focus_center[fc_index] - helio->helio_pos).normalized();
 	GridDDA dda_handler;
 	dda_handler.rayCastGridDDA(solar_scene, helio, -solar_scene->sunray_dir, rela_shadow_index, true);
-	//calcIntersection3DDDA(helio, -solar_scene->sunray_dir, shadow_relative_grid_label_3ddda);
-
-	//calcIntersection3DDDA(helio, reflect_dir, block_relative_grid_label_3ddda);
 
 	vector<Vector3d> dir = { -solar_scene->sunray_dir, reflect_dir };
-	//vector<set<vector<int>>> estimate_grids = { shadow_relative_grid_label_3ddda, block_relative_grid_label_3ddda };
-	//helio->sd_bk = helioClipper(helio, dir, estimate_grids);
 	vector<unordered_set<int>> estimate_grids = { rela_shadow_index, rela_block_index[index] };
 	helio->sd_bk = helioClipper(helio, dir, estimate_grids);
 	if (gl != NULL)
@@ -54,9 +48,7 @@ double SdBkCalc::_helio_calc(int index, int DNI)
 	helio->total_e = (1 - helio->sd_bk)*helio->flux_sum;
 	helio->fluxCalc = true;
 
-	//shadow_relative_grid_label_3ddda.clear();
-	//block_relative_grid_label_3ddda.clear();
-	//estimate_grids.clear();
+
 	return helio->total_e;
 }
 
@@ -182,6 +174,9 @@ double SdBkCalc::calcFluxMap(Heliostat * helio, const double DNI)
 			_flux_sum += _multi_inte_flux_sum(proj_v, helio, helio->cos_phi[i], DNI);;
 		}
 	}
+
+	float cos_phi = helio->cos_phi[fc_index];
+	float total_e = inte_infinite_flux_sum(helio, focus_center, cos_phi, 1);
 
 	return _flux_sum;
 }
@@ -469,7 +464,7 @@ double SdBkCalc::inte_infinite_flux_sum(Heliostat * helio, const Vector3d& recv_
 {
 	double dis = (helio->helio_pos - recv_pos).norm();
 	double mAA = calc_mAA(dis);
-	return DNI *helio->S *helio->cos_w * helio->rou* cos_phi* mAA;
+	return DNI *helio->S *helio->cos_w * helio->rou* mAA;
 }
 
 // 
@@ -565,7 +560,6 @@ double SdBkCalc::calcTotalEnergy(const double DNI)
 #pragma omp parallel for
 	for (int i = 0; i < helios.size(); i++) {
 		double res  = _helio_calc(i, DNI);
-
 #pragma omp critical
 		sum += res;
 	}

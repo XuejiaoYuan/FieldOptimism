@@ -32,7 +32,7 @@ using namespace Eigen;
 #define PI acos(double(-1))
 #define HELIOSTAT_REFLECTIVITY 0.88 
 #define RECEIVER_SLICE 0.05		// *ATTENTION*: w与l应被RECEIVER_SLICE整除
-#define HELIO_SLICE 0.02		// 以该长度分割定日镜
+#define HELIO_SLICE 0.04		// 以该长度分割定日镜
 
 #define DEVICE_LIST_SIZE 10		
 #define DEVICE_BACKUP_SIZE 5
@@ -41,6 +41,8 @@ using namespace Eigen;
 #define		MAX_BLOCK_SINGLE_DIM	0x0ffff
 #define		MAX_THREADS				1024
 
+#define SIGMA_SUM	2.41e-3
+#define SIGMA_S		1e-3
 
 
 //#define DEBUG

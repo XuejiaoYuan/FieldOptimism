@@ -417,6 +417,11 @@ inline __host__ __device__ float3 normalize(float3 v)
 	return v * invLen;
 }
 
+// norm
+inline __host__ __device__ float norm(float3 a, float3 b) {
+	return sqrt(pow(a.x - b.x, 2) + pow(a.y - b.y, 2) + pow(a.z - b.z, 2));
+}
+
 // floor
 inline __host__ __device__ float3 floor(const float3 v)
 {

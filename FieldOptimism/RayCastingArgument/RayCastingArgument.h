@@ -10,6 +10,7 @@ public:
 	float3* d_helio_normals;		// 各定日镜法向量 heliosNum
 	float3* d_helio_vertexes;		// 各定日镜顶点坐标 heliosNum x 4
 	float3* d_helio_pos;
+	float2 d_helio_size;
 	
 	int numberOfHeliostats;
 	

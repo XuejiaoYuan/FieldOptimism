@@ -67,6 +67,7 @@ void HeliostatDeviceArgument::setHelioDeviceArguments(vector<Heliostat*>& helios
 	}
 	cudaMemcpy(d_helio_normals, h_helio_normals, sizeof(float3)*numberOfHeliostats, cudaMemcpyHostToDevice);
 	cudaMemcpy(d_helio_vertexes, h_helio_vertexes, sizeof(float3) * 4 * numberOfHeliostats, cudaMemcpyHostToDevice);
+	d_helio_size = make_float2(helios[0]->helio_size.x(), helios[0]->helio_size.z());
 
 	delete[] h_helio_normals;
 	delete[] h_helio_vertexes;

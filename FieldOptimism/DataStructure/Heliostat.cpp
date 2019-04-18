@@ -108,7 +108,7 @@ void Heliostat::calc_flux_param(const Vector3d& focus_center)
 		swap(ip_l, ip_w);
 	l_w_ratio = ip_l / ip_w;
 
-	flux_param = 0.5 * S * cos_w * rou * mAA * l_w_ratio / PI / sigma/ sigma;
+	flux_param = 0.5 * S * cos_w * rou * mAA * l_w_ratio / PI;
 }
 
 void Heliostat::setHelioVertex()

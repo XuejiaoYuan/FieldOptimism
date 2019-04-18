@@ -7,7 +7,7 @@ float HelioEnergy::calcHelioEnergy(float sigma, FieldUpdateMode mode)
 	float* h_total_energy = new float;
 	*h_total_energy = 0;
 
-	int nThreads = 1024;
+	int nThreads = 512;
 	dim3 nBlocks;
 	GeometryFunc::setThreadsBlocks(nBlocks, nThreads, r_args.numberOfReceivers*m*n*helioNum);
 
@@ -28,6 +28,11 @@ float HelioEnergy::calcHelioEnergy(float sigma, FieldUpdateMode mode)
 	fluxIntegral << <nBlocks, nThreads >> > (h_args, r_args, gl_handler, d_total_energy, m, n);
 	cudaDeviceSynchronize();
 	cudaMemcpy(h_total_energy, d_total_energy, sizeof(float), cudaMemcpyDeviceToHost);
+	cudaError_t cudaStatus = cudaGetLastError();
+	if (cudaStatus != cudaSuccess) {
+		fprintf(stderr, "%s\n", cudaGetErrorString(cudaStatus));
+	}
+
 
 	float res = *h_total_energy;
 	delete h_total_energy;
