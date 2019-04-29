@@ -91,8 +91,9 @@ void Layout::adjustHelioLayout(vector<Heliostat*>& helios, const vector<vector<d
 		double x_start = -(col / 2.0 - 0.5)*helio_interval.x();
 		for (int j = 0; j < col; j++) {
 			helio = new Heliostat((HelioType)helio_type, helio_gap, helio_matrix, helio_size, helios.size(), Vector3d(x_start, helio_pos.y(), z_start));
-			helio->calcFluxParam(recvs);
 			setHelioLayout(helio);
+			//helio->calcFluxParam(recvs);
+			helio->initFluxParam(recvs);
 			helios.push_back(helio);
 			helio = nullptr;
 			x_start += helio_interval.x();
@@ -129,12 +130,14 @@ void CrossRectLayout::adjustHelioLayout(vector<Heliostat*>& helios, const vector
 
 	int cnt = 0;
 	for (int i = 0; i < row; i++) {
-		int tmp_col = col - i % 2;
+		int tmp_col = col - i % 2;		
 		z_start -= helio_interval.z();
-		double x_start = -(tmp_col / 2.0 - 0.5)*helio_interval.x();
+		//double x_start = -(tmp_col / 2.0 - 0.5)*helio_interval.x();
+		double x_start = -(tmp_col / 2.0)*helio_interval.x();
 		for (int j = 0; j < tmp_col; j++) {
 			helio = new Heliostat((HelioType)helio_type, helio_gap, helio_matrix, helio_size, helios.size(), Vector3d(x_start, helio_pos.y(), z_start));
-			helio->calcFluxParam(recvs);
+			//helio->calcFluxParam(recvs);
+			helio->initFluxParam(recvs);
 			setHelioLayout(helio);
 			helios.push_back(helio);
 			helio = nullptr;
@@ -207,7 +210,8 @@ void FermatLayout::setCircleHelios(const int field_index, const double R, const 
 					start_r
 				)
 			);
-			helio->calcFluxParam(recvs);
+			//helio->calcFluxParam(recvs);
+			helio->initFluxParam(recvs);
 			setHelioLayout(helio);
 			helios.push_back(helio);
 			helio = nullptr;

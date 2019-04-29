@@ -109,7 +109,7 @@ bool SolarScene::initSolarScene(const string &scene_filepath, const Vector3d &su
 }
 
 
-bool SolarScene::changeSolarScene(const Vector3d & sunray_dir)
+bool SolarScene::changeHeliosNormal(const Vector3d & sunray_dir)
 {
 	this->sunray_dir = Vector3d(sunray_dir.x(), sunray_dir.y(), sunray_dir.z() );
 
@@ -242,7 +242,7 @@ bool SolarScene::adjustFieldParam(const vector<vector<double>*>& field_args)
 
 void SolarScene::saveSolarScene(string scene_savepath)
 {
-	fstream outFile(scene_savepath +"scene_T" + to_string(layouts[0]->layout_type) + "_H" + to_string(helios.size()) + ".scn", ios::out);
+	fstream outFile(scene_savepath +"he_scene_T" + to_string(layouts[0]->layout_type) + "_H" + to_string(helios.size()) + ".scn", ios::out);
 	if (outFile.fail()) {
 		cerr << "Can't write to this file!" << endl;
 	}
@@ -268,7 +268,7 @@ void SolarScene::saveSolarScene(string scene_savepath)
 		outFile << "pos " << layout->layout_bound_pos.x() << ' ' << layout->layout_bound_pos.y() << ' ' << layout->layout_bound_pos.z() << endl;
 		outFile << "size " << layout->layout_size.x() << ' ' << layout->layout_size.y() << ' ' << layout->layout_size.z() << endl;
 		outFile << "inter " << layout->helio_interval.x() << ' ' << layout->helio_interval.y() << ' ' << layout->helio_interval.z() << endl;
-		outFile << "n " << layout->helio_num << endl;
+		outFile << "n " << helios.size() << endl;
 		outFile << "type 0" << endl;
 		outFile << "end" << endl;
 		
@@ -288,7 +288,7 @@ void SolarScene::saveSolarScene(string scene_savepath)
 	}
 	outFile.close();
 
-	outFile.open(scene_savepath + "task_helios_T" + to_string(layouts[0]->layout_type) + "_H" + to_string(helios.size()) + ".txt", ios_base::out);
+	outFile.open(scene_savepath + "hetask_helios_T" + to_string(layouts[0]->layout_type) + "_H" + to_string(helios.size()) + ".txt", ios_base::out);
 	outFile << helios.size() << endl;
 	for (int i = 0; i < helios.size(); ++i)
 		outFile << i << ' ';

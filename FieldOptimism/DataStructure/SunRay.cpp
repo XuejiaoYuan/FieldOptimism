@@ -61,10 +61,15 @@ Vector3d SunRay::calcSunRay(const string &spa_data_file) {
     if(res == 0){
 		double altitude = deg2rad(90 - spa.zenith);
 		double azimuth = deg2rad(spa.azimuth-90);
-		sunray_dir.x() = cos(altitude) * cos(azimuth);
+		//sunray_dir.x() = cos(altitude) * cos(azimuth);
+		//sunray_dir.y() = -sin(altitude);
+		//sunray_dir.z() = -cos(altitude) * sin(azimuth);
+
+		sunray_dir.x() = -cos(altitude) * cos(azimuth);
 		sunray_dir.y() = -sin(altitude);
 		sunray_dir.z() = -cos(altitude) * sin(azimuth);
-    }
+	
+	}
 	sunray_dir = sunray_dir.normalized();
     inFile.close();
 
@@ -82,16 +87,21 @@ Vector3d SunRay::changeSunRay(const vector<int>& time_param)
 	spa.hour = time_param[2];
 	spa.minute = time_param[3];
 	int res = spa_calculate(&spa);
-	current_altitude = 90 - spa.zenith;
-	current_azimuth = spa.azimuth;
+	current_altitude = 90 - spa.zenith;		// 太阳高度角，与地面的夹角
+	current_azimuth = spa.azimuth;			// 太阳方位角，由北向东顺时针
 	calcDNI(time_param);
 
 	if (res == 0) {
 		double altitude = deg2rad(90 - spa.zenith);
 		double azimuth = deg2rad(spa.azimuth - 90);
-		sunray_dir.x() = cos(altitude) * cos(azimuth);
+		//sunray_dir.x() = cos(altitude) * cos(azimuth);
+		//sunray_dir.y() = -sin(altitude);
+		//sunray_dir.z() = -cos(altitude) * sin(azimuth);
+
+		sunray_dir.x() = -cos(altitude) * cos(azimuth);
 		sunray_dir.y() = -sin(altitude);
 		sunray_dir.z() = -cos(altitude) * sin(azimuth);
+
 	}
 	sunray_dir = sunray_dir.normalized();
 
@@ -102,9 +112,14 @@ Vector3d SunRay::changeSunRay(const double & altitude, const double & azimuth)
 {
 	double local_altitude = deg2rad(altitude);
 	double local_azimuth = deg2rad(azimuth - 90);
-	sunray_dir.x() = cos(local_altitude) * sin(local_azimuth);
+	//sunray_dir.x() = cos(local_altitude) * sin(local_azimuth);
+	//sunray_dir.y() = -sin(local_altitude);
+	//sunray_dir.z() =  -cos(local_altitude) * cos(local_azimuth);
+	sunray_dir.x() = -cos(local_altitude) * cos(local_azimuth);
 	sunray_dir.y() = -sin(local_altitude);
-	sunray_dir.z() =  -cos(local_altitude) * cos(local_azimuth);
+	sunray_dir.z() =  -cos(local_altitude) * sin(local_azimuth);
+
+
 	sunray_dir = sunray_dir.normalized();
 	return sunray_dir;
 }

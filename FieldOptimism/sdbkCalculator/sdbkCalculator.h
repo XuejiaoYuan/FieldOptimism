@@ -12,14 +12,18 @@ typedef enum {
 	RectFieldType, CrossRectFieldType, FermatFieldType, RadialFieldType
 }FieldType;
 
+typedef enum {
+	WithCenterBias, WithoutCenterBias
+}iHFCALMode;
 
 class SdBkCalc
 {
 public:
-	SdBkCalc(const FieldType& _field_type, SolarScene* _solar_scene) {
+	SdBkCalc(const FieldType& _field_type, SolarScene* _solar_scene) :ihfcal_mode(WithoutCenterBias) {
 		this->field_type = _field_type;
 		this->solar_scene = _solar_scene;
 	}
+	void setHFCALMode(iHFCALMode mode) { this->ihfcal_mode = mode; }
 	void initBlockRelaIndex(const Vector3d& dir);
 	double calcSingleShadowBlock(int helio_index);
 	double calcSingleFluxSum(int helio_index, const double DNI);
@@ -32,6 +36,7 @@ public:
 	SolarScene* solar_scene;
 	GaussLegendreCPU* gl;
 	vector<unordered_set<int>> rela_block_index;
+	iHFCALMode ihfcal_mode;
 
 protected:
 	double helioClipper(Heliostat * helio, const vector<Vector3d>& dir, const vector<unordered_set<int>>& estimate_grids);
@@ -44,7 +49,8 @@ protected:
 	double inte_infinite_flux_sum(Heliostat* helio, const Vector3d& recv_pos, const double cos_phi, const double DNI);
 	double _helio_calc(int index, int DNI);
 	void flux_sum_matrix_grid(vector<Vector3d>& _recv_v, vector<Vector2d>& proj_v, const int rows, const int cols, Heliostat* helio, const double cos_phi, const double DNI);
-	//void flux_sum_matrix_inte(Vector3d& recv_normal, Vector3d& fc, vector<Vector3d>& _recv_v, Matrix4d& local2world, vector<Vector2d>& proj_v, Heliostat * helio, const double cos_phi, const double DNI);
+	void flux_sum_matrix_inte(Vector3d& recv_normal, Vector3d& fc, vector<Vector3d>& _recv_v, Matrix4d& local2world, vector<Vector2d>& proj_v, Heliostat * helio, const double cos_phi, const double DNI);
+	float flux_grid_from_recv(vector<Vector3d>& recv_v, const int rows, const int cols, Heliostat* helio, Vector3d& fc_center, double DNI, double cos_phi);
 
 };
 

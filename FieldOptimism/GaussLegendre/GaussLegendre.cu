@@ -12,7 +12,7 @@ void GaussLegendre::initNodeWeight(const int _M, const int _N)
 __device__
 float GaussLegendre::calcInte(const float4& x, const float4& y, const float sigma, const float ratio)
 {
-	
+
 	float sum = 0.0;
 	for (int i = 0; i < M; i++) {
 		for (int j = 0; j < N; j++) {
@@ -76,7 +76,7 @@ void GaussLegendre::calcWeight(const int n, float*& x, float*& w, const float a,
 	delete[] h_weight;
 }
 
-__device__ 
+__device__
 float GaussLegendre::jacobi(const float4& x, const float4& y, const float s, const float t) {
 	float J00 = -(1.0 - t) * x.x + (1.0 - t) * x.y + (1.0 + t) * x.z - (1.0 + t) * x.w;
 	float J01 = -(1.0 - t) * y.x + (1.0 - t) * y.y + (1.0 + t) * y.z - (1.0 + t) * y.w;
@@ -98,4 +98,3 @@ float2 GaussLegendre::map(const float4&x, const float4&y, const float s, const f
 	map_v.y = dot(N, y);
 	return map_v;
 }
-

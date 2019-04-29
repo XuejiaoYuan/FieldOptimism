@@ -29,12 +29,10 @@ void GridDDA::predictRelatedHelio(SolarScene* solar_scene, RayCastHelioDeviceArg
 }
 
 
-bool GridDDA::checkBoundingBox(const Vector3d & Hloc, const Vector3d & Hnormal, const Vector3d & HIloc, const Vector3d & dir, double diameter, bool shadowDir)
+bool GridDDA::checkBoundingBox(const Vector3d & Hloc, const Vector3d & Hnormal, const Vector3d & HIloc, const Vector3d & dir, double diameter)
 {
 	Vector3d dist = HIloc - Hloc;
-	double proj;
-	if (shadowDir) proj = dist.dot(dir);
-	else proj = GeometryFunc::reflect(-dir, Hnormal).dot(dist);
+	double proj = dist.dot(dir);
 	if (proj < Epsilon) return false;
 	if (sqrt(pow(dist.norm(), 2) - pow(proj, 2)) > diameter) return false;
 	return true;
@@ -60,7 +58,11 @@ void GridDDA::rayCastGridDDA(SolarScene* solar_scene, Heliostat * helio, Vector3
 	Vector3d sunray_dir = -dir;
 	Layout*& layout = solar_scene->layouts[0];
 	Vector3d curNormal = helio->helio_normal;
-	if (!shadowDir) dir = GeometryFunc::reflect(-dir, curNormal);
+	if (!shadowDir) {
+		int fc_index = helio->focus_center_index;
+		Vector3d fc_center = solar_scene->recvs[0]->focus_center[fc_index];
+		dir = (fc_center - helio->helio_pos).normalized();
+	}
 	Vector2d ray_dir(dir.x(), dir.z());
 	ray_dir.normalized();
 	Vector2d tangent_dir(ray_dir.y(), -ray_dir.x());
@@ -77,7 +79,7 @@ void GridDDA::rayCastGridDDA(SolarScene* solar_scene, Heliostat * helio, Vector3
 	// 3. 确定光线在场地中y反向移动距离及最终离开网格位置
 	double upper_y = layout->layout_size.y() + layout->layout_bound_pos.y();
 
-	double dis = (upper_y - helio->vertex[1].y()) / dir.y();						// TODO: check if the vertex is right
+	double dis = (upper_y - helio->helio_pos.y()) / dir.y();						// TODO: check if the vertex is right
 	Vector2d upper_v[2] = {
 		Vector2d((radius + dis)*dir.x(), (radius + dis)*dir.z()) + proj_origin[0],
 		Vector2d((radius + dis)*dir.x(), (radius + dis)*dir.z()) + proj_origin[1]
@@ -172,7 +174,7 @@ void GridDDA::rayCastGridDDA(SolarScene* solar_scene, Heliostat * helio, Vector3
 	for (auto& iter = relative_helio_label.begin(); iter != relative_helio_label.end(); ++iter) {
 		for (auto& rela_helio : solar_scene->layouts[0]->helio_layout[(*iter)[0]][(*iter)[1]]) {
 			if (rela_helio == helio || rela_helio_index.count(rela_helio->helio_index)) continue;
-			if (checkBoundingBox(helio->helio_pos, helio->helio_normal, rela_helio->helio_pos, -sunray_dir, 2*radius, shadowDir)) {
+			if (checkBoundingBox(helio->helio_pos, helio->helio_normal, rela_helio->helio_pos, dir, 2*radius)) {
 				rela_helio_index.insert(rela_helio->helio_index);
 			}
 		}

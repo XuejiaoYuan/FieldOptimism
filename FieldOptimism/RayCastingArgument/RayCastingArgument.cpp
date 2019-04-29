@@ -81,20 +81,20 @@ void IntegralHelioDeviceArgumet::setHelioRecvArguments(vector<Heliostat*>& helio
 	if (!d_focus_index) {
 		cudaMalloc((void**)&d_focus_index, sizeof(int)*numberOfHeliostats);
 		cudaMalloc((void**)&d_imgplane_world2local, sizeof(float4) * 4 * numberOfHeliostats);
-		cudaMalloc((void**)&d_lw_ratio, sizeof(float)*numberOfHeliostats);
+		cudaMalloc((void**)&d_gauss_param, sizeof(float2)*numberOfHeliostats);
 		cudaMalloc((void**)&d_factor, sizeof(float)*numberOfHeliostats);
 	}
 
 	int* h_focus_index = new int[numberOfHeliostats];
 	float4* h_imgplane_world2local = new float4[4 * numberOfHeliostats];
-	float* h_lw_ratio = new float[numberOfHeliostats];
+	float2* h_gauss_param = new float2[numberOfHeliostats];
 	float* h_factor = new float[numberOfHeliostats];
 	Vector3d focus_center, reverse_dir;
 	Matrix4d world2localM, local2worldM;
 #pragma omp parallel for
 	for (int i = 0; i < helios.size(); ++i) {
 		h_focus_index[i] = helios[i]->focus_center_index;
-		h_lw_ratio[i] = helios[i]->l_w_ratio;
+		h_gauss_param[i] = make_float2(helios[i]->l_w_ratio, helios[i]->sigma);
 		h_factor[i] = helios[i]->flux_param * (1 - helios[i]->sd_bk);
 	}
 
@@ -108,12 +108,12 @@ void IntegralHelioDeviceArgumet::setHelioRecvArguments(vector<Heliostat*>& helio
 	}
 	cudaMemcpy(d_focus_index, h_focus_index, sizeof(int)*numberOfHeliostats, cudaMemcpyHostToDevice);
 	cudaMemcpy(d_imgplane_world2local, h_imgplane_world2local, sizeof(float4) * 4 * numberOfHeliostats, cudaMemcpyHostToDevice);
-	cudaMemcpy(d_lw_ratio, h_lw_ratio, sizeof(float)*numberOfHeliostats, cudaMemcpyHostToDevice);
+	cudaMemcpy(d_gauss_param, h_gauss_param, sizeof(float2)*numberOfHeliostats, cudaMemcpyHostToDevice);
 	cudaMemcpy(d_factor, h_factor, sizeof(float)*numberOfHeliostats, cudaMemcpyHostToDevice);
 
 	delete[] h_focus_index;
 	delete[] h_imgplane_world2local;
-	delete[] h_lw_ratio;
+	delete[] h_gauss_param;
 	delete[] h_factor;
 }
 

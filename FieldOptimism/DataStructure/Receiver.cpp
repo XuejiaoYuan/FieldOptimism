@@ -21,16 +21,16 @@ void Receiver::init_recv(fstream& inFile, InputMode& input_mode)
 		else
 			line_stream >> recv_face;
 	}
-	focus_center.push_back(recv_pos + Vector3d(recv_normal.array() * recv_size.array()));
+	focus_center.push_back(recv_pos + Vector3d(recv_normal.array() * recv_size.array()/2));
 	recv_normal_list.push_back(recv_normal);
-	double half_l = recv_size.x() / 2.0;
-	double half_w = recv_size.z() / 2.0;
+	double half_l = recv_size.y() / 2.0;			// ±ß³¤
+	double half_w = recv_size.x() / 2.0;			// ¸ß¶È
 	Vector3d down_cor(0, -1, 0);
 	Vector3d cor_dir = recv_normal.cross(down_cor).normalized();
 	vector<Vector3d> vertex = {
-		(focus_center[0] - down_cor* half_l - cor_dir*half_w),
-		(focus_center[0] + down_cor* half_l - cor_dir*half_w),
-		(focus_center[0] + down_cor* half_l + cor_dir*half_w),
+		(focus_center[0] - down_cor* half_l - cor_dir*half_w),				// 0 - 3
+		(focus_center[0] + down_cor* half_l - cor_dir*half_w),				// |   |	
+		(focus_center[0] + down_cor* half_l + cor_dir*half_w),				// 1 - 2
 		(focus_center[0] - down_cor* half_l + cor_dir*half_w),
 	};
 	recv_vertex.push_back(vertex);
@@ -66,12 +66,12 @@ void PolyhedronRecv::init_recv(fstream& inFile, InputMode& input_mode)
 	}
 	Matrix3d m;
 	double delta_angle = 2 * PI / recv_face_num;
-	double pos = recv_size.z() / 2 / tan(delta_angle / 2);
+	double pos = recv_size.y() / 2 / tan(delta_angle / 2);
 	mask_rows = recv_size.x() / RECEIVER_SLICE;
-	mask_cols = recv_size.z() / RECEIVER_SLICE;
+	mask_cols = recv_size.y() / RECEIVER_SLICE;
 	Vector3d down_cor(0, -1, 0);
-	double half_l = recv_size.x() / 2.0;
-	double half_w = recv_size.z() / 2.0;
+	double half_l = recv_size.y() / 2.0;
+	double half_w = recv_size.x() / 2.0;
 
 	for (int i = 0; i < recv_face_num; i++) {
 		m << cos(i*delta_angle), 0, sin(i*delta_angle),

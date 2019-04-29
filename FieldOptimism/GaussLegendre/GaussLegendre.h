@@ -21,7 +21,7 @@ public:
 	double jacobi(const Vector4d& x, const Vector4d& y, double s, double t);
 	Vector2d map(const Vector4d&x, const Vector4d&y, double s, double t);
 	double flux_func(double x, double y, const double sigma, const double ratio) {
-		return exp(-0.5 / pow(sigma, 2)*(pow(x, 2) + pow(y * ratio, 2)));
+		return exp(-0.5 / pow(sigma, 2)*(pow(x, 2) + pow(y * ratio, 2))) / pow(sigma, 2);
 	}
 
 	vector<VectorXd> node;

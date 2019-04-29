@@ -94,12 +94,12 @@ class IntegralHelioDeviceArgumet : public HeliostatDeviceArgument {
 public:
 	int* d_focus_index;					// 各定日镜聚焦接收器平面序号 helioNum
 	float4* d_imgplane_world2local;		// 各定日镜对应image plane的坐标变换结果
-	float* d_lw_ratio;					// 各定日镜在image plane上的边长比
+	float2* d_gauss_param;				// 各定日镜在image plane上的边长比, sigma
 	float* d_factor;					// 各定日镜各项因子参数
 	float sigma;						// iHFCAL积分参数
 	float DNI;							// 当前时刻DNI
-	IntegralHelioDeviceArgumet() : d_focus_index(nullptr), d_imgplane_world2local(nullptr), 
-		d_lw_ratio(nullptr), d_factor(nullptr){}
+	IntegralHelioDeviceArgumet() : d_focus_index(nullptr), d_imgplane_world2local(nullptr), d_gauss_param(nullptr),
+		d_factor(nullptr) {}
 	~IntegralHelioDeviceArgumet() {
 		clearArguments();
 	}
@@ -108,7 +108,7 @@ public:
 	void clearArguments() {
 		d_focus_index = nullptr;
 		d_imgplane_world2local = nullptr;
-		d_lw_ratio = nullptr;
+		d_gauss_param = nullptr;
 		d_factor = nullptr;
 	}
 	void clear() {
@@ -121,9 +121,9 @@ public:
 			cudaFree(d_imgplane_world2local);
 			d_imgplane_world2local = nullptr;
 		}
-		if (d_lw_ratio) {
-			cudaFree(d_lw_ratio);
-			d_lw_ratio = nullptr;
+		if (d_gauss_param) {
+			cudaFree(d_gauss_param);
+			d_gauss_param = nullptr;
 		}
 		if (d_factor) {
 			cudaFree(d_factor);

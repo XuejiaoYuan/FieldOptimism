@@ -22,7 +22,7 @@ public:
         recvs.clear();
     }
 	bool initSolarScene(const string&scene_filepath, const Vector3d&sunray_dir);
-	bool changeSolarScene(const Vector3d&sunray_dir);		//change the surface normal of heiliostats
+	bool changeHeliosNormal(const Vector3d&sunray_dir);		//change the surface normal of heiliostats
 
 	// function for parameter optimisim
 	bool initFieldParam(const string&file_name);

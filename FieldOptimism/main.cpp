@@ -33,7 +33,10 @@ int main(int argc, char** argv) {
 	//t_handler.testPolygonClipping();
 
 	// 2. ÄÜÁ¿²âÊÔ
-	t_handler.testEnergyCalc(8, 8, 2, 2);
-
+	//t_handler.testTotalEnergyCalc(8, 8, 2, 2);
+	//t_handler.testOneTimeHelioEnergy(8, 8, 2, 2);
+	//t_handler.testHelioEnergyCalc(8, 8, 2, 2);
+	t_handler.testFitSigme(8, 8, 2, 2);
+	//t_handler.testCalcPolygonCenter();
  	return 1;
 }

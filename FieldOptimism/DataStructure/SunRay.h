@@ -5,15 +5,9 @@
 #ifndef HELIOSHADOW_SUNRAY_H
 #define HELIOSHADOW_SUNRAY_H
 
-// #include "../Common/utils.h"
-//#include "../Common/global_function.h"
 #include "../Common/CommonFunc.h"
 #include "SPA.h"
-//#include <string>
-//#include <fstream>
-//#include <iostream>
-//#include <sstream>
-//#include <vector>
+
 //using namespace std;
 
 class SunRay {

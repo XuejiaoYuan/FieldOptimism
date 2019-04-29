@@ -28,7 +28,7 @@ using namespace Eigen;
 
 
 #define Epsilon		1e-6
-#define VERTEXSCALE 1000000000000
+#define VERTEXSCALE 100000
 #define PI acos(double(-1))
 #define HELIOSTAT_REFLECTIVITY 0.88 
 #define RECEIVER_SLICE 0.05		// *ATTENTION*: w与l应被RECEIVER_SLICE整除
@@ -41,7 +41,7 @@ using namespace Eigen;
 #define		MAX_BLOCK_SINGLE_DIM	0x0ffff
 #define		MAX_THREADS				1024
 
-#define SIGMA_SUM	2.41e-3
+#define SIGMA_SUN	2.41e-3
 #define SIGMA_S		1e-3
 
 
@@ -68,3 +68,7 @@ enum FieldUpdateMode
 {
 	SunUpdateMode, HelioUpdateMode
 };
+
+typedef enum {
+	HelioEnergyMode, TotalEnergyMode
+}EnergyResMode;

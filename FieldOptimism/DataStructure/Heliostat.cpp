@@ -34,8 +34,7 @@ void Heliostat::changeSurfaceNormal(const vector<Vector3d>& focus_center, const 
 	cos_w = (-sunray_dir).dot(helio_normal);
 
 	setHelioVertex();
-
-	calc_flux_param(focus_center[focus_center_index]);
+	calcFluxParam(focus_center[focus_center_index]);
 }
 
 void Heliostat::changeSubHelio(const Vector3d & focus_center, const Vector3d & sunray_dir)
@@ -82,6 +81,49 @@ void Heliostat::initHeliostat(stringstream& line_stream, fstream& inFile, Layout
 		bool flag = initSurfaceNormal(focus_center, sunray_dir);
 }
 
+void Heliostat::initFluxParam(const vector<Receiver*>& recvs)
+{
+	double dis = set_focus_center_index(recvs);
+	if (dis <= 1000)
+		mAA = (double)(0.99321 - 0.0001176 * dis + 1.97 * 1e-8 * dis * dis);      //d<1000
+	else
+		mAA = exp(-0.0001106 * dis);
+
+	S = helio_size.x() * helio_size.z();
+
+	sigma_list.clear();
+	sigma_list.resize(6);
+	sigma_list[0] = dis;								// dis
+	sigma_list[1] = SIGMA_SUN;							// sigma_sun
+	sigma_list[2] = 2*SIGMA_S;					// sigma_bq
+	sigma_list[3] = 0;									// sigma_ast
+	sigma_list[4] = 0;									// sigma_t
+	sigma_list[5] = abs(cos_phi[focus_center_index]);	// cos_rev
+}
+
+void Heliostat::calcFluxParam(const Vector3d& focus_center)
+{
+	Vector3d reverse_sunray_dir = (helio_pos - focus_center).normalized();
+
+	// l_w_ratio 对总能量无影响
+	vector<Vector3d> inter_v(3);
+	for (int i = 0; i < 3; i++) {
+		// 计算image plane顶点
+		GeometryFunc::calcIntersection(reverse_sunray_dir, focus_center, vertex[i], -reverse_sunray_dir, inter_v[i]);
+	}
+	double ip_w = (inter_v[1] - inter_v[0]).norm();
+	double ip_l = (inter_v[2] - inter_v[1]).norm();
+	l_w_ratio = ip_l / ip_w;
+	//l_w_ratio = 1;
+
+	//sigma_list[3] = sqrt(S) * (1 - cos_w) / (4 * sigma_list[0]);
+	//sigma = calcSigma();
+	//sigma = 1.46;
+	flux_param = 0.5 * S * cos_w * rou * l_w_ratio * mAA / PI;
+}
+
+
+
 void Heliostat::getSubHelioVertex(vector<Vector3d>& subhelio_vertex)
 {
 	if (helio_matrix.x() == 1 && helio_matrix.y() == 1)
@@ -93,23 +135,6 @@ void Heliostat::getSubHelioVertex(vector<Vector3d>& subhelio_vertex)
 	}
 }
 
-
-void Heliostat::calc_flux_param(const Vector3d& focus_center)
-{
-	vector<Vector3d> inter_v(3);
-	Vector3d reverse_dir = (helio_pos - focus_center).normalized();
-	for (int i = 0; i < 3; i++) {
-		// 计算image plane顶点
-		 GeometryFunc::calcIntersection(reverse_dir, focus_center, vertex[i], -reverse_dir, inter_v[i]);
-	}
-	double ip_w = (vertex[1] - vertex[0]).norm();
-	double ip_l = (vertex[2] - vertex[1]).norm();
-	if (ip_l < ip_w)
-		swap(ip_l, ip_w);
-	l_w_ratio = ip_l / ip_w;
-
-	flux_param = 0.5 * S * cos_w * rou * mAA * l_w_ratio / PI;
-}
 
 void Heliostat::setHelioVertex()
 {
@@ -154,21 +179,6 @@ double Heliostat::set_focus_center_index(const vector<Receiver*>& recvs)
 	return min_d;
 }
 
-void Heliostat::calcFluxParam(const vector<Receiver*>& recvs)
-{
-	double dis = set_focus_center_index(recvs);
-	if (dis <= 1000)
-		mAA = (double)(0.99321 - 0.0001176 * dis + 1.97 * 1e-8 * dis * dis);      //d<1000
-	else
-		mAA = exp(-0.0001106 * dis);
-
-	Vector3d reverse_sunray_dir = (helio_pos - recvs[0]->focus_center[focus_center_index]).normalized();
-	S = helio_size.x() * helio_size.z();
-
-	// TODO: set helio sigma
-	sigma = 1.31;
-}
-
 void Heliostat::calcLsfParam()
 {
 	lsf_param_M = MatrixXd(6, 6);
@@ -189,6 +199,11 @@ void Heliostat::calcLsfParam()
 	lsf_param_M.row(3) = pos_x*pos_x*lsf_param_v;
 	lsf_param_M.row(4) = pos_x*pos_y*lsf_param_v;
 	lsf_param_M.row(5) = pos_y*pos_y*lsf_param_v;
+}
+
+double Heliostat::calcSigma()
+{
+	return sqrt(pow(sigma_list[0], 2) * (pow(sigma_list[1], 2) + pow(sigma_list[2], 2) + pow(sigma_list[3], 2) + pow(sigma_list[4], 2))) / sqrt(sigma_list[5]);
 }
 
 void Heliostat::initializeSubHelio(const Vector3d&focus_center, const Vector3d&sunray_dir)

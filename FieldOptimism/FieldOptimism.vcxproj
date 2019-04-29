@@ -50,7 +50,7 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;WIN64;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <OpenMPSupport>true</OpenMPSupport>
+      <OpenMPSupport>false</OpenMPSupport>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>DebugFastLink</GenerateDebugInformation>
@@ -94,6 +94,7 @@
     <CudaCompile Include="HelioEnergy\HelioEnergy.cu" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="CalcPolygonCenter\CalcPolygonCenter.h" />
     <ClInclude Include="Common\CommonFunc.h" />
     <ClInclude Include="Common\global_function.cuh" />
     <ClInclude Include="Common\utils.h" />
@@ -117,9 +118,11 @@
     <ClInclude Include="HelioEnergy\HelioEnergy.cuh" />
     <ClInclude Include="RayCastingArgument\RayCastingArgument.h" />
     <ClInclude Include="sdbkCalculator\sdbkCalculator.h" />
+    <ClInclude Include="SigmaFitting\SigmaFitting.h" />
     <ClInclude Include="TestHandler\TestHandler.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="CalcPolygonCenter\CalcPolygonCenter.cpp" />
     <ClCompile Include="DataStructure\Clipper\clipper.cpp" />
     <ClCompile Include="DataStructure\Heliostat.cpp" />
     <ClCompile Include="DataStructure\Layout.cpp" />
@@ -135,6 +138,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="RayCastingArgument\RayCastingArgument.cpp" />
     <ClCompile Include="sdbkCalculator\sdbkCalculator.cpp" />
+    <ClCompile Include="SigmaFitting\SigmaFitting.cpp" />
     <ClCompile Include="TestHandler\TestHandler.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

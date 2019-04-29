@@ -4,6 +4,8 @@
 #include "../DiscreteRayCaster/DiscreteRayCaster.h"
 #include "../DataStructure/Timer.h"
 #include "../HelioEnergy/HelioEnergy.cuh"
+#include "../SigmaFitting/SigmaFitting.h"
+#include "../CalcPolygonCenter/CalcPolygonCenter.h"
 #include <direct.h>
 
 class TestHandler {
@@ -18,7 +20,11 @@ public:
 	void testHelioPredict();
 	void testRayCasting();
 	void testPolygonClipping();
-	void testEnergyCalc(int M, int N, int m, int n);
+	void testTotalEnergyCalc(int M, int N, int m, int n);
+	void testHelioEnergyCalc(int M, int N, int m, int n);
+	void testOneTimeHelioEnergy(int M, int N, int m, int n);
+	void testFitSigme(int M, int N, int m, int n);
+	void testCalcPolygonCenter();
 
 	SolarScene *solar_scene;
 	SunRay sunray;

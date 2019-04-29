@@ -48,6 +48,12 @@
     <Filter Include="TestHandler">
       <UniqueIdentifier>{cbcabe50-597c-4e9b-87df-732555671a79}</UniqueIdentifier>
     </Filter>
+    <Filter Include="SigmaFitting">
+      <UniqueIdentifier>{9451a4da-0cf0-48b8-992c-008760fcc696}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="CalcPolygonCenter">
+      <UniqueIdentifier>{14731b65-cad4-46c8-a7ed-d6471df88f55}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DataStructure\Clipper\clipper.hpp">
@@ -122,6 +128,12 @@
     <ClInclude Include="TestHandler\TestHandler.h">
       <Filter>TestHandler</Filter>
     </ClInclude>
+    <ClInclude Include="SigmaFitting\SigmaFitting.h">
+      <Filter>SigmaFitting</Filter>
+    </ClInclude>
+    <ClInclude Include="CalcPolygonCenter\CalcPolygonCenter.h">
+      <Filter>CalcPolygonCenter</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DataStructure\Clipper\clipper.cpp">
@@ -169,6 +181,12 @@
     </ClCompile>
     <ClCompile Include="TestHandler\TestHandler.cpp">
       <Filter>TestHandler</Filter>
+    </ClCompile>
+    <ClCompile Include="SigmaFitting\SigmaFitting.cpp">
+      <Filter>SigmaFitting</Filter>
+    </ClCompile>
+    <ClCompile Include="CalcPolygonCenter\CalcPolygonCenter.cpp">
+      <Filter>CalcPolygonCenter</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
