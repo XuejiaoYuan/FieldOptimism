@@ -1,42 +1,28 @@
 #include "CalcPolygonCenter.h"
 
-double PolygonCenterCalculator::calcPolygonCenter(const Paths & solution, float2& center)
+double PolygonCenterCalculator::calcPolygonCenter(const Paths & solution, Vector3d& center, bool calcCenter)
 {
-	vector<float2> v_list;	
+	vector<vector<Vector3d>> v_list(solution.size());
 	for (int i = 0; i < solution.size(); i++) {
 		int n = solution[i].size();
 		for (int j = 0; j < n; j++) {
-			v_list.push_back(make_float2(solution[i][j].X / (double)VERTEXSCALE, solution[i][j].Y / (double)VERTEXSCALE));
+			v_list[i].push_back(Vector3d(solution[i][j].X / (double)VERTEXSCALE, 0, solution[i][j].Y / (double)VERTEXSCALE));
 		}
 	}
-	double area = calcArea(v_list);
-	
-	vector<float2> tris(3);
-	tris[0] = v_list[0];
-	center.x = 0;
-	center.y = 0;
-	for (int i = 2; i < v_list.size(); ++i) {
-		tris[1] = v_list[i - 1];
-		tris[2] = v_list[i];
-		double curS = calcArea(tris);
-		if (curS) {
-			float2 curC = calcTriangleCenter(tris);
-			center += curS *curC;
+	double S = 0;
+	center = Vector3d(0, 0, 0);
+	for (int i = 0; i < solution.size(); ++i) {
+		int k = v_list[i].size();
+		for (int j = 0; j < k; ++j) {
+			double tS = (v_list[i][j].x()*v_list[i][(j + 1) % k].z() - v_list[i][j].z()*v_list[i][(j + 1) % k].x()) / 2.;
+			S += tS;
+			if(calcCenter)
+				center += tS*(v_list[i][j] + v_list[i][(j + 1) % k]) / 3;
 		}
 	}
-	if (area) center /= area;
+	if(calcCenter) center /= S;
 
-	double S = 0.;          //S面积,xy横纵坐标和
-	float2 s = make_float2(0, 0);
-	int k = v_list.size();
-	for (int i = 0; i < k; i++) {
-		double tS = (v_list[i].x*v_list[(i+1)%k].y - v_list[i].y*v_list[(i + 1) % k].x) / 2.;
-		S += tS;
-		s += tS*(v_list[i] + v_list[(i+1)%k]) / 3;
-	}
-	s /= S;
-
-	return fabs(area);
+	return fabs(S);
 }
 
 double PolygonCenterCalculator::calcArea(const vector<float2>& vertexes)

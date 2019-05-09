@@ -5,9 +5,6 @@
 
 bool Heliostat::initSurfaceNormal(const vector<Vector3d> &focus_center, const Vector3d &sunray_dir) {
 	double dis_min = INT_MAX;
-	max_rela_dis = INT_MIN;
-	min_rela_dis = INT_MAX;
-	approx_rela_dis = INT_MIN;
 	for (int i = 0; i < focus_center.size(); i++) {
 		double dis = (focus_center[i] - helio_pos).norm();
 		if (dis < dis_min) {
@@ -25,9 +22,6 @@ bool Heliostat::initSurfaceNormal(const vector<Vector3d> &focus_center, const Ve
 
 void Heliostat::changeSurfaceNormal(const vector<Vector3d>& focus_center, const Vector3d & sunray_dir)
 {
-	max_rela_dis = INT_MIN;
-	min_rela_dis = INT_MAX;
-	approx_rela_dis = INT_MIN;
 	Vector3d reflectray_dir = focus_center[focus_center_index] - helio_pos;
 	reflectray_dir = reflectray_dir.normalized();
 	helio_normal = (reflectray_dir - sunray_dir).normalized();
@@ -95,7 +89,8 @@ void Heliostat::initFluxParam(const vector<Receiver*>& recvs)
 	sigma_list.resize(6);
 	sigma_list[0] = dis;								// dis
 	sigma_list[1] = SIGMA_SUN;							// sigma_sun
-	sigma_list[2] = 2*SIGMA_S;					// sigma_bq
+	//sigma_list[2] = 2*SIGMA_S;							// sigma_bq
+	sigma_list[2] = sqrt(2 * (1 + pow(cos_w,2)))*SIGMA_S;
 	sigma_list[3] = 0;									// sigma_ast
 	sigma_list[4] = 0;									// sigma_t
 	sigma_list[5] = abs(cos_phi[focus_center_index]);	// cos_rev
@@ -113,11 +108,11 @@ void Heliostat::calcFluxParam(const Vector3d& focus_center)
 	}
 	double ip_w = (inter_v[1] - inter_v[0]).norm();
 	double ip_l = (inter_v[2] - inter_v[1]).norm();
-	l_w_ratio = ip_l / ip_w;
-	//l_w_ratio = 1;
+	//l_w_ratio = ip_l / ip_w;
+	l_w_ratio = 1;
 
-	//sigma_list[3] = sqrt(S) * (1 - cos_w) / (4 * sigma_list[0]);
-	//sigma = calcSigma();
+	sigma_list[3] = sqrt(S) * (1 - cos_w) / (4 * sigma_list[0]);
+	sigma = calcSigma();
 	//sigma = 1.46;
 	flux_param = 0.5 * S * cos_w * rou * l_w_ratio * mAA / PI;
 }
@@ -138,7 +133,7 @@ void Heliostat::getSubHelioVertex(vector<Vector3d>& subhelio_vertex)
 
 void Heliostat::setHelioVertex()
 {
-	GeometryFunc::setLocalVertex(helio_size.x(), helio_size.z(), vertex);
+	GeometryFunc::setLocalVertex(helio_size, vertex);
 
 	GeometryFunc::getHelioMatrix(helio_normal, helio_pos, local2worldM, world2localM);
 

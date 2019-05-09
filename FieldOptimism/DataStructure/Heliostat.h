@@ -83,10 +83,8 @@ public:
 	double sigma;				// Heliostat's sigma
 	vector<double> sigma_list;	// dis, sigma_sun, sigma_bq, sigma_ast, sigma_t, cos_rev
 	double flux_param;			// flux_param = 0.5 * S * cos_w * rou * l_w_ration * mAA / pi
-	double max_rela_dis;			// 计算阴影与遮挡时最大无关距离
-	double min_rela_dis;			// 计算阴影与遮挡时最小相关距离
-	double approx_rela_dis;		// 由公式计算得到的阴影与遮挡时最大无关距离
 	MatrixXd lsf_param_M, lsf_param_v;			// 用于计算LSF曲面的参数
+	float3 centerBias;			// 由于阴影遮挡导致的重心偏移位置
 
 protected:
 	bool initialized;

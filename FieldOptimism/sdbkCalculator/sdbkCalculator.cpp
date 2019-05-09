@@ -60,28 +60,22 @@ double SdBkCalc::helioClipper(Heliostat * helio, const vector<Vector3d>& dir, co
 {
 	vector<Heliostat*>& helios = solar_scene->helios;
 	vector<Vector3d> helio_v, tmp_v(4);
-	vector<Vector2d> project_v(4), local_v;
+	vector<float2> local_v;
 	double t;
 	Paths subj(1), clips;
 	helio_v = helio->vertex;
 
 	for (int i = 0; i < helio_v.size(); i++) {
 		Vector3d tmp_v = GeometryFunc::mulMatrix(helio_v[i], helio->world2localM);
-		local_v.push_back(Vector2d(tmp_v.x(), tmp_v.z()));
-		subj[0] << IntPoint(VERTEXSCALE*local_v[i].x(), VERTEXSCALE*local_v[i].y());
+		local_v.push_back(make_float2(tmp_v.x(), tmp_v.z()));
+		subj[0] << IntPoint(VERTEXSCALE*local_v[i].x, VERTEXSCALE*local_v[i].y);
 	}
 
-	double total_area = 0;
-	for (int j = 0; j < local_v.size(); j++)
-		total_area += (local_v[j].x()*local_v[(j + 1) % 4].y()
-			- (local_v[(j + 1) % 4].x()*local_v[j].y()));
-	total_area = fabs(total_area*0.5);
-
+	double total_area = PolygonCenterCalculator::calcArea(local_v);
 	if (total_area == 0) {
 		cout << "Project surface is 0!" << endl;
 		return 0;
 	}
-
 
 	for (int index = 0; index < 2; index++) {
 		Vector3d reverse_dir = -dir[index];
@@ -112,21 +106,22 @@ double SdBkCalc::helioClipper(Heliostat * helio, const vector<Vector3d>& dir, co
 	c.AddPaths(subj, ptSubject, true);
 	c.AddPaths(clips, ptClip, true);
 	c.Execute(ctIntersection, solution, pftNonZero, pftNonZero);
+	
+	// º∆À„ £”‡√Êª˝
+	c.Clear();
+	c.AddPaths(subj, ptSubject, true);
+	c.AddPaths(solution, ptClip, true);
+	c.Execute(ctDifference, solution, pftNonZero, pftNonZero);
 
-	double sum = 0;
-	for (int i = 0; i < solution.size(); i++) {
-		int n = solution[i].size();
-		for (int j = 0; j < n; j++) {
-			sum += (solution[i][j].X / (double)VERTEXSCALE*solution[i][(j + 1) % n].Y / (double)VERTEXSCALE)
-				- (solution[i][(j + 1) % n].X / (double)VERTEXSCALE*solution[i][j].Y / (double)VERTEXSCALE);
-		}
+	Vector3d h_local_centerBias;
+	double area = PolygonCenterCalculator::calcPolygonCenter(solution, h_local_centerBias, calcCenterMode);
+	if (calcCenterMode) {
+		h_local_centerBias = GeometryFunc::mulMatrix(h_local_centerBias, helio->local2worldM);
+		helio->centerBias = make_float3(h_local_centerBias.x(), h_local_centerBias.y(), h_local_centerBias.z());
 	}
-	sum = fabs(sum*0.5);
-
-	double res = sum / total_area;
-	return res;
+	double res = area / total_area;
+	return 1.0 - fabs(res);
 }
-
 
 
 void SdBkCalc::initBlockRelaIndex(const Vector3d & dir)
@@ -238,8 +233,8 @@ void SdBkCalc::flux_sum_matrix_grid(vector<Vector3d>& _recv_v, vector<Vector2d>&
 	for (int i = 0; i < rows; i++) {
 		for (int j = 0; j < cols; j++) {
 			outFile << mask_x(i, j) << ' ' << mask_y(i, j) << ' '
-				<< DNI*helio->flux_param * grid_area* gl->flux_func(mask_x(i, j), mask_y(i, j), helio->sigma, helio->l_w_ratio) << endl;
-			sum += DNI*helio->flux_param * grid_area* gl->flux_func(mask_x(i, j), mask_y(i, j), helio->sigma, helio->l_w_ratio);
+				<< DNI*helio->flux_param *(1 - helio->sd_bk) * grid_area* gl->flux_func(mask_x(i, j), mask_y(i, j), helio->sigma, helio->l_w_ratio) << endl;
+			sum += DNI*helio->flux_param *(1 - helio->sd_bk) * grid_area* gl->flux_func(mask_x(i, j), mask_y(i, j), helio->sigma, helio->l_w_ratio);
 		}
 	}
 	outFile.close();
@@ -267,15 +262,32 @@ float SdBkCalc::flux_grid_from_recv(vector<Vector3d>& recv_v, const int rows, co
 		grid_area += recv_v[i].x()*recv_v[(i + 1) % 4].y() - recv_v[i].y()*recv_v[(i + 1) % 4].x();
 	grid_area = fabs(grid_area / 2.0 / rows / cols);
 
-	fstream outFile("grid_" + to_string(helio->helio_index) + ".txt", ios_base::out);
+	fstream outFile(save_path +"grid_nlw_cb_sc_" + to_string(helio->helio_index) + ".txt", ios_base::out);
 
+	//vector<Vector3d> test_v(4);
+	//for (int i = 0; i < 4; ++i)
+	//	GeometryFunc::calcIntersection(reverse_dir, fc_center, recv_v[i], reverse_dir, test_v[i]);
+	//double l = (recv_v[0] - recv_v[1]).norm();
+	//double l_ = (test_v[0] - test_v[1]).norm();
+	//double w = (recv_v[1] - recv_v[2]).norm();
+	//double w_ = (test_v[1] - test_v[2]).norm();
+	//double ratio = (l_*w_) / (l*w);
+
+	Vector3d i_center_bias(0, 0, 0);
+	if (calcCenterMode) {
+		Vector3d h_center_bias(helio->centerBias.x, helio->centerBias.y, helio->centerBias.z);
+		GeometryFunc::calcIntersection(reverse_dir, fc_center, h_center_bias, reverse_dir, i_center_bias);
+		i_center_bias = GeometryFunc::mulMatrix(i_center_bias, world2local);
+	}
 	for (int i = 0; i < rows; ++i) {
 		for (int j = 0; j < cols; ++j) {
 			Vector3d start_v = recv_v[0] + i*row_gap + j*col_gap;
 			Vector3d inter_v;
 			GeometryFunc::calcIntersection(reverse_dir, fc_center, start_v, reverse_dir, inter_v);
 			Vector3d proj_v = GeometryFunc::mulMatrix(inter_v, world2local);
-			double res = DNI*cos_phi*helio->flux_param * gl->flux_func(proj_v.x(), proj_v.z(), helio->sigma, helio->l_w_ratio);		// flux intensity(without grid area)
+			double res = DNI*(1 - helio->sd_bk)*cos_phi*helio->flux_param
+				* gl->flux_func(proj_v.x() - i_center_bias.x(), proj_v.z() - i_center_bias.z(), helio->sigma, helio->l_w_ratio);		// flux intensity(without grid area)
+			//double res = DNI*(1 - helio->sd_bk)*cos_phi*helio->flux_param * gl->flux_func(proj_v.x(), proj_v.z(), helio->sigma, helio->l_w_ratio);
 			sum += res;
 			outFile << start_v.x() << ' ' << start_v.y() << ' ' << res << endl;
 		}
@@ -330,7 +342,7 @@ void SdBkCalc::flux_sum_matrix_inte(Vector3d& recv_normal, Vector3d& fc, vector<
 		for (int j = 0; j < weight[1].size(); j++) {
 			map_v = gl->map(x, y, node[0][i], node[1][j]);
 			recv_map_v = gl->map(recv_x, recv_y, node[0][i], node[1][j]);
-			double tmp_sum = DNI*cos_phi*helio->flux_param *
+			double tmp_sum = DNI*cos_phi*helio->flux_param *(1 - helio->sd_bk) *
 				weight[0][i] * weight[1][j] * gl->jacobi(x, y, node[0](i), node[1](j))*gl->flux_func(map_v.x(), map_v.y(), helio->sigma, helio->l_w_ratio);
 			Vector3d recv_map_v = GeometryFunc::mulMatrix(Vector3d(map_v.x(), 0, map_v.y()), local2world);
 			// outFile << recv_map_v.x() << ' ' << recv_map_v.y() << ' ' << tmp_sum << endl;
@@ -586,11 +598,9 @@ double SdBkCalc::calcSingleFluxSum(int helio_index, const double DNI) {
 				proj_v.push_back(Vector2d(inter_v.x(), inter_v.z()));
 
 			}
-			double dis1 = (tmp_v[2] - tmp_v[1]).norm();
-			double dis2 = (proj_v[2] - proj_v[1]).norm();
 			//flux_sum_matrix_grid(recvs[0]->recv_vertex[i], proj_v, 400, 200, helio, helio->cos_phi[i], DNI);
 			//flux_sum_matrix_inte(solar_scene->recvs[0]->recv_normal_list[i], focus_center, recvs[0]->recv_vertex[i], local2worldM, proj_v, helio, helio->cos_phi[i], DNI);
-			double res = flux_grid_from_recv(recvs[0]->recv_vertex[i], 400, 200, helio, focus_center, 1, helio->cos_phi[i]);
+			double res = flux_grid_from_recv(recvs[0]->recv_vertex[i], 240, 240, helio, focus_center, DNI, helio->cos_phi[i]);
 			_flux_sum += _multi_inte_flux_sum(proj_v, helio, helio->cos_phi[i], DNI);
 		}
 	}
@@ -657,7 +667,7 @@ void FermatSdBkCalc::save_clipper_res(const string save_path, int month, int day
 	for (int i = 0; i < solar_scene->helios.size(); i++) {
 		auto h = solar_scene->helios[i];
 		outFile << solar_scene->sunray_dir.x() << ' ' << solar_scene->sunray_dir.z() << ' ' << h->helio_pos.x() << ' ' << h->helio_pos.z() << ' ' << h->sd_bk << ' ' 
-			<< h->flux_sum << ' ' << h->min_rela_dis << ' ' << h->max_rela_dis << ' ' << h->approx_rela_dis << endl;
+			<< h->flux_sum << endl;
 	}
 	outFile.close();
 

@@ -106,14 +106,15 @@ namespace GeometryFunc
 		return true;
 	}
 
-	inline void setLocalVertex(const double l, const double w, vector<Vector3d>& vertex) {
-		double half_l = l / 2.0;
-		double half_w = w / 2.0;
+	inline void setLocalVertex(const Vector3d& size, vector<Vector3d>& vertex) {
+		double half_l = size.x() / 2.0;
+		double half_w = size.z() / 2.0;
+		double half_h = size.y() / 2;
 		vertex.clear();
-		vertex.push_back(Vector3d(-half_l, 0, -half_w));
-		vertex.push_back(Vector3d(-half_l, 0, +half_w));
-		vertex.push_back(Vector3d(+half_l, 0, +half_w));
-		vertex.push_back(Vector3d(+half_l, 0, -half_w));
+		vertex.push_back(Vector3d(-half_l, half_h, -half_w));
+		vertex.push_back(Vector3d(-half_l, half_h, +half_w));
+		vertex.push_back(Vector3d(+half_l, half_h, +half_w));
+		vertex.push_back(Vector3d(+half_l, half_h, -half_w));
 	}
 
 	inline void getHelioMatrix(const Vector3d& normal, const Vector3d& origin_p, Matrix4d& local2worldM, Matrix4d& world2localM) {

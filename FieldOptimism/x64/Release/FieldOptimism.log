@@ -4,7 +4,7 @@ e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\d
 e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\../Common/global_function.cuh(39): warning C4244: “参数”: 从“const double”转换到“float”，可能丢失数据
 e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\../Common/global_function.cuh(43): warning C4244: “参数”: 从“const double”转换到“float”，可能丢失数据
 e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\../Common/global_function.cuh(62): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
-e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\../Common/global_function.cuh(179): warning C4267: “初始化”: 从“size_t”转换到“int”，可能丢失数据
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\../Common/global_function.cuh(180): warning C4267: “初始化”: 从“size_t”转换到“int”，可能丢失数据
 e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\Heliostat.h(40): warning C4150: 删除指向不完整“SubHelio”类型的指针；没有调用析构函数
   e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\Heliostat.h(19): note: 参见“SubHelio”的声明
   TestHandler.cpp
@@ -13,17 +13,20 @@ e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\d
 e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\../Common/global_function.cuh(39): warning C4244: “参数”: 从“const double”转换到“float”，可能丢失数据
 e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\../Common/global_function.cuh(43): warning C4244: “参数”: 从“const double”转换到“float”，可能丢失数据
 e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\../Common/global_function.cuh(62): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
-e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\../Common/global_function.cuh(179): warning C4267: “初始化”: 从“size_t”转换到“int”，可能丢失数据
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\../Common/global_function.cuh(180): warning C4267: “初始化”: 从“size_t”转换到“int”，可能丢失数据
 e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\../DataStructure/Heliostat.h(40): warning C4150: 删除指向不完整“SubHelio”类型的指针；没有调用析构函数
   e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\../DataStructure/Heliostat.h(19): note: 参见“SubHelio”的声明
 e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\griddda\../RayCastingArgument/RayCastingArgument.h(67): warning C4244: “=”: 从“double”转换到“int”，可能丢失数据
 e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\griddda\../RayCastingArgument/RayCastingArgument.h(68): warning C4244: “=”: 从“double”转换到“int”，可能丢失数据
 e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\helioenergy\../GaussLegendre/GaussLegendre.cuh(19): warning C4244: “return”: 从“double”转换到“float”，可能丢失数据
+TestHandler\TestHandler.cpp(332): warning C4244: “参数”: 从“float”转换到“ClipperLib::cInt”，可能丢失数据
+TestHandler\TestHandler.cpp(335): warning C4244: “参数”: 从“double”转换到“ClipperLib::cInt”，可能丢失数据
+TestHandler\TestHandler.cpp(336): warning C4244: “参数”: 从“double”转换到“ClipperLib::cInt”，可能丢失数据
     正在创建库 E:\xjYuan\003 ZJU\002 Solar\004 Codes\190326_Solar\FieldOptimism\x64\Release\FieldOptimism.lib 和对象 E:\xjYuan\003 ZJU\002 Solar\004 Codes\190326_Solar\FieldOptimism\x64\Release\FieldOptimism.exp
   正在生成代码
-  26 of 4802 functions ( 0.5%) were compiled, the rest were copied from previous compilation.
-    2 functions were new in current compilation
-    6 functions had inline decision re-evaluated but remain unchanged
+  21 of 5003 functions ( 0.4%) were compiled, the rest were copied from previous compilation.
+    1 functions were new in current compilation
+    4 functions had inline decision re-evaluated but remain unchanged
   已完成代码的生成
   FieldOptimism.vcxproj -> E:\xjYuan\003 ZJU\002 Solar\004 Codes\190326_Solar\FieldOptimism\x64\Release\FieldOptimism.exe
   FieldOptimism.vcxproj -> E:\xjYuan\003 ZJU\002 Solar\004 Codes\190326_Solar\FieldOptimism\x64\Release\FieldOptimism.pdb (Full PDB)

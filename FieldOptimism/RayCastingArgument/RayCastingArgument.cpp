@@ -117,6 +117,23 @@ void IntegralHelioDeviceArgumet::setHelioRecvArguments(vector<Heliostat*>& helio
 	delete[] h_factor;
 }
 
+void IntegralHelioDeviceArgumet::setHelioCenterBias(vector<Heliostat*>& helios, bool update)
+{
+	if (update && d_center_bias) {
+		cudaFree(d_center_bias);
+		d_center_bias = nullptr;
+	}
+	if (!d_center_bias) 
+		cudaMalloc((void**)&d_center_bias, sizeof(float3)*numberOfHeliostats);
+	float3* h_center_bias = new float3[numberOfHeliostats];
+#pragma omp parallel for
+	for (int i = 0; i < helios.size(); ++i)
+		h_center_bias[i] = helios[i]->centerBias;
+
+	cudaMemcpy(d_center_bias, h_center_bias, sizeof(float3)*numberOfHeliostats, cudaMemcpyHostToDevice);
+	delete[] h_center_bias;
+}
+
 void ReceiverDeviceArgument::setRecvDeviceArguments(Receiver& recv)
 {
 	numberOfReceivers = recv.recv_vertex.size();

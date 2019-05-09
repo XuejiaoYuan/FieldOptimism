@@ -18,6 +18,7 @@ vector<float> HelioEnergy::calcHelioEnergy(FieldUpdateMode mode)
 	case SunUpdateMode:
 		h_args.setHelioDeviceArguments(solar_scene->helios);
 		h_args.setHelioRecvArguments(solar_scene->helios, *(solar_scene->recvs[0]));
+		if(calcCenterMode) h_args.setHelioCenterBias(solar_scene->helios);
 		break;
 	default:
 		break;
@@ -60,6 +61,7 @@ float HelioEnergy::calcTotalEnergy(FieldUpdateMode mode)
 	case SunUpdateMode:
 		h_args.setHelioDeviceArguments(solar_scene->helios);
 		h_args.setHelioRecvArguments(solar_scene->helios, *(solar_scene->recvs[0]));
+		if(calcCenterMode) h_args.setHelioCenterBias(solar_scene->helios);
 		break;
 	default:
 		break;

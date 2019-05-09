@@ -7,7 +7,8 @@
 
 class HelioEnergy {
 public:
-	HelioEnergy(SolarScene* solar_scene, int M, int N, int m, int n) :M(M), N(N), m(m), n(n), solar_scene(solar_scene), d_total_energy(nullptr) {
+	HelioEnergy(SolarScene* solar_scene, int M, int N, int m, int n, bool calcCenterMode = false) 
+		:M(M), N(N), m(m), n(n), solar_scene(solar_scene), d_total_energy(nullptr), calcCenterMode(calcCenterMode) {
 		r_args.setRecvDeviceArguments(*(solar_scene->recvs[0]));
 		gl_handler.initNodeWeight(M, N);
 		cudaMalloc((void**)&d_total_energy, sizeof(float));
@@ -15,12 +16,15 @@ public:
 	}
 	vector<float> calcHelioEnergy(FieldUpdateMode mode);
 	float calcTotalEnergy(FieldUpdateMode mode);
+	void setHFCALMode(bool calcCenterMode) { this->calcCenterMode = calcCenterMode; }
 	~HelioEnergy() {
 		h_args.clear();
 		gl_handler.clear();
 		cudaFree(d_total_energy);
 		d_total_energy = nullptr;
 	}
+	
+	bool calcCenterMode;
 
 private:
 	int M;	// 积分节点

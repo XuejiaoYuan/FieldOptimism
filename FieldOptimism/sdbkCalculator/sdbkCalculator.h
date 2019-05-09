@@ -5,6 +5,7 @@
 #include "../GaussLegendre/GaussLegendre.h"
 #include "../DataStructure/FieldSegment.h"
 #include "../GridDDA/GridDDA.h"
+#include "../CalcPolygonCenter/CalcPolygonCenter.h"
 using namespace ClipperLib;
 
 
@@ -12,18 +13,14 @@ typedef enum {
 	RectFieldType, CrossRectFieldType, FermatFieldType, RadialFieldType
 }FieldType;
 
-typedef enum {
-	WithCenterBias, WithoutCenterBias
-}iHFCALMode;
-
 class SdBkCalc
 {
 public:
-	SdBkCalc(const FieldType& _field_type, SolarScene* _solar_scene) :ihfcal_mode(WithoutCenterBias) {
+	SdBkCalc(const FieldType& _field_type, SolarScene* _solar_scene) :calcCenterMode(false), save_path("") {
 		this->field_type = _field_type;
 		this->solar_scene = _solar_scene;
 	}
-	void setHFCALMode(iHFCALMode mode) { this->ihfcal_mode = mode; }
+	void setHFCALMode(bool calcCenterMode) { this->calcCenterMode = calcCenterMode; }
 	void initBlockRelaIndex(const Vector3d& dir);
 	double calcSingleShadowBlock(int helio_index);
 	double calcSingleFluxSum(int helio_index, const double DNI);
@@ -36,7 +33,8 @@ public:
 	SolarScene* solar_scene;
 	GaussLegendreCPU* gl;
 	vector<unordered_set<int>> rela_block_index;
-	iHFCALMode ihfcal_mode;
+	bool calcCenterMode;
+	string save_path;
 
 protected:
 	double helioClipper(Heliostat * helio, const vector<Vector3d>& dir, const vector<unordered_set<int>>& estimate_grids);

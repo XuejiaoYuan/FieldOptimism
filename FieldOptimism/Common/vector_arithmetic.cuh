@@ -193,6 +193,12 @@ inline __host__ __device__ void operator/=(float2 &a, float s)
 	float inv = 1.0f / s;
 	a *= inv;
 }
+inline __host__ __device__ bool operator==(float2 a, float2 b) {
+	if (abs(a.x - b.x) < 1e-5 && abs(a.y - b.y) < 1e-5)
+		return true;
+	return false;
+}
+
 
 // lerp
 inline __device__ __host__ float2 lerp(float2 a, float2 b, float t)

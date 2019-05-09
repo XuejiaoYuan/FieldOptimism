@@ -174,7 +174,6 @@ void TestHandler::testTotalEnergyCalc(int M, int N, int m, int n)
 	}
 }
 
-
 void TestHandler::testHelioEnergyCalc(int M, int N, int m, int n) {
 	Vector3d sunray_dir;
 
@@ -221,38 +220,54 @@ void TestHandler::testHelioEnergyCalc(int M, int N, int m, int n) {
 void TestHandler::testOneTimeHelioEnergy(int M, int N, int m, int n)
 {
 	Vector3d sunray_dir;
-
+	float DNI = 1000;
 	SdBkCalcCreator sdbk_calc_creator;
 	SdBkCalc* sdbk_calc = sdbk_calc_creator.getSdBkCalc(solar_scene);
-	HelioEnergy e_handler(solar_scene, M, N, m, n);
+	HelioEnergy e_handler(solar_scene, M, N, m, n, true);
 	sdbk_calc->gl = new GaussLegendreCPU(M, N, m, n);
-	sdbk_calc->initBlockRelaIndex(sunray_dir);
 
 	fstream outFile;
 	
-	sunray_dir = sunray.changeSunRay(80.2, 185);
+	sunray_dir = sunray.changeSunRay(80.2, 185);		// mid day: 80.2, 185
 	solar_scene->changeHeliosNormal(sunray_dir);
+	sdbk_calc->setHFCALMode(true);
+	sdbk_calc->initBlockRelaIndex(sunray_dir);
 	sdbk_calc->calcTotalShadowBlock();
 
-	sdbk_calc->calcSingleFluxSum(980, 1);
+	SigmaFitting sg_handler;
+	//sg_handler.fromFluxPeak2Sigma("SdBkRes/he_M3D21H8m0/max_flux.txt", solar_scene->helios, solar_scene->recvs[0], DNI);
+	vector<int> test_helio_index = { 0, 980, 1960, 2113 };
+	vector<Heliostat*> test_helio_list;
+	test_helio_list = solar_scene->helios;
+	//for (auto i : test_helio_index)
+	//	test_helio_list.push_back(solar_scene->helios[i]);
+	//sg_handler.fromFluxPeak2Sigma("Inputfiles/QMCRT/mid_day/iter_500_tri/max_flux.txt", test_helio_list, solar_scene->recvs[0], DNI);
+	
+	//DNI = 681;
+	//sunray_dir = sunray.changeSunRay(9.5, 120);		// mid day: 80.2, 185
+	//solar_scene->changeHeliosNormal(sunray_dir);
+	//sdbk_calc->calcTotalShadowBlock();
+
+	string path = "Outputfiles/QMCRT/mid_day/iter_500_tri_1/total_res/";
+	_mkdir(path.c_str());
+
+	//sdbk_calc->save_path = path;
+	//for (auto h : test_helio_list)
+	//	sdbk_calc->calcSingleFluxSum(h->helio_index, DNI);
 
 	vector<float> gpu_res = e_handler.calcHelioEnergy(SunUpdateMode);
 	double sum = e_handler.calcTotalEnergy(SunUpdateMode);
 
-	string path = "SdBkRes/he_test_980";
-	_mkdir(path.c_str());
-
-	outFile.open(path + "/calc_helio_energy.txt", ios_base::out);
-	outFile << sum << endl;
+	outFile.open(path + "calc_helio_energy.txt", ios_base::out);
+	//outFile << sum * DNI << endl;
 	for (auto&r : gpu_res)
-		outFile << r << endl;
+		outFile << r * DNI << endl;
 	outFile.close();
 
-	outFile.open(path + "/sigma.txt", ios_base::out);
-	for (auto&h : solar_scene->helios)
+	outFile.open(path + "sigma.txt", ios_base::out);
+	for (auto&h : test_helio_list)
 		outFile << h->sigma << endl;
 	outFile.close();
-	
 }
 
 void TestHandler::testFitSigme(int M, int N, int m, int n)
@@ -260,14 +275,15 @@ void TestHandler::testFitSigme(int M, int N, int m, int n)
 	SdBkCalcCreator sdbk_calc_creator;
 	SdBkCalc* sdbk_calc = sdbk_calc_creator.getSdBkCalc(solar_scene);
 	HelioEnergy e_handler(solar_scene, M, N, m, n);
-	//sunray.changeSunRay({ 3, 21, 8, 0 });
-	Vector3d sunray_dir = sunray.changeSunRay(9.5, 120);
+	sunray.changeSunRay({ 3, 21, 8, 0 });
+	Vector3d sunray_dir = sunray.changeSunRay(80.2, 185);
 	solar_scene->changeHeliosNormal(sunray_dir);
+	sdbk_calc->setHFCALMode(true);
 	sdbk_calc->initBlockRelaIndex(sunray_dir);
 	sdbk_calc->calcTotalShadowBlock();
 
 	SigmaFitting sg_handler;
-	sg_handler.fromFluxPeak2Sigma("SdBkRes/he_M3D21H8m0/max_flux.txt", solar_scene->helios, 1);
+	sg_handler.fromFluxPeak2Sigma("SdBkRes/he_M3D21H8m0/max_flux.txt", solar_scene->helios, solar_scene->recvs[0], 1000);
 
 	fstream outFile;
 	for (auto& day : sample_day) {
@@ -284,12 +300,12 @@ void TestHandler::testFitSigme(int M, int N, int m, int n)
 
 				vector<float> gpu_res = e_handler.calcHelioEnergy(SunUpdateMode);
 				
-				outFile.open(path + "/mean_fit_calc_helio_energy.txt", ios_base::out);
+				outFile.open(path + "/new_fit_helio_energy.txt", ios_base::out);
 				for (auto&r : gpu_res)
-					outFile << r << endl;
+					outFile << r * 1000 << endl;
 				outFile.close();
 
-				outFile.open(path + "/mean_fit_sigma.txt", ios_base::out);
+				outFile.open(path + "/new_fit_sigma.txt", ios_base::out);
 				for (auto&h : solar_scene->helios)
 					outFile << h->sigma << endl;
 				outFile.close();
@@ -301,10 +317,36 @@ void TestHandler::testFitSigme(int M, int N, int m, int n)
 
 void TestHandler::testCalcPolygonCenter()
 {
-	Paths path(1);
-	path[0] << IntPoint(0, 1 * VERTEXSCALE) << IntPoint(1 * VERTEXSCALE, 1 * VERTEXSCALE) << IntPoint(1 * VERTEXSCALE, 0) << IntPoint(0, 2 * VERTEXSCALE)
-			<< IntPoint(2 * VERTEXSCALE, 2 * VERTEXSCALE) 
-			<< IntPoint(2 * VERTEXSCALE, 0) << IntPoint(0, 0);
-	float2 center;
-	PolygonCenterCalculator::calcPolygonCenter(path, center);
+	SdBkCalcCreator sdbk_calc_creator;
+	SdBkCalc* sdbk_calc = sdbk_calc_creator.getSdBkCalc(solar_scene);
+	sunray.changeSunRay({ 3, 21, 8, 0 });
+	Vector3d sunray_dir = sunray.changeSunRay(80.2, 185);
+	solar_scene->changeHeliosNormal(sunray_dir);
+	sdbk_calc->setHFCALMode(true);
+	sdbk_calc->initBlockRelaIndex(sunray_dir);
+	sdbk_calc->calcTotalShadowBlock();
+
+	Paths subj(1), clips;
+	vector<float2> v_list = { { 0, 0 },{ 0, 2 },{ 2, 2 },{ 2, 0 } };
+	for (int i = 0; i < v_list.size(); ++i)
+		subj[0] << IntPoint(v_list[i].x*VERTEXSCALE, v_list[i].y*VERTEXSCALE);
+
+	Path clip1, clip2;
+	clip1 << IntPoint(0, 0) << IntPoint(0, VERTEXSCALE) << IntPoint(0.5*VERTEXSCALE, VERTEXSCALE) << IntPoint(0.5*VERTEXSCALE, 0);
+	clip2 << IntPoint(1.5*VERTEXSCALE, 0) << IntPoint(1.5*VERTEXSCALE, VERTEXSCALE) << IntPoint(2 * VERTEXSCALE, VERTEXSCALE) << IntPoint(2 * VERTEXSCALE,0);
+	clips.push_back(clip1);
+	clips.push_back(clip2);
+
+	Clipper c;
+	Paths solution;
+	c.AddPaths(subj, ptSubject, true);
+	c.AddPaths(clips, ptClip, true);
+	c.Execute(ctIntersection, solution, pftNonZero, pftNonZero);
+	c.Clear();
+	c.AddPaths(subj, ptSubject, true);
+	c.AddPaths(solution, ptClip, true);
+	c.Execute(ctDifference, solution, pftNonZero, pftNonZero);
+	
+	Vector3d center;
+	PolygonCenterCalculator::calcPolygonCenter(solution, center);
 }
