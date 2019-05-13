@@ -262,16 +262,7 @@ float SdBkCalc::flux_grid_from_recv(vector<Vector3d>& recv_v, const int rows, co
 		grid_area += recv_v[i].x()*recv_v[(i + 1) % 4].y() - recv_v[i].y()*recv_v[(i + 1) % 4].x();
 	grid_area = fabs(grid_area / 2.0 / rows / cols);
 
-	fstream outFile(save_path +"grid_nlw_cb_sc_" + to_string(helio->helio_index) + ".txt", ios_base::out);
-
-	//vector<Vector3d> test_v(4);
-	//for (int i = 0; i < 4; ++i)
-	//	GeometryFunc::calcIntersection(reverse_dir, fc_center, recv_v[i], reverse_dir, test_v[i]);
-	//double l = (recv_v[0] - recv_v[1]).norm();
-	//double l_ = (test_v[0] - test_v[1]).norm();
-	//double w = (recv_v[1] - recv_v[2]).norm();
-	//double w_ = (test_v[1] - test_v[2]).norm();
-	//double ratio = (l_*w_) / (l*w);
+	fstream outFile(save_path +"grid_lw_cb_ro_" + to_string(helio->helio_index) + ".txt", ios_base::out);
 
 	Vector3d i_center_bias(0, 0, 0);
 	if (calcCenterMode) {
@@ -284,10 +275,17 @@ float SdBkCalc::flux_grid_from_recv(vector<Vector3d>& recv_v, const int rows, co
 			Vector3d start_v = recv_v[0] + i*row_gap + j*col_gap;
 			Vector3d inter_v;
 			GeometryFunc::calcIntersection(reverse_dir, fc_center, start_v, reverse_dir, inter_v);
-			Vector3d proj_v = GeometryFunc::mulMatrix(inter_v, world2local);
-			double res = DNI*(1 - helio->sd_bk)*cos_phi*helio->flux_param
-				* gl->flux_func(proj_v.x() - i_center_bias.x(), proj_v.z() - i_center_bias.z(), helio->sigma, helio->l_w_ratio);		// flux intensity(without grid area)
+			Vector3d proj_v = GeometryFunc::mulMatrix(inter_v, world2local) - i_center_bias;
+			Vector3d trans_v;
+
+			trans_v.x() = proj_v.x()*cos(helio->rotate_theta) + proj_v.z()*sin(helio->rotate_theta);
+			trans_v.z() = proj_v.z()*cos(helio->rotate_theta) - proj_v.x()*sin(helio->rotate_theta);
+
+			//double res = DNI*(1 - helio->sd_bk)*cos_phi*helio->flux_param
+			//	* gl->flux_func(proj_v.x() - i_center_bias.x(), proj_v.z() - i_center_bias.z(), helio->sigma, helio->l_w_ratio);		// flux intensity(without grid area)
 			//double res = DNI*(1 - helio->sd_bk)*cos_phi*helio->flux_param * gl->flux_func(proj_v.x(), proj_v.z(), helio->sigma, helio->l_w_ratio);
+			
+			double res = DNI*(1 - helio->sd_bk)*cos_phi*helio->flux_param * gl->flux_func(trans_v.x(), trans_v.z(), helio->sigma, helio->l_w_ratio); 
 			sum += res;
 			outFile << start_v.x() << ' ' << start_v.y() << ' ' << res << endl;
 		}

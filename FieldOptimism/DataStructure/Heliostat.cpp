@@ -102,18 +102,31 @@ void Heliostat::calcFluxParam(const Vector3d& focus_center)
 
 	// l_w_ratio 对总能量无影响
 	vector<Vector3d> inter_v(3);
-	for (int i = 0; i < 3; i++) {
-		// 计算image plane顶点
-		GeometryFunc::calcIntersection(reverse_sunray_dir, focus_center, vertex[i], -reverse_sunray_dir, inter_v[i]);
-	}
+	Vector3d row_dir = (vertex[1] - vertex[0]).normalized();
+	Vector3d col_dir = (vertex[2] - vertex[1]).normalized();
+	
+	GeometryFunc::calcIntersection(reverse_sunray_dir, focus_center, helio_pos, -reverse_sunray_dir, inter_v[0]);
+	GeometryFunc::calcIntersection(reverse_sunray_dir, focus_center, helio_pos + row_dir, -reverse_sunray_dir, inter_v[1]);
+	GeometryFunc::calcIntersection(reverse_sunray_dir, focus_center, helio_pos + col_dir, -reverse_sunray_dir, inter_v[2]);
+
+	Vector3d img_x_axis = reverse_sunray_dir.cross(Vector3d(0, 1, 0));
+	Vector3d img_y_axis = img_x_axis.cross(reverse_sunray_dir);
+	col_dir = (inter_v[2] - inter_v[0]).normalized();
+	rotate_theta = acos(abs(col_dir.dot(img_x_axis)));
+	if (col_dir.dot(img_y_axis) < 0) rotate_theta = -rotate_theta;
+	//rotate_theta = 0;
+	//for (int i = 0; i < 3; i++) {
+	//	// 计算image plane顶点
+	//	GeometryFunc::calcIntersection(reverse_sunray_dir, focus_center, vertex[i], -reverse_sunray_dir, inter_v[i]);
+	//}
 	double ip_w = (inter_v[1] - inter_v[0]).norm();
-	double ip_l = (inter_v[2] - inter_v[1]).norm();
+	double ip_l = (inter_v[2] - inter_v[0]).norm();
 	//l_w_ratio = ip_l / ip_w;
-	l_w_ratio = 1;
+	l_w_ratio = 1 + 1/2.*log(ip_w / ip_l);
+	//l_w_ratio = 1;
 
 	sigma_list[3] = sqrt(S) * (1 - cos_w) / (4 * sigma_list[0]);
-	sigma = calcSigma();
-	//sigma = 1.46;
+	//sigma = calcSigma();
 	flux_param = 0.5 * S * cos_w * rou * l_w_ratio * mAA / PI;
 }
 

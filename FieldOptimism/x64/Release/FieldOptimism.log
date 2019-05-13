@@ -7,7 +7,7 @@ e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\d
 e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\../Common/global_function.cuh(180): warning C4267: “初始化”: 从“size_t”转换到“int”，可能丢失数据
 e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\Heliostat.h(40): warning C4150: 删除指向不完整“SubHelio”类型的指针；没有调用析构函数
   e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\Heliostat.h(19): note: 参见“SubHelio”的声明
-  TestHandler.cpp
+  sdbkCalculator.cpp
 e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\../Common/global_function.cuh(28): warning C4838: 从“int”转换到“double”需要收缩转换
 e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\../Common/global_function.cuh(32): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
 e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\../Common/global_function.cuh(39): warning C4244: “参数”: 从“const double”转换到“float”，可能丢失数据
@@ -18,15 +18,52 @@ e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\d
   e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\../DataStructure/Heliostat.h(19): note: 参见“SubHelio”的声明
 e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\griddda\../RayCastingArgument/RayCastingArgument.h(67): warning C4244: “=”: 从“double”转换到“int”，可能丢失数据
 e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\griddda\../RayCastingArgument/RayCastingArgument.h(68): warning C4244: “=”: 从“double”转换到“int”，可能丢失数据
-e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\helioenergy\../GaussLegendre/GaussLegendre.cuh(19): warning C4244: “return”: 从“double”转换到“float”，可能丢失数据
-TestHandler\TestHandler.cpp(332): warning C4244: “参数”: 从“float”转换到“ClipperLib::cInt”，可能丢失数据
-TestHandler\TestHandler.cpp(335): warning C4244: “参数”: 从“double”转换到“ClipperLib::cInt”，可能丢失数据
-TestHandler\TestHandler.cpp(336): warning C4244: “参数”: 从“double”转换到“ClipperLib::cInt”，可能丢失数据
+sdbkCalculator\sdbkCalculator.cpp(10): warning C4267: “初始化”: 从“size_t”转换到“int”，可能丢失数据
+sdbkCalculator\sdbkCalculator.cpp(16): warning C4244: “初始化”: 从“double”转换到“int”，可能丢失数据
+sdbkCalculator\sdbkCalculator.cpp(17): warning C4244: “参数”: 从“const double”转换到“int”，可能丢失数据
+sdbkCalculator\sdbkCalculator.cpp(70): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
+sdbkCalculator\sdbkCalculator.cpp(71): warning C4244: “参数”: 从“float”转换到“ClipperLib::cInt”，可能丢失数据
+sdbkCalculator\sdbkCalculator.cpp(97): warning C4244: “参数”: 从“double”转换到“ClipperLib::cInt”，可能丢失数据
+sdbkCalculator\sdbkCalculator.cpp(120): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
+sdbkCalculator\sdbkCalculator.cpp(172): warning C4244: “初始化”: 从“double”转换到“float”，可能丢失数据
+sdbkCalculator\sdbkCalculator.cpp(176): warning C4244: “初始化”: 从“double”转换到“float”，可能丢失数据
+sdbkCalculator\sdbkCalculator.cpp(177): warning C4244: “初始化”: 从“double”转换到“float”，可能丢失数据
+sdbkCalculator\sdbkCalculator.cpp(297): warning C4244: “return”: 从“double”转换到“float”，可能丢失数据
+sdbkCalculator\sdbkCalculator.cpp(458): warning C4244: “参数”: 从“time_t”转换到“unsigned int”，可能丢失数据
+sdbkCalculator\sdbkCalculator.cpp(468): warning C4244: “初始化”: 从“double”转换到“int”，可能丢失数据
+sdbkCalculator\sdbkCalculator.cpp(469): warning C4244: “初始化”: 从“double”转换到“int”，可能丢失数据
+sdbkCalculator\sdbkCalculator.cpp(530): warning C4267: “初始化”: 从“size_t”转换到“int”，可能丢失数据
+sdbkCalculator\sdbkCalculator.cpp(531): warning C4267: “初始化”: 从“size_t”转换到“int”，可能丢失数据
+sdbkCalculator\sdbkCalculator.cpp(619): warning C4244: “参数”: 从“const double”转换到“int”，可能丢失数据
+sdbkCalculator\sdbkCalculator.cpp(1018): warning C4018: “>”: 有符号/无符号不匹配
+sdbkCalculator\sdbkCalculator.cpp(1019): warning C4244: “初始化”: 从“Eigen::EigenBase<Derived>::Index”转换到“int”，可能丢失数据
+          with
+          [
+              Derived=Eigen::Matrix<double,-1,-1,0,-1,-1>
+          ]
+sdbkCalculator\sdbkCalculator.cpp(1023): warning C4244: “-=”: 从“Eigen::EigenBase<Derived>::Index”转换到“int”，可能丢失数据
+          with
+          [
+              Derived=Eigen::Matrix<double,-1,-1,0,-1,-1>
+          ]
+sdbkCalculator\sdbkCalculator.cpp(1026): warning C4244: “初始化”: 从“Eigen::EigenBase<Derived>::Index”转换到“int”，可能丢失数据
+          with
+          [
+              Derived=Eigen::Matrix<double,-1,-1,0,-1,-1>
+          ]
+sdbkCalculator\sdbkCalculator.cpp(1034): warning C4244: “=”: 从“double”转换到“int”，可能丢失数据
+sdbkCalculator\sdbkCalculator.cpp(1037): warning C4267: “=”: 从“size_t”转换到“int”，可能丢失数据
+sdbkCalculator\sdbkCalculator.cpp(1046): warning C4244: “初始化”: 从“Eigen::EigenBase<Derived>::Index”转换到“int”，可能丢失数据
+          with
+          [
+              Derived=Eigen::Matrix<double,-1,-1,0,-1,-1>
+          ]
+sdbkCalculator\sdbkCalculator.cpp(1047): warning C4244: “=”: 从“double”转换到“int”，可能丢失数据
     正在创建库 E:\xjYuan\003 ZJU\002 Solar\004 Codes\190326_Solar\FieldOptimism\x64\Release\FieldOptimism.lib 和对象 E:\xjYuan\003 ZJU\002 Solar\004 Codes\190326_Solar\FieldOptimism\x64\Release\FieldOptimism.exp
   正在生成代码
-  21 of 5003 functions ( 0.4%) were compiled, the rest were copied from previous compilation.
-    1 functions were new in current compilation
-    4 functions had inline decision re-evaluated but remain unchanged
+  24 of 5351 functions ( 0.4%) were compiled, the rest were copied from previous compilation.
+    2 functions were new in current compilation
+    5 functions had inline decision re-evaluated but remain unchanged
   已完成代码的生成
   FieldOptimism.vcxproj -> E:\xjYuan\003 ZJU\002 Solar\004 Codes\190326_Solar\FieldOptimism\x64\Release\FieldOptimism.exe
   FieldOptimism.vcxproj -> E:\xjYuan\003 ZJU\002 Solar\004 Codes\190326_Solar\FieldOptimism\x64\Release\FieldOptimism.pdb (Full PDB)

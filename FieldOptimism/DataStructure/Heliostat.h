@@ -85,6 +85,7 @@ public:
 	double flux_param;			// flux_param = 0.5 * S * cos_w * rou * l_w_ration * mAA / pi
 	MatrixXd lsf_param_M, lsf_param_v;			// 用于计算LSF曲面的参数
 	float3 centerBias;			// 由于阴影遮挡导致的重心偏移位置
+	double rotate_theta;			// 定日镜投影到image plane产生的轴旋转角度
 
 protected:
 	bool initialized;
