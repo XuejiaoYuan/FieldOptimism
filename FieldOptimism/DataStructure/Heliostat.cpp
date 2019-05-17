@@ -20,15 +20,15 @@ bool Heliostat::initSurfaceNormal(const vector<Vector3d> &focus_center, const Ve
 	return true;
 }
 
-void Heliostat::changeSurfaceNormal(const vector<Vector3d>& focus_center, const Vector3d & sunray_dir)
+void Heliostat::changeSurfaceNormal(const Vector3d & sunray_dir, bool calcLWRatio, bool calcSigma)
 {
-	Vector3d reflectray_dir = focus_center[focus_center_index] - helio_pos;
+	Vector3d reflectray_dir = focus_center - helio_pos;
 	reflectray_dir = reflectray_dir.normalized();
 	helio_normal = (reflectray_dir - sunray_dir).normalized();
 	cos_w = (-sunray_dir).dot(helio_normal);
 
 	setHelioVertex();
-	calcFluxParam(focus_center[focus_center_index]);
+	calcFluxParam(focus_center, calcLWRatio, calcSigma);
 }
 
 void Heliostat::changeSubHelio(const Vector3d & focus_center, const Vector3d & sunray_dir)
@@ -77,7 +77,9 @@ void Heliostat::initHeliostat(stringstream& line_stream, fstream& inFile, Layout
 
 void Heliostat::initFluxParam(const vector<Receiver*>& recvs)
 {
-	double dis = set_focus_center_index(recvs);
+	vector<double> res = set_focus_center_index(recvs);
+	double dis = res[0];
+
 	if (dis <= 1000)
 		mAA = (double)(0.99321 - 0.0001176 * dis + 1.97 * 1e-8 * dis * dis);      //d<1000
 	else
@@ -93,40 +95,51 @@ void Heliostat::initFluxParam(const vector<Receiver*>& recvs)
 	sigma_list[2] = sqrt(2 * (1 + pow(cos_w,2)))*SIGMA_S;
 	sigma_list[3] = 0;									// sigma_ast
 	sigma_list[4] = 0;									// sigma_t
-	sigma_list[5] = abs(cos_phi[focus_center_index]);	// cos_rev
+	sigma_list[5] = abs(res[1]);	// cos_rev
 }
 
-void Heliostat::calcFluxParam(const Vector3d& focus_center)
+void Heliostat::calcFluxParam(const Vector3d& focus_center, bool calcLWRatio, bool _calcSigma)
 {
-	Vector3d reverse_sunray_dir = (helio_pos - focus_center).normalized();
+	if (calcLWRatio) {
+		// 测试改进模型时
+		// 1. l_w_ratio对模型分布有影响
+		// 2. rotate_theta对模型转向有影响
+		Vector3d reverse_sunray_dir = (helio_pos - focus_center).normalized();
+		vector<Vector3d> inter_v(3);
+		Vector3d row_dir = (vertex[1] - vertex[0]).normalized();
+		Vector3d col_dir = (vertex[2] - vertex[1]).normalized();
 
-	// l_w_ratio 对总能量无影响
-	vector<Vector3d> inter_v(3);
-	Vector3d row_dir = (vertex[1] - vertex[0]).normalized();
-	Vector3d col_dir = (vertex[2] - vertex[1]).normalized();
-	
-	GeometryFunc::calcIntersection(reverse_sunray_dir, focus_center, helio_pos, -reverse_sunray_dir, inter_v[0]);
-	GeometryFunc::calcIntersection(reverse_sunray_dir, focus_center, helio_pos + row_dir, -reverse_sunray_dir, inter_v[1]);
-	GeometryFunc::calcIntersection(reverse_sunray_dir, focus_center, helio_pos + col_dir, -reverse_sunray_dir, inter_v[2]);
+		double t1 = GeometryFunc::calcIntersection(reverse_sunray_dir, focus_center, helio_pos, -reverse_sunray_dir, inter_v[0]);
+		double t2 = GeometryFunc::calcIntersection(reverse_sunray_dir, focus_center, helio_pos + row_dir, -reverse_sunray_dir, inter_v[1]);
+		double t3 = GeometryFunc::calcIntersection(reverse_sunray_dir, focus_center, helio_pos + col_dir, -reverse_sunray_dir, inter_v[2]);
 
-	Vector3d img_x_axis = reverse_sunray_dir.cross(Vector3d(0, 1, 0));
-	Vector3d img_y_axis = img_x_axis.cross(reverse_sunray_dir);
-	col_dir = (inter_v[2] - inter_v[0]).normalized();
-	rotate_theta = acos(abs(col_dir.dot(img_x_axis)));
-	if (col_dir.dot(img_y_axis) < 0) rotate_theta = -rotate_theta;
-	//rotate_theta = 0;
-	//for (int i = 0; i < 3; i++) {
-	//	// 计算image plane顶点
-	//	GeometryFunc::calcIntersection(reverse_sunray_dir, focus_center, vertex[i], -reverse_sunray_dir, inter_v[i]);
-	//}
-	double ip_w = (inter_v[1] - inter_v[0]).norm();
-	double ip_l = (inter_v[2] - inter_v[0]).norm();
-	//l_w_ratio = ip_l / ip_w;
-	l_w_ratio = 1 + 1/2.*log(ip_w / ip_l);
-	//l_w_ratio = 1;
+		Vector3d img_x_axis = reverse_sunray_dir.cross(Vector3d(0, 1, 0)).normalized();
+		Vector3d img_y_axis = img_x_axis.cross(reverse_sunray_dir).normalized();
 
-	sigma_list[3] = sqrt(S) * (1 - cos_w) / (4 * sigma_list[0]);
-	//sigma = calcSigma();
+		col_dir = (inter_v[2] - inter_v[0]).normalized();
+		row_dir = (inter_v[1] - inter_v[0]).normalized();
+		double cos_eta = (col_dir.dot(img_x_axis) - row_dir.dot(img_y_axis)) / 2.;
+		//double cos_eta = col_dir.dot(img_x_axis);
+		rotate_theta = acos(abs(cos_eta));
+
+		if (cos_eta < 0) rotate_theta = -rotate_theta;
+		double ip_w = (inter_v[1] - inter_v[0]).norm();
+		double ip_l = (inter_v[2] - inter_v[0]).norm();
+		l_w_ratio = 1 + 1 / 2.*log(ip_w / ip_l);
+	}
+	else {
+		// 计算全镜场能量时：
+		// 1. l_w_ratio对总能量不产生影响
+		// 2. rotate_theta对总能量不产生影响
+		// 3. 使用公式计算sigma代替峰值拟合
+		l_w_ratio = 1;
+		rotate_theta = 0;
+	}
+	if (_calcSigma) {
+		sigma_list[3] = sqrt(S) * (1 - cos_w) / (4 * sigma_list[0]);
+		sigma = calcSigma();
+	}
+
 	flux_param = 0.5 * S * cos_w * rou * l_w_ratio * mAA / PI;
 }
 
@@ -157,34 +170,69 @@ void Heliostat::setHelioVertex()
 
 }
 
-double Heliostat::set_focus_center_index(const vector<Receiver*>& recvs)
+vector<double> Heliostat::set_focus_center_index(const vector<Receiver*>& recvs)
 {
+	// 暂时只处理一个定日镜
+
+	if (recvs.size() < 1) {
+		throw std::runtime_error("[Error] Field without receivers!!!\n");
+	}
+	else if (recvs.size() > 1)
+		throw std::runtime_error("[Error Heliostat] Can't deal with more than one receiver!!!\n");
+
 	int recv_index = 0;
 	int ret_index = 0;
 	double min_d = INT_MAX;
-	for (int i = 0; i < recvs.size(); i++) {
-		for (int j = 0; j < recvs[i]->focus_center.size(); j++) {
-			Vector3d fc = recvs[i]->focus_center[j];
-			double dis = sqrt(pow(fc.x() - helio_pos.x(), 2)
-				+ pow(fc.y()-helio_pos.y(), 2)
-				+ pow(fc.z() - helio_pos.z(), 2));
-			if (dis < min_d) {
-				recv_index = i;
-				min_d = dis;
-				ret_index = j;
+	double ret_cos = 1;
+	switch (recvs[0]->recv_type)
+	{
+	case RectangularRecvType:
+	case PolyhedronRecvType: {
+		for (int i = 0; i < recvs.size(); i++) {
+			vector<Vector3d> fc_centers = recvs[i]->get_focus_center();
+			for (int j = 0; j < fc_centers.size(); j++) {
+				Vector3d fc = fc_centers[j];
+				double dis = sqrt(pow(fc.x() - helio_pos.x(), 2)
+					+ pow(fc.y() - helio_pos.y(), 2)
+					+ pow(fc.z() - helio_pos.z(), 2));
+				if (dis < min_d) {
+					recv_index = i;
+					min_d = dis;
+					ret_index = j;
+				}
 			}
 		}
-	}
-	focus_center_index = ret_index;
-
-	Vector3d image_plane_normal = (helio_pos - recvs[recv_index]->focus_center[ret_index]).normalized();
-	for (int i = 0; i < recvs.size(); i++) {
-		for (int j = 0; j < recvs[i]->focus_center.size(); j++) {
-			cos_phi.push_back(recvs[i]->recv_normal_list[j].dot(image_plane_normal));
+		focus_center_index = ret_index;
+		focus_center = recvs[recv_index]->get_focus_center()[ret_index];
+		Vector3d image_plane_normal = (helio_pos - focus_center).normalized();
+		for (int i = 0; i < recvs.size(); i++) {
+			vector<Vector3d> fc_centers = recvs[i]->get_focus_center();
+			for (int j = 0; j < fc_centers.size(); j++) {
+				cos_phi.push_back(recvs[i]->get_normal_list()[j].dot(image_plane_normal));
+			}
 		}
+		ret_cos = cos_phi[ret_index];
+		break;
+	}
+	case CylinderRecvType: {
+		focus_center_index = helio_index;		// 每个定日镜对应一个唯一聚焦点
+		CylinderRecv* recv = dynamic_cast<CylinderRecv*>(recvs[0]);
+		focus_center = recv->get_focus_center(helio_pos);
+		Vector3d image_plane_normal = (helio_pos - focus_center).normalized();
+		cos_phi.push_back((focus_center - recv->recv_pos).normalized().dot(image_plane_normal));
+		min_d = (helio_pos - focus_center).norm();
+		ret_cos = cos_phi.back();
+		break;
+	}
+	case CircularTruncatedConeRecvType:
+		throw std::runtime_error("[Error Heliostat] Not implement yet!!!\n");
+		break;
+	default:
+		throw std::runtime_error("[Error Heliostat] Wrong receiver type!!!\n");
+		break;
 	}
 
-	return min_d;
+	return { min_d, ret_cos };
 }
 
 void Heliostat::calcLsfParam()

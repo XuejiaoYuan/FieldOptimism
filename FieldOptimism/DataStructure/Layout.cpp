@@ -82,8 +82,6 @@ void Layout::adjustHelioLayout(vector<Heliostat*>& helios, const vector<vector<d
 	layout_row_col.y() = layout_size.x() / helio_interval.x();		//col
 	helio_layout.resize(layout_row_col.x(), vector<vector<Heliostat*>>(layout_row_col.y()));
 
-
-
 	int cnt = 0;
 	vector<int> row_col(2, 0);
 	for (int i = 0; i < row; i++) {
@@ -149,6 +147,10 @@ void CrossRectLayout::adjustHelioLayout(vector<Heliostat*>& helios, const vector
 
 void FermatLayout::adjustHelioLayout(vector<Heliostat*>& helios, const vector<vector<double>*>& field_args, const vector<Receiver*>& recvs)
 {
+	//
+	// TODO: 对于Fermat型镜场，需要固定定日镜数量
+	//
+
 	vector<double> recv_dis, angle_delta;
 	vector<int> n_rows;
 	calcCircleParams(recv_dis, n_rows, angle_delta, field_args);

@@ -2,45 +2,14 @@
 
 void Receiver::init_recv(fstream& inFile, InputMode& input_mode)
 {
-	string line, word;
-	stringstream line_stream;
-	while (getline(inFile, line)) {
-		line_stream.clear();
-		line_stream.str(line);
-		line_stream >> word;
-		if (word == "end") {
-			input_mode = Initial;
-			break;
-		}
-		else if (word == "pos")
-			line_stream >> recv_pos.x() >> recv_pos.y() >> recv_pos.z();
-		else if (word == "size")
-			line_stream >> recv_size.x() >> recv_size.y() >> recv_size.z();
-		else if (word == "norm")
-			line_stream >> recv_normal.x() >> recv_normal.y() >> recv_normal.z();
-		else
-			line_stream >> recv_face;
-	}
+	readRecvFromFile(inFile, input_mode);
 	focus_center.push_back(recv_pos + Vector3d(recv_normal.array() * recv_size.array()/2));
 	recv_normal_list.push_back(recv_normal);
-	double half_l = recv_size.y() / 2.0;			// 边长
-	double half_w = recv_size.x() / 2.0;			// 高度
-	Vector3d down_cor(0, -1, 0);
-	Vector3d cor_dir = recv_normal.cross(down_cor).normalized();
-	vector<Vector3d> vertex = {
-		(focus_center[0] - down_cor* half_l - cor_dir*half_w),				// 0 - 3
-		(focus_center[0] + down_cor* half_l - cor_dir*half_w),				// |   |	
-		(focus_center[0] + down_cor* half_l + cor_dir*half_w),				// 1 - 2
-		(focus_center[0] - down_cor* half_l + cor_dir*half_w),
-	};
+	vector<Vector3d> vertex = getRecvVertex(focus_center[0], recv_size.y() / 2.0, recv_size.y() / 2.0, recv_normal); 
 	recv_vertex.push_back(vertex);
-
-	mask_rows = recv_size.x() / RECEIVER_SLICE;
-	mask_cols = recv_size.z() / RECEIVER_SLICE;
 }
 
-
-void PolyhedronRecv::init_recv(fstream& inFile, InputMode& input_mode)
+void Receiver::readRecvFromFile(fstream & inFile, InputMode & input_mode)
 {
 	string line, word;
 	stringstream line_stream;
@@ -54,22 +23,37 @@ void PolyhedronRecv::init_recv(fstream& inFile, InputMode& input_mode)
 		}
 		else if (word == "pos")
 			line_stream >> recv_pos.x() >> recv_pos.y() >> recv_pos.z();
-		else if (word == "size")
-			line_stream >> recv_size.x() >> recv_size.y() >> recv_size.z();		 // 接收器边长，高度，0
+		else if (word == "size")				// 接收器边长，高度，厚度
+			line_stream >> recv_size.x() >> recv_size.y() >> recv_size.z();
 		else if (word == "num")
 			line_stream >> recv_face_num;
 		else if (word == "norm")
 			line_stream >> recv_normal.x() >> recv_normal.y() >> recv_normal.z();
 		else
 			line_stream >> recv_face;
-
 	}
+}
+
+vector<Vector3d> Receiver::getRecvVertex(Vector3d & center, double half_l, double half_w, Vector3d & recv_normal)
+{
+	Vector3d down_cor(0, -1, 0);
+	Vector3d cor_dir = recv_normal.cross(down_cor).normalized();
+	vector<Vector3d> vertex = {
+		(center - down_cor* half_l - cor_dir*half_w),				// 0 - 3
+		(center + down_cor* half_l - cor_dir*half_w),				// |   |	
+		(center + down_cor* half_l + cor_dir*half_w),				// 1 - 2
+		(center - down_cor* half_l + cor_dir*half_w),
+	};
+	return vertex;
+}
+
+
+void PolyhedronRecv::init_recv(fstream& inFile, InputMode& input_mode)
+{
+	readRecvFromFile(inFile, input_mode);
 	Matrix3d m;
 	double delta_angle = 2 * PI / recv_face_num;
 	double pos = recv_size.y() / 2 / tan(delta_angle / 2);
-	mask_rows = recv_size.x() / RECEIVER_SLICE;
-	mask_cols = recv_size.y() / RECEIVER_SLICE;
-	Vector3d down_cor(0, -1, 0);
 	double half_l = recv_size.y() / 2.0;
 	double half_w = recv_size.x() / 2.0;
 
@@ -80,13 +64,35 @@ void PolyhedronRecv::init_recv(fstream& inFile, InputMode& input_mode)
 		recv_normal_list.push_back(m * recv_normal);
 		focus_center.push_back(recv_pos + recv_normal_list[i]* pos);
 
-		Vector3d cor_dir = recv_normal_list[i].cross(down_cor).normalized();
-		vector<Vector3d> vertex = {
-			(focus_center[i] - down_cor* half_l - cor_dir*half_w),
-			(focus_center[i] + down_cor* half_l - cor_dir*half_w),
-			(focus_center[i] + down_cor* half_l + cor_dir*half_w),
-			(focus_center[i] - down_cor* half_l + cor_dir*half_w),
-		};
+		vector<Vector3d> vertex = getRecvVertex(focus_center[i], half_l, half_w, recv_normal_list[i]);
 		recv_vertex.push_back(vertex);
 	}
 }
+
+void CylinderRecv::init_recv(fstream & inFile, InputMode & input_mode)
+{
+	// size.x: radius of cylinder
+	// size.y: height of cylinder
+	// size.z: no meaning
+	readRecvFromFile(inFile, input_mode);
+}
+
+Vector3d CylinderRecv::get_focus_center(Vector3d& helio_pos)
+{
+	Vector3d dir = (helio_pos - recv_pos).normalized();
+	double r = recv_size.x() / (Vector2d(dir.x(), dir.z()).norm());
+	Vector3d fc_center = Vector3d(recv_pos.x() + dir.x()*r, recv_pos.y(), recv_pos.z() + dir.z()*r);
+	return fc_center;
+}
+
+vector<vector<Vector3d>> CylinderRecv::get_recv_vertex(Vector3d& focus_center)
+{
+	if ((focus_center - Vector3d(0, 0, 0)).norm() < Epsilon)
+		throw runtime_error("[Error CylinderRecv] Get receiver vertex without focus center!!!\n");
+	vector<vector<Vector3d>> recv_vertex;
+	Vector3d recv_normal = (focus_center - recv_pos).normalized();
+	vector<Vector3d> vertex = getRecvVertex(recv_pos, recv_size.y() / 2.0, recv_size.x(), recv_normal);
+	recv_vertex.push_back(vertex);
+	return recv_vertex;
+}
+

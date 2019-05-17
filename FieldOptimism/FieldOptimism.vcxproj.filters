@@ -1,20 +1,20 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <CudaCompile Include="DataStructure\DeviceList.cu">
-      <Filter>DataStructure</Filter>
-    </CudaCompile>
     <CudaCompile Include="DiscreteRayCaster\RayCasterCore.cu">
       <Filter>DiscreteRayCaster</Filter>
     </CudaCompile>
     <CudaCompile Include="GaussLegendre\GaussLegendre.cu">
       <Filter>GaussLegendre</Filter>
     </CudaCompile>
-    <CudaCompile Include="HelioEnergy\FluxIntegral.cu">
-      <Filter>HelioEnergy</Filter>
+    <CudaCompile Include="HelioEnergy\ReceiverEnergyCalc\RecvEnergyCalc.cu">
+      <Filter>HelioEnergy\ReceiverEnergyCalc</Filter>
     </CudaCompile>
-    <CudaCompile Include="HelioEnergy\HelioEnergy.cu">
-      <Filter>HelioEnergy</Filter>
+    <CudaCompile Include="HelioEnergy\ReceiverEnergyCalc\RectangleReceiverFluxIntegral\RectRecvFluxIntegral.cu">
+      <Filter>HelioEnergy\ReceiverEnergyCalc\RectangleReceiverFluxIntegral</Filter>
+    </CudaCompile>
+    <CudaCompile Include="HelioEnergy\ReceiverEnergyCalc\CylinderReceiverFluxIntegral\CylinderRecvFluxIntegral.cu">
+      <Filter>HelioEnergy\ReceiverEnergyCalc\CylinderReceiverFluxIntegral</Filter>
     </CudaCompile>
   </ItemGroup>
   <ItemGroup>
@@ -54,6 +54,21 @@
     <Filter Include="CalcPolygonCenter">
       <UniqueIdentifier>{14731b65-cad4-46c8-a7ed-d6471df88f55}</UniqueIdentifier>
     </Filter>
+    <Filter Include="RayCastingArgument\ReceiverDeviceArgument">
+      <UniqueIdentifier>{5b8ce237-c669-46ee-b19c-e3479d64e2e4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="RayCastingArgument\HeliostatDeviceArgument">
+      <UniqueIdentifier>{de27aefd-90d5-4390-80a3-f9674500b4a8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="HelioEnergy\ReceiverEnergyCalc">
+      <UniqueIdentifier>{8b4dd180-f09c-4de1-be8d-958ceb4c3a73}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="HelioEnergy\ReceiverEnergyCalc\CylinderReceiverFluxIntegral">
+      <UniqueIdentifier>{1ade22b7-7310-4eca-b4d1-06acb4943d81}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="HelioEnergy\ReceiverEnergyCalc\RectangleReceiverFluxIntegral">
+      <UniqueIdentifier>{545907a9-443e-4b59-88a1-c104f9c53d5a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DataStructure\Clipper\clipper.hpp">
@@ -72,9 +87,6 @@
       <Filter>DataStructure</Filter>
     </ClInclude>
     <ClInclude Include="DataStructure\Layout.h">
-      <Filter>DataStructure</Filter>
-    </ClInclude>
-    <ClInclude Include="DataStructure\LsfFieldSegment.h">
       <Filter>DataStructure</Filter>
     </ClInclude>
     <ClInclude Include="DataStructure\Receiver.h">
@@ -101,12 +113,6 @@
     <ClInclude Include="Common\global_function.cuh">
       <Filter>Common</Filter>
     </ClInclude>
-    <ClInclude Include="RayCastingArgument\RayCastingArgument.h">
-      <Filter>RayCastingArgument</Filter>
-    </ClInclude>
-    <ClInclude Include="DataStructure\DeviceList.cuh">
-      <Filter>DataStructure</Filter>
-    </ClInclude>
     <ClInclude Include="Common\vector_arithmetic.cuh">
       <Filter>Common</Filter>
     </ClInclude>
@@ -115,12 +121,6 @@
     </ClInclude>
     <ClInclude Include="GaussLegendre\GaussLegendre.cuh">
       <Filter>GaussLegendre</Filter>
-    </ClInclude>
-    <ClInclude Include="HelioEnergy\FluxIntegral.cuh">
-      <Filter>HelioEnergy</Filter>
-    </ClInclude>
-    <ClInclude Include="HelioEnergy\HelioEnergy.cuh">
-      <Filter>HelioEnergy</Filter>
     </ClInclude>
     <ClInclude Include="GaussLegendre\GaussLegendre.h">
       <Filter>GaussLegendre</Filter>
@@ -134,6 +134,27 @@
     <ClInclude Include="CalcPolygonCenter\CalcPolygonCenter.h">
       <Filter>CalcPolygonCenter</Filter>
     </ClInclude>
+    <ClInclude Include="RayCastingArgument\HeliostatDeviceArgument\HeliostatDeviceArgument.h">
+      <Filter>RayCastingArgument\HeliostatDeviceArgument</Filter>
+    </ClInclude>
+    <ClInclude Include="RayCastingArgument\ReceiverDeviceArgument\ReceiverDeviceArgument.h">
+      <Filter>RayCastingArgument\ReceiverDeviceArgument</Filter>
+    </ClInclude>
+    <ClInclude Include="RayCastingArgument\ReceiverDeviceArgument\CylinderReceiverDeviceArgument.h">
+      <Filter>RayCastingArgument\ReceiverDeviceArgument</Filter>
+    </ClInclude>
+    <ClInclude Include="HelioEnergy\EnergyCalcPipeline.h">
+      <Filter>HelioEnergy</Filter>
+    </ClInclude>
+    <ClInclude Include="HelioEnergy\ReceiverEnergyCalc\RecvEnergyCalc.cuh">
+      <Filter>HelioEnergy\ReceiverEnergyCalc</Filter>
+    </ClInclude>
+    <ClInclude Include="HelioEnergy\ReceiverEnergyCalc\RectangleReceiverFluxIntegral\RectRecvFluxIntegral.cuh">
+      <Filter>HelioEnergy\ReceiverEnergyCalc\RectangleReceiverFluxIntegral</Filter>
+    </ClInclude>
+    <ClInclude Include="HelioEnergy\ReceiverEnergyCalc\CylinderReceiverFluxIntegral\CylinderRecvFluxIntegral.cuh">
+      <Filter>HelioEnergy\ReceiverEnergyCalc\CylinderReceiverFluxIntegral</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DataStructure\Clipper\clipper.cpp">
@@ -146,9 +167,6 @@
       <Filter>DataStructure</Filter>
     </ClCompile>
     <ClCompile Include="DataStructure\Layout.cpp">
-      <Filter>DataStructure</Filter>
-    </ClCompile>
-    <ClCompile Include="DataStructure\LsfFieldSegment.cpp">
       <Filter>DataStructure</Filter>
     </ClCompile>
     <ClCompile Include="DataStructure\Receiver.cpp">
@@ -169,9 +187,6 @@
     <ClCompile Include="DiscreteRayCaster\DiscreteRayCaster.cpp">
       <Filter>DiscreteRayCaster</Filter>
     </ClCompile>
-    <ClCompile Include="RayCastingArgument\RayCastingArgument.cpp">
-      <Filter>RayCastingArgument</Filter>
-    </ClCompile>
     <ClCompile Include="main.cpp" />
     <ClCompile Include="GridDDA\GridDDA_cpu.cpp">
       <Filter>GridDDA</Filter>
@@ -187,6 +202,18 @@
     </ClCompile>
     <ClCompile Include="CalcPolygonCenter\CalcPolygonCenter.cpp">
       <Filter>CalcPolygonCenter</Filter>
+    </ClCompile>
+    <ClCompile Include="RayCastingArgument\HeliostatDeviceArgument\HeliostatDeviceArgument.cpp">
+      <Filter>RayCastingArgument\HeliostatDeviceArgument</Filter>
+    </ClCompile>
+    <ClCompile Include="RayCastingArgument\ReceiverDeviceArgument\ReceiverDeviceArgument.cpp">
+      <Filter>RayCastingArgument\ReceiverDeviceArgument</Filter>
+    </ClCompile>
+    <ClCompile Include="RayCastingArgument\ReceiverDeviceArgument\CylinderReceiverDeviceArgument.cpp">
+      <Filter>RayCastingArgument\ReceiverDeviceArgument</Filter>
+    </ClCompile>
+    <ClCompile Include="HelioEnergy\EnergyCalcPipeline.cpp">
+      <Filter>HelioEnergy</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

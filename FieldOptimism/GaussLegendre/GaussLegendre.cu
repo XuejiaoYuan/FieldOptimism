@@ -1,5 +1,7 @@
 #include "GaussLegendre.cuh"
 
+GaussLegendre* GaussLegendre::m_instance;
+
 void GaussLegendre::initNodeWeight(const int _M, const int _N)
 {
 	M = _M;
@@ -97,4 +99,33 @@ float2 GaussLegendre::map(const float4&x, const float4&y, const float s, const f
 	map_v.x = dot(N, x);
 	map_v.y = dot(N, y);
 	return map_v;
+}
+
+void GaussLegendre::clear()
+{
+	if (d_node_row) {
+		cudaFree(d_node_row); d_node_row = nullptr;
+	}
+	if (d_node_col) {
+		cudaFree(d_node_col); d_node_col = nullptr;
+	}
+	if (d_weight_row) {
+		cudaFree(d_weight_row); d_weight_row = nullptr;
+	}
+	if (d_weight_col) {
+		cudaFree(d_weight_col); d_weight_col = nullptr;
+	}	
+}
+
+GaussLegendre * GaussLegendre::getInstance(int _M, int _N)
+{
+	if (m_instance && (m_instance->M != _M || m_instance->N != _N)) {
+		m_instance->clear();
+		m_instance = nullptr;
+	}
+	if (m_instance == nullptr) {
+		m_instance = new GaussLegendre();
+		m_instance->initNodeWeight(_M, _N);
+	}
+	return m_instance;
 }

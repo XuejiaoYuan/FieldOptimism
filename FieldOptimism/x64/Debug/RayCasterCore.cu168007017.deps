@@ -183,8 +183,8 @@ c:\program files\nvidia gpu computing toolkit\cuda\v10.1\include\cuda_runtime_ap
 c:\program files\nvidia gpu computing toolkit\cuda\v10.1\include\device_launch_parameters.h
 c:\program files\nvidia gpu computing toolkit\cuda\v10.1\include\vector_types.h
 e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\discreteraycaster\RayCasterCore.cuh
-e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\discreteraycaster\../RayCastingArgument/RayCastingArgument.h
-e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\raycastingargument\../Common/CommonFunc.h
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\discreteraycaster\../RayCastingArgument/HeliostatDeviceArgument/HeliostatDeviceArgument.h
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\raycastingargument\heliostatdeviceargument\../../Common/CommonFunc.h
 D:\Visual Studio\VC\include\iostream
 D:\Visual Studio\VC\include\istream
 D:\Visual Studio\VC\include\ostream

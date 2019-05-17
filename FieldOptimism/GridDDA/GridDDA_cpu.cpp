@@ -60,8 +60,7 @@ void GridDDA::rayCastGridDDA(SolarScene* solar_scene, Heliostat * helio, Vector3
 	Vector3d curNormal = helio->helio_normal;
 	if (!shadowDir) {
 		int fc_index = helio->focus_center_index;
-		Vector3d fc_center = solar_scene->recvs[0]->focus_center[fc_index];
-		dir = (fc_center - helio->helio_pos).normalized();
+		dir = (helio->focus_center - helio->helio_pos).normalized();
 	}
 	Vector2d ray_dir(dir.x(), dir.z());
 	ray_dir.normalized();

@@ -4,118 +4,14 @@
 
 #include "SolarScene.h"
 
-//
-//  Load heliostat field's file with Duan's format
-//
-bool SolarScene::initSolarScene(const string &scene_filepath, const Vector3d &sunray_dir){
-	this->sunray_dir = Vector3d(sunray_dir.x(), sunray_dir.y(), sunray_dir.z());
-	fstream inFile(scene_filepath);
-    if(inFile.fail()){
-        cerr<<"Can't open the file!"<<endl;
-        return false;
-    }
 
-    InputMode input_mode = Initial;
-    string line, word;
-    stringstream line_stream;
-    int grid_num;
-    int helio_type;
-    Receiver* recv;
-    Layout* layout;
-    Heliostat* helio;
-	Vector2d helio_gap;
-	Vector2i helio_matrix;
-    while(getline(inFile,line)){
-        line_stream.clear();
-        line_stream.str(line);
-        line_stream >> word;
-
-        if(word=="#"){
-            line_stream >> word;
-            if(word == "Ground"){
-                input_mode = GroundMode;
-                continue;
-            }
-            else if(word == "Receiver"){
-                input_mode = ReceiverMode;
-                continue;
-            }
-            else if(word == "Heliostats"){
-                input_mode = HeliostatMode;
-                continue;
-            }
-            else{
-                input_mode = LayoutMode;
-                continue;
-            }
-        }
-
-        switch(input_mode){
-            case GroundMode:{
-                if(word == "ground")
-                    line_stream >> scene_length >>scene_width;
-                else if(word == "ngrid"){
-                    line_stream >> grid_num;
-                    input_mode = Initial;
-                }
-                break;
-            }
-            case ReceiverMode:{
-                int recv_type;
-                ReceiverCreator recv_creator;
-                line_stream >> recv_type;
-                recv = recv_creator.getReceiver((ReceiverType)recv_type);
-				recv->init_recv(inFile, input_mode);
-                recvs.push_back(recv);
-                recv = nullptr;
-                break;
-            }
-			case HeliostatMode: {
-				if (word == "gap")
-					line_stream >> helio_gap.x() >> helio_gap.y();
-				else if (word == "matrix")
-					line_stream >> helio_matrix.x() >> helio_matrix.y();
-				else if (word == "end") {
-					input_mode = Initial;
-					break;
-				}
-				else if (word == "helio") {
-					helio = new Heliostat((HelioType)helio_type);
-					helio->initHeliostat(line_stream, inFile, layouts[0]->layout_type, helio_gap, helio_matrix, recvs[0]->focus_center, sunray_dir);
-					helio->helio_index = helios.size();
-					helios.push_back(helio);
-					helio = nullptr;		
-				}
-				break;
-			}
-            case LayoutMode:{
-                int layout_type;
-                LayoutCreator layout_creator;
-                line_stream >> layout_type;
-                layout = layout_creator.getLayout((LayoutType)layout_type);
-				layout->initLayout(inFile, input_mode, helio_type);
-                layouts.push_back(layout);
-                layout = nullptr;
-                break;
-            }
-            case Initial:break;
-            default: break;
-        }
-
-    }
-    inFile.close();
-	layouts[0]->setHelioLayout(helios);
-    return true;
-}
-
-
-bool SolarScene::changeHeliosNormal(const Vector3d & sunray_dir)
+bool SolarScene::changeHeliosNormal(const Vector3d & sunray_dir, bool calcLWRatio, bool calcSimga)
 {
 	this->sunray_dir = Vector3d(sunray_dir.x(), sunray_dir.y(), sunray_dir.z() );
 
 #pragma omp parallel for
 	for (int i = 0; i < helios.size(); i++)
-		helios[i]->changeSurfaceNormal(recvs[0]->focus_center, sunray_dir);
+		helios[i]->changeSurfaceNormal(sunray_dir, calcLWRatio, calcSimga);
 
 	layouts[0]->setHelioLayout(helios);
 	
@@ -242,7 +138,7 @@ bool SolarScene::adjustFieldParam(const vector<vector<double>*>& field_args)
 
 void SolarScene::saveSolarScene(string scene_savepath)
 {
-	fstream outFile(scene_savepath +"he_scene_T" + to_string(layouts[0]->layout_type) + "_H" + to_string(helios.size()) + ".scn", ios::out);
+	fstream outFile(scene_savepath +"scene_T" + to_string(layouts[0]->layout_type) + "_H" + to_string(helios.size()) + ".scn", ios::out);
 	if (outFile.fail()) {
 		cerr << "Can't write to this file!" << endl;
 	}
@@ -288,7 +184,7 @@ void SolarScene::saveSolarScene(string scene_savepath)
 	}
 	outFile.close();
 
-	outFile.open(scene_savepath + "hetask_helios_T" + to_string(layouts[0]->layout_type) + "_H" + to_string(helios.size()) + ".txt", ios_base::out);
+	outFile.open(scene_savepath + "scene_T" + to_string(layouts[0]->layout_type) + "_H" + to_string(helios.size()) + ".txt", ios_base::out);
 	outFile << helios.size() << endl;
 	for (int i = 0; i < helios.size(); ++i)
 		outFile << i << ' ';

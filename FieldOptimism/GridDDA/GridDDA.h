@@ -1,8 +1,7 @@
 #pragma once
 #include "../Common/CommonFunc.h"
 #include "../DataStructure/SolarScene.h"
-#include "../RayCastingArgument/RayCastingArgument.h"
-#include "../DataStructure/DeviceList.cuh"
+#include "../RayCastingArgument/HeliostatDeviceArgument/HeliostatDeviceArgument.h"
 #include "../DataStructure/Timer.h"
 
 

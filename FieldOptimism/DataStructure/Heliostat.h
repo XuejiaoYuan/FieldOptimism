@@ -6,10 +6,6 @@
 #define HELIOSHADOW_HELIOSTAT_H
 #pragma once
 
-// #include "../Common/utils.h"
-// #include "../Common/global_function.cuh"
-// #include "../Common/global_function.h"
-// #include "../Common/vector_arithmetic.cuh"
 #include "../DataStructure/Receiver.h"
 
 typedef enum {
@@ -17,6 +13,7 @@ typedef enum {
 }HelioType;
 
 class SubHelio;
+class Receiver;
 
 class Heliostat {
 public:
@@ -49,11 +46,11 @@ public:
 	void getSubHelioVertex(vector<Vector3d>& subhelio_vertex);
 	void initializeSubHelio(const Vector3d&focus_center, const Vector3d&sunray_dir);
 	bool initSurfaceNormal(const vector<Vector3d>& focus_center, const Vector3d& sunray_dir);   // Calculate the normal of heliostat surface
-	void changeSurfaceNormal(const vector<Vector3d>& focus_center, const Vector3d& sunray_dir);
+	void changeSurfaceNormal(const Vector3d& sunray_dir, bool calcLWRatio, bool calcSimga);
 	void changeSubHelio(const Vector3d& focus_center, const Vector3d& sunray_dir);
 	double calcSunHelioAngle(const Vector3d& sunray_dir);
-	double set_focus_center_index(const vector<Receiver*>& recvs);
-	void calcFluxParam(const Vector3d& focus_center);
+	vector<double> set_focus_center_index(const vector<Receiver*>& recvs);
+	void calcFluxParam(const Vector3d& focus_center, bool calcLWRatio, bool calcSigma);
 	void calcLsfParam();
 	double calcSigma();
 
@@ -86,6 +83,7 @@ public:
 	MatrixXd lsf_param_M, lsf_param_v;			// 用于计算LSF曲面的参数
 	float3 centerBias;			// 由于阴影遮挡导致的重心偏移位置
 	double rotate_theta;			// 定日镜投影到image plane产生的轴旋转角度
+	Vector3d focus_center;			// 定日镜在接收器平面聚焦中心
 
 protected:
 	bool initialized;

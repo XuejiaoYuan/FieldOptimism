@@ -21,13 +21,11 @@ public:
         helios.clear();
         recvs.clear();
     }
-	bool initSolarScene(const string&scene_filepath, const Vector3d&sunray_dir);
-	bool changeHeliosNormal(const Vector3d&sunray_dir);		//change the surface normal of heiliostats
+	bool changeHeliosNormal(const Vector3d&sunray_dir, bool calcLWRatio = true, bool calcSimga = true);		//change the surface normal of heiliostats
 
 	// function for parameter optimisim
 	bool initFieldParam(const string&file_name);
 	bool adjustFieldParam(const vector<vector<double>*>& field_args);
-
 
 	void saveSolarScene(string scene_savepath);
 
@@ -36,7 +34,6 @@ public:
 
     vector<Layout*>  layouts;
     vector<Heliostat*> helios;
-	// vector<vector<Heliostat*>> helios;
 	vector<Receiver*> recvs;
 	Vector3d sunray_dir;
 };

@@ -25,7 +25,7 @@ int main(int argc, char** argv) {
 
 
 	TestHandler t_handler(30);
-	t_handler.initSolarScene(scene_filepath, sunray_filepath);
+	t_handler.initSolarScene(scene_filepath, sunray_filepath, save_path);
 
 	// 1. ÒõÓ°ÕÚµ²²âÊÔ
 	//t_handler.testRayCasting();
@@ -34,9 +34,11 @@ int main(int argc, char** argv) {
 
 	// 2. ÄÜÁ¿²âÊÔ
 	//t_handler.testTotalEnergyCalc(8, 8, 2, 2);
-	t_handler.testOneTimeHelioEnergy(8, 8, 2, 2);
+	//t_handler.testHelioFluxDensityModel(8, 8, 2, 2);
 	//t_handler.testHelioEnergyCalc(8, 8, 2, 2);
-	//t_handler.testFitSigme(8, 8, 2, 2);
+	//t_handler.testFitSigma(8, 8, 2, 2);
 	//t_handler.testCalcPolygonCenter();
- 	return 1;
+	t_handler.testOneTimeHelioEnergy(8, 8, 2, 2);
+	
+	return 1;
 }

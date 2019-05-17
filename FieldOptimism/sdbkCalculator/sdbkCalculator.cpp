@@ -36,7 +36,7 @@ double SdBkCalc::_helio_calc(int index, int DNI)
 	Heliostat* helio = solar_scene->helios[index];
 	unordered_set<int> rela_shadow_index;
 	int fc_index = solar_scene->helios[index]->focus_center_index;
-	Vector3d reflect_dir = (solar_scene->recvs[0]->focus_center[fc_index] - helio->helio_pos).normalized();
+	Vector3d reflect_dir = (helio->focus_center - helio->helio_pos).normalized();
 	GridDDA dda_handler;
 	dda_handler.rayCastGridDDA(solar_scene, helio, -solar_scene->sunray_dir, rela_shadow_index, true);
 
@@ -147,21 +147,21 @@ double SdBkCalc::calcFluxMap(Heliostat * helio, const double DNI)
 {
 	int fc_index = helio->focus_center_index;
 	vector<Receiver*> recvs = solar_scene->recvs;
-	Vector3d focus_center = recvs[0]->focus_center[fc_index];
-	Vector3d reverse_dir = (helio->helio_pos - focus_center).normalized();		// The normal of image plane
+	Vector3d reverse_dir = (helio->helio_pos - helio->focus_center).normalized();		// The normal of image plane
 	double _flux_sum = 0;
 
 	Matrix4d world2localM, local2worldM;
-	GeometryFunc::getImgPlaneMatrixs(reverse_dir, focus_center, local2worldM, world2localM, 1);
+	GeometryFunc::getImgPlaneMatrixs(reverse_dir, helio->focus_center, local2worldM, world2localM, 1);
 
+	vector<vector<Vector3d>> recv_vertexes = recvs[0]->get_recv_vertex(helio->focus_center);
 	for (int i = 0; i < helio->cos_phi.size(); i++) {
 		if (helio->cos_phi[i] > Epsilon) {
 			vector<Vector2d> proj_v;
 			vector<Vector3d> tmp_v;
 
-			for (auto& v : recvs[0]->recv_vertex[i]) {
+			for (auto& v : recv_vertexes[i]) {
 				Vector3d inter_v;
-				GeometryFunc::calcIntersection(reverse_dir, focus_center, v, reverse_dir, inter_v);
+				GeometryFunc::calcIntersection(reverse_dir, helio->focus_center, v, reverse_dir, inter_v);
 				tmp_v.push_back(inter_v);
 				inter_v = GeometryFunc::mulMatrix(inter_v, world2localM);
 				proj_v.push_back(Vector2d(inter_v.x(), inter_v.z()));
@@ -174,7 +174,7 @@ double SdBkCalc::calcFluxMap(Heliostat * helio, const double DNI)
 	}
 
 	float cos_phi = helio->cos_phi[fc_index];
-	float total_e = inte_infinite_flux_sum(helio, focus_center, cos_phi, 1);
+	float total_e = inte_infinite_flux_sum(helio, helio->focus_center, cos_phi, 1);
 
 	return _flux_sum;
 }
@@ -555,7 +555,7 @@ double SdBkCalc::calcSingleShadowBlock(int helio_index)
 	Heliostat* helio = solar_scene->helios[helio_index];
 	vector<unordered_set<int>> estimate_index(2);
 	int fc_index = solar_scene->helios[helio_index]->focus_center_index;
-	Vector3d reflect_dir = (solar_scene->recvs[0]->focus_center[fc_index] - helio->helio_pos).normalized();
+	Vector3d reflect_dir = (helio->focus_center - helio->helio_pos).normalized();
 	GridDDA dda_handler;
 	dda_handler.rayCastGridDDA(solar_scene, helio, -solar_scene->sunray_dir, estimate_index[0], true);
 	if (rela_block_index.empty())
@@ -577,20 +577,21 @@ double SdBkCalc::calcSingleFluxSum(int helio_index, const double DNI) {
 	Heliostat* helio = solar_scene->helios[helio_index];
 	int fc_index = helio->focus_center_index;
 	vector<Receiver*> recvs = solar_scene->recvs;
-	Vector3d focus_center = recvs[0]->focus_center[fc_index];
-	Vector3d reverse_dir = (helio->helio_pos - focus_center).normalized();		// The normal of image plane
+	Vector3d reverse_dir = (helio->helio_pos - helio->focus_center).normalized();		// The normal of image plane
 	double _flux_sum = 0;
 
 	Matrix4d world2localM, local2worldM;
-	GeometryFunc::getImgPlaneMatrixs(reverse_dir, focus_center, local2worldM, world2localM, 1);
+	GeometryFunc::getImgPlaneMatrixs(reverse_dir, helio->focus_center, local2worldM, world2localM, 1);
 
+	vector<vector<Vector3d>> recv_vertex = recvs[0]->get_recv_vertex(helio->focus_center);
 	for (int i = 0; i < helio->cos_phi.size(); i++) {
 		if (helio->cos_phi[i] > Epsilon) {
 			vector<Vector2d> proj_v;
 			vector<Vector3d> tmp_v;
-			for (auto& v : recvs[0]->recv_vertex[i]) {
+
+			for (auto& v : recv_vertex[i]) {
 				Vector3d inter_v;
-				GeometryFunc::calcIntersection(reverse_dir, focus_center, v, reverse_dir, inter_v);
+				GeometryFunc::calcIntersection(reverse_dir, helio->focus_center, v, reverse_dir, inter_v);
 				tmp_v.push_back(inter_v);
 				inter_v = GeometryFunc::mulMatrix(inter_v, world2localM);
 				proj_v.push_back(Vector2d(inter_v.x(), inter_v.z()));
@@ -598,7 +599,7 @@ double SdBkCalc::calcSingleFluxSum(int helio_index, const double DNI) {
 			}
 			//flux_sum_matrix_grid(recvs[0]->recv_vertex[i], proj_v, 400, 200, helio, helio->cos_phi[i], DNI);
 			//flux_sum_matrix_inte(solar_scene->recvs[0]->recv_normal_list[i], focus_center, recvs[0]->recv_vertex[i], local2worldM, proj_v, helio, helio->cos_phi[i], DNI);
-			double res = flux_grid_from_recv(recvs[0]->recv_vertex[i], 240, 240, helio, focus_center, DNI, helio->cos_phi[i]);
+			double res = flux_grid_from_recv(recv_vertex[i], 240, 240, helio, helio->focus_center, DNI, helio->cos_phi[i]);
 			_flux_sum += _multi_inte_flux_sum(proj_v, helio, helio->cos_phi[i], DNI);
 		}
 	}
@@ -688,7 +689,7 @@ void SdBkCalcTest::totalHeliosTest(const string& _save_path) {
 //
 void SdBkCalcTest::singleHelioTest(const int _helio_index) {
 	int fc_index = solar_scene->helios[_helio_index]->focus_center_index;
-	Vector3d reflect_dir = solar_scene->recvs[0]->focus_center[fc_index] - solar_scene->helios[_helio_index]->helio_pos;
+	Vector3d reflect_dir = solar_scene->helios[_helio_index]->focus_center - solar_scene->helios[_helio_index]->helio_pos;
 	setDir(-solar_scene->sunray_dir, reflect_dir.normalized());
 	setTestIndex(_helio_index);
 

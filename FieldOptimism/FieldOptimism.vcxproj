@@ -50,7 +50,7 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;WIN64;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <OpenMPSupport>false</OpenMPSupport>
+      <OpenMPSupport>true</OpenMPSupport>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>DebugFastLink</GenerateDebugInformation>
@@ -87,11 +87,11 @@
     </CudaCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <CudaCompile Include="DataStructure\DeviceList.cu" />
     <CudaCompile Include="DiscreteRayCaster\RayCasterCore.cu" />
     <CudaCompile Include="GaussLegendre\GaussLegendre.cu" />
-    <CudaCompile Include="HelioEnergy\FluxIntegral.cu" />
-    <CudaCompile Include="HelioEnergy\HelioEnergy.cu" />
+    <CudaCompile Include="HelioEnergy\ReceiverEnergyCalc\CylinderReceiverFluxIntegral\CylinderRecvFluxIntegral.cu" />
+    <CudaCompile Include="HelioEnergy\ReceiverEnergyCalc\RectangleReceiverFluxIntegral\RectRecvFluxIntegral.cu" />
+    <CudaCompile Include="HelioEnergy\ReceiverEnergyCalc\RecvEnergyCalc.cu" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CalcPolygonCenter\CalcPolygonCenter.h" />
@@ -100,10 +100,8 @@
     <ClInclude Include="Common\utils.h" />
     <ClInclude Include="Common\vector_arithmetic.cuh" />
     <ClInclude Include="DataStructure\Clipper\clipper.hpp" />
-    <ClInclude Include="DataStructure\DeviceList.cuh" />
     <ClInclude Include="DataStructure\Heliostat.h" />
     <ClInclude Include="DataStructure\Layout.h" />
-    <ClInclude Include="DataStructure\LsfFieldSegment.h" />
     <ClInclude Include="DataStructure\Receiver.h" />
     <ClInclude Include="DataStructure\SolarScene.h" />
     <ClInclude Include="DataStructure\SPA.h" />
@@ -114,9 +112,13 @@
     <ClInclude Include="GaussLegendre\GaussLegendre.cuh" />
     <ClInclude Include="GaussLegendre\GaussLegendre.h" />
     <ClInclude Include="GridDDA\GridDDA.h" />
-    <ClInclude Include="HelioEnergy\FluxIntegral.cuh" />
-    <ClInclude Include="HelioEnergy\HelioEnergy.cuh" />
-    <ClInclude Include="RayCastingArgument\RayCastingArgument.h" />
+    <ClInclude Include="HelioEnergy\EnergyCalcPipeline.h" />
+    <ClInclude Include="HelioEnergy\ReceiverEnergyCalc\CylinderReceiverFluxIntegral\CylinderRecvFluxIntegral.cuh" />
+    <ClInclude Include="HelioEnergy\ReceiverEnergyCalc\RectangleReceiverFluxIntegral\RectRecvFluxIntegral.cuh" />
+    <ClInclude Include="HelioEnergy\ReceiverEnergyCalc\RecvEnergyCalc.cuh" />
+    <ClInclude Include="RayCastingArgument\HeliostatDeviceArgument\HeliostatDeviceArgument.h" />
+    <ClInclude Include="RayCastingArgument\ReceiverDeviceArgument\CylinderReceiverDeviceArgument.h" />
+    <ClInclude Include="RayCastingArgument\ReceiverDeviceArgument\ReceiverDeviceArgument.h" />
     <ClInclude Include="sdbkCalculator\sdbkCalculator.h" />
     <ClInclude Include="SigmaFitting\SigmaFitting.h" />
     <ClInclude Include="TestHandler\TestHandler.h" />
@@ -126,7 +128,6 @@
     <ClCompile Include="DataStructure\Clipper\clipper.cpp" />
     <ClCompile Include="DataStructure\Heliostat.cpp" />
     <ClCompile Include="DataStructure\Layout.cpp" />
-    <ClCompile Include="DataStructure\LsfFieldSegment.cpp" />
     <ClCompile Include="DataStructure\Receiver.cpp" />
     <ClCompile Include="DataStructure\SolarScene.cpp" />
     <ClCompile Include="DataStructure\SPA.cpp" />
@@ -135,8 +136,11 @@
     <ClCompile Include="DiscreteRayCaster\DiscreteRayCaster.cpp" />
     <ClCompile Include="GaussLegendre\GaussLegendre.cpp" />
     <ClCompile Include="GridDDA\GridDDA_cpu.cpp" />
+    <ClCompile Include="HelioEnergy\EnergyCalcPipeline.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="RayCastingArgument\RayCastingArgument.cpp" />
+    <ClCompile Include="RayCastingArgument\HeliostatDeviceArgument\HeliostatDeviceArgument.cpp" />
+    <ClCompile Include="RayCastingArgument\ReceiverDeviceArgument\CylinderReceiverDeviceArgument.cpp" />
+    <ClCompile Include="RayCastingArgument\ReceiverDeviceArgument\ReceiverDeviceArgument.cpp" />
     <ClCompile Include="sdbkCalculator\sdbkCalculator.cpp" />
     <ClCompile Include="SigmaFitting\SigmaFitting.cpp" />
     <ClCompile Include="TestHandler\TestHandler.cpp" />

@@ -1,4 +1,4 @@
-#include "../RayCastingArgument/RayCastingArgument.h"
+#include "../RayCastingArgument/HeliostatDeviceArgument/HeliostatDeviceArgument.h"
 
 
 vector<double> rayCastCore(Vector3d sunray_dir, RayCastHelioDeviceArgument& h_args, string save_path, CalcMode calc_mode);
