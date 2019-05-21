@@ -21,7 +21,7 @@ public:
 		this->solar_scene = _solar_scene;
 	}
 	void setHFCALMode(bool calcCenterMode) { this->calcCenterMode = calcCenterMode; }
-	void initBlockRelaIndex(const Vector3d& dir);
+	void initBlockRelaIndex();
 	double calcSingleShadowBlock(int helio_index);
 	double calcSingleFluxSum(int helio_index, const double DNI);
 	double calcTotalEnergy(const double DNI);
@@ -32,7 +32,7 @@ public:
 	FieldType field_type;
 	SolarScene* solar_scene;
 	GaussLegendreCPU* gl;
-	vector<unordered_set<int>> rela_block_index;
+	vector<set<vector<int>>> rela_block_grid_index;
 	bool calcCenterMode;
 	string save_path;
 

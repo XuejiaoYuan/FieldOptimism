@@ -80,9 +80,6 @@
     <ClInclude Include="Common\CommonFunc.h">
       <Filter>Common</Filter>
     </ClInclude>
-    <ClInclude Include="Common\utils.h">
-      <Filter>Common</Filter>
-    </ClInclude>
     <ClInclude Include="DataStructure\Heliostat.h">
       <Filter>DataStructure</Filter>
     </ClInclude>

@@ -1,5 +1,6 @@
 #include "EnergyCalcPipeline.h"
 #include "../DataStructure/Timer.h"
+#include "ReceiverEnergyCalc/RecvEnergyCalc.cuh"
 
 float* EnergyCalcPipeline::d_total_energy;
 

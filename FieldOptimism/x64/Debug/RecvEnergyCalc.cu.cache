@@ -1,4 +1,4 @@
-Identity=HelioEnergy\RecvEnergyCalc.cu
+Identity=HelioEnergy\ReceiverEnergyCalc\RecvEnergyCalc.cu
 AdditionalCompilerOptions=
 AdditionalCompilerOptions=
 AdditionalDependencies=

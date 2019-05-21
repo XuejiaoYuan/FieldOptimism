@@ -28,7 +28,7 @@ public:
 		helio_normal = Vector3d(0, 0, 0);
 		sd_bk = 0;
 		rou = HELIOSTAT_REFLECTIVITY;
-		sigma = 1.31;	// TODO: update
+		sigma = 1.31;
 		helio_index = _index;
 		//calcLsfParam();
 	};

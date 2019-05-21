@@ -24,7 +24,8 @@ int main(int argc, char** argv) {
 	string save_path = string(argv[5]);
 
 
-	TestHandler t_handler(30);
+	TestHandler t_handler(15);
+	t_handler.sample_day = { make_int2(6, 21) };
 	t_handler.initSolarScene(scene_filepath, sunray_filepath, save_path);
 
 	// 1. “ı”∞’⁄µ≤≤‚ ‘
@@ -34,11 +35,14 @@ int main(int argc, char** argv) {
 
 	// 2. ƒ‹¡ø≤‚ ‘
 	//t_handler.testTotalEnergyCalc(8, 8, 2, 2);
-	//t_handler.testHelioFluxDensityModel(8, 8, 2, 2);
+	t_handler.testHelioFluxDensityModel(8, 8, 2, 2);
 	//t_handler.testHelioEnergyCalc(8, 8, 2, 2);
 	//t_handler.testFitSigma(8, 8, 2, 2);
 	//t_handler.testCalcPolygonCenter();
-	t_handler.testOneTimeHelioEnergy(8, 8, 2, 2);
+	//t_handler.testOneTimeHelioEnergy(8, 8, 2, 2);
 	
+	// 3. π‚œﬂ≤‚ ‘
+	//t_handler.testSunRay();
+
 	return 1;
 }

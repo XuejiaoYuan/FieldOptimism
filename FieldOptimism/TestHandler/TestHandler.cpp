@@ -51,18 +51,42 @@ void TestHandler::testSunRay()
 {
 	string save_path = output_filepath + "SunRayDir/";
 	_mkdir(save_path.c_str());
-	fstream outFile(save_path + "sunray_dir.txt", ios_base::out);
+	
 	Vector3d sunray_dir;
+	float DNI;
 	for (auto& day : sample_day) {
 		for (auto& hour : sample_hour) {
 			for (int minute = 0; minute < 60; minute += minute_inter) {
 				vector<int> time_param = { day.x, day.y, hour, minute };
 				sunray_dir = sunray.changeSunRay(time_param);
-				outFile << sunray_dir.x() << ' ' << sunray_dir.y() << ' ' << sunray_dir.z() << endl;
+				DNI = sunray.calcDNI(time_param);
+
+				string f_name = "he_scene_T" + to_string(solar_scene->layouts[0]->layout_type) + "_H" + to_string(solar_scene->helios.size());
+				string time_str = "M" + to_string(day.x) + "D" + to_string(day.y) + "H" + to_string(hour) + "m" + to_string(minute);
+				fstream outFile(save_path + f_name + "_"  + time_str + ".json", ios_base::out);
+				outFile << "sun_dir " << sunray_dir.x() << ' ' << sunray_dir.y() << ' ' << sunray_dir.z() << endl;
+				outFile << "csr 0.1" << endl;
+				outFile << "dni " << DNI << endl;
+				outFile << "num_of_sunshape_groups 128\n"
+					<< "num_per_sunshape_group 2\n"
+					<< "inverse_transform_sampling_groups 64\n"
+					<< "receiver_pixel_length 0.05\n"
+					<< "helio_disturb_std 0.001\n"
+					<< "helio_reflected_rate 0.88\n"
+					<< "helio_pixel_length 0.01" << endl;
+				outFile.close();
+
+				outFile.open(save_path + f_name + "_run.bat", ios_base::out | ios_base::app);
+				outFile << "SolarEnergyRayTracing.exe "
+					<< "-c InputFiles/he_scene_T1_H9950/DiffSunDir/he_scene_T1_H9950_" + time_str + ".json " 
+					<< "-s InputFiles/he_scene_T1_H9950/he_scene_T1_H9950.scn -h "
+					<< "InputFiles/he_scene_T1_H9950/he_scene_T1_H9950.txt "
+					<< "-o OutputFiles/he_scene_T1_H9950/" + time_str + "/\n" << endl;
+				outFile.close();
 			}
 		}
 	}
-	outFile.close();
+	
 }
 
 void TestHandler::testHelioPredict()
@@ -108,7 +132,7 @@ void TestHandler::testPolygonClipping()
 	SdBkCalcCreator sdbk_calc_creator;
 	SdBkCalc* sdbk_calc = sdbk_calc_creator.getSdBkCalc(solar_scene);
 	Vector3d sunray_dir;
-	sdbk_calc->initBlockRelaIndex(sunray_dir);
+	sdbk_calc->initBlockRelaIndex();
 
 	fstream outFile;
 	for (auto& day : sample_day) {
@@ -144,7 +168,7 @@ void TestHandler::testTotalEnergyCalc(int M, int N, int m, int n)
 	SdBkCalcCreator sdbk_calc_creator;
 	SdBkCalc* sdbk_calc = sdbk_calc_creator.getSdBkCalc(solar_scene);
 	sdbk_calc->gl = new GaussLegendreCPU(M, N, m, n);
-	sdbk_calc->initBlockRelaIndex(sunray_dir);
+	sdbk_calc->initBlockRelaIndex();
 	
 	fstream outFile;
 	string save_path = output_filepath + "TotalEnergy/";
@@ -203,7 +227,7 @@ void TestHandler::testHelioEnergyCalc(int M, int N, int m, int n) {
 	SdBkCalcCreator sdbk_calc_creator;
 	SdBkCalc* sdbk_calc = sdbk_calc_creator.getSdBkCalc(solar_scene);
 	sdbk_calc->gl = new GaussLegendreCPU(M, N, m, n);
-	sdbk_calc->initBlockRelaIndex(sunray_dir);
+	sdbk_calc->initBlockRelaIndex();
 
 	fstream outFile;
 	for (auto& day : sample_day) {
@@ -242,44 +266,60 @@ void TestHandler::testHelioEnergyCalc(int M, int N, int m, int n) {
 
 void TestHandler::testHelioFluxDensityModel(int M, int N, int m, int n)
 {
+	vector<int> test_helio_index = { 75, 1699, 3060, 4960, 6000};
+	vector<Heliostat*> helio_list4calc;
+	for (auto i : test_helio_index)
+		helio_list4calc.push_back(solar_scene->helios[i]);
+	
+	string path = output_filepath + "ModelTest/LWRatioCompare/";
+	_mkdir(path.c_str());
+
+	vector<Heliostat*> test_helio_list;
+	for (auto i : test_helio_index)
+		test_helio_list.push_back(solar_scene->helios[i]);
+	
 	Vector3d sunray_dir;
-	float DNI = 681;
+	float DNI = 1;
 	SdBkCalcCreator sdbk_calc_creator;
 	SdBkCalc* sdbk_calc = sdbk_calc_creator.getSdBkCalc(solar_scene);
 	sdbk_calc->gl = new GaussLegendreCPU(M, N, m, n);
+	sdbk_calc->initBlockRelaIndex();
+	sdbk_calc->setHFCALMode(true);
+	
+	bool calcLWRatio = true;
+	bool calcSigma = false;	
 
 	fstream outFile;
-	
-	sunray_dir = sunray.changeSunRay(9.5, 120);		// mid day: 80.2, 185
-	solar_scene->changeHeliosNormal(sunray_dir, true);
-	sdbk_calc->setHFCALMode(true);
-	sdbk_calc->initBlockRelaIndex(sunray_dir);
-	sdbk_calc->calcTotalShadowBlock();
+	for (auto& day : sample_day) {
+		for (auto& hour : sample_hour) {
+			for (int minute = 0; minute < 60; minute += minute_inter) {
+				vector<int> time_param = { day.x, day.y, hour, minute };
+				//vector<int> time_param = { 6, 21, 8, 15 };
+				string time_str = "M" + to_string(day.x) + "D" + to_string(day.y) + "H" + to_string(hour) + "m" + to_string(minute) + "/";
+				sunray_dir = sunray.changeSunRay(time_param);
+				DNI = sunray.calcDNI(time_param);
+				solar_scene->changeHeliosNormal(sunray_dir, calcLWRatio, calcSigma);
+				
+				outFile.open(path + "lw_ratio_m11.txt", ios_base::out | ios_base::app);
+				for (auto& h : test_helio_list) {	
+					outFile << h->l_w_ratio << ' ';
+				}
+				outFile << endl;
+				outFile.close();
+				
+				sdbk_calc->calcTotalShadowBlock();
 
-	vector<int> test_helio_index = { 0, 75, 400, 980, 1699,1960, 2113, 3059, 3890, 4684, 4963, 6005, 7875 };
-	vector<Heliostat*> helio_list4calc;
-	helio_list4calc = solar_scene->helios;
-	//for (auto i : test_helio_index)
-	//	helio_list4calc.push_back(solar_scene->helios[i]);
-	SigmaFitting sg_handler;
-	//sg_handler.fromFluxPeak2Sigma("Inputfiles/QMCRT/early_day/iter_2000/max_flux.txt", helio_list4calc, solar_scene->recvs[0], DNI);
-	
-	string path = output_filepath + "QMCRT/early_day/iter_2000_test/";
-	_mkdir(path.c_str());
-	sdbk_calc->save_path = path;
+				SigmaFitting sg_handler;
+				sg_handler.fromFluxPeak2Sigma("Inputfiles/QMCRT/ModelTest/he_scene_T1_H9950/" + time_str + "max_flux.txt", helio_list4calc, solar_scene->recvs[0], DNI);
 
-	vector<Heliostat*> test_helio_list;
-	//for (auto i : test_helio_index)
-	//	test_helio_list.push_back(solar_scene->helios[i]);
-	//test_helio_list = helio_list4calc;
-	//for (auto h : test_helio_list)
-	//	sdbk_calc->calcSingleFluxSum(h->helio_index, DNI);
+				sdbk_calc->save_path = path + time_str;
+				_mkdir(sdbk_calc->save_path.c_str());
+				for (auto h : test_helio_list)
+					sdbk_calc->calcSingleFluxSum(h->helio_index, DNI);
+			}
+		}
+	}
 
-
-	outFile.open(path + "sigma.txt", ios_base::out);
-	for (auto&h : test_helio_list)
-		outFile << h->sigma << endl;
-	outFile.close();
 }
 
 void TestHandler::testOneTimeHelioEnergy(int M, int N, int m, int n)
@@ -297,7 +337,7 @@ void TestHandler::testOneTimeHelioEnergy(int M, int N, int m, int n)
 	SdBkCalcCreator sdbk_calc_creator;
 	SdBkCalc* sdbk_calc = sdbk_calc_creator.getSdBkCalc(solar_scene);
 	sdbk_calc->setHFCALMode(calcLWRatio);
-	sdbk_calc->initBlockRelaIndex(sunray_dir);
+	sdbk_calc->initBlockRelaIndex();
 	sdbk_calc->calcTotalShadowBlock();
 
 	// 3. Calculate total energy
@@ -314,7 +354,7 @@ void TestHandler::testCalcPolygonCenter()
 	Vector3d sunray_dir = sunray.changeSunRay(80.2, 185);
 	solar_scene->changeHeliosNormal(sunray_dir);
 	sdbk_calc->setHFCALMode(true);
-	sdbk_calc->initBlockRelaIndex(sunray_dir);
+	sdbk_calc->initBlockRelaIndex();
 	sdbk_calc->calcTotalShadowBlock();
 
 	Paths subj(1), clips;

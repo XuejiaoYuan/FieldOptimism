@@ -118,14 +118,23 @@ void Heliostat::calcFluxParam(const Vector3d& focus_center, bool calcLWRatio, bo
 
 		col_dir = (inter_v[2] - inter_v[0]).normalized();
 		row_dir = (inter_v[1] - inter_v[0]).normalized();
-		double cos_eta = (col_dir.dot(img_x_axis) - row_dir.dot(img_y_axis)) / 2.;
-		//double cos_eta = col_dir.dot(img_x_axis);
+		//double cos_eta = (col_dir.dot(img_x_axis) - row_dir.dot(img_y_axis)) / 2.;
+		double cos_eta = col_dir.dot(img_x_axis);
 		rotate_theta = acos(abs(cos_eta));
 
-		if (cos_eta < 0) rotate_theta = -rotate_theta;
+		if (col_dir.dot(img_y_axis) < 0) rotate_theta = -rotate_theta;
 		double ip_w = (inter_v[1] - inter_v[0]).norm();
 		double ip_l = (inter_v[2] - inter_v[0]).norm();
-		l_w_ratio = 1 + 1 / 2.*log(ip_w / ip_l);
+		//l_w_ratio = 1 + 1./ 2.*log(ip_w / ip_l);
+		//l_w_ratio = 1 + 1/2.*log10(ip_w / ip_l);
+		//l_w_ratio = 1 + log10(ip_w / ip_l);  m4
+		//l_w_ratio = 1 + abs(log10(ip_w / ip_l));	
+		if (ip_w / ip_l < 1)
+			l_w_ratio = 1 + log10(2 - ip_w / ip_l);
+		else
+			l_w_ratio = 1 + log10(ip_w / ip_l);
+		//rotate_theta /= 2.;
+		//rotate_theta = 0;
 	}
 	else {
 		// 计算全镜场能量时：
@@ -215,7 +224,7 @@ vector<double> Heliostat::set_focus_center_index(const vector<Receiver*>& recvs)
 		break;
 	}
 	case CylinderRecvType: {
-		focus_center_index = helio_index;		// 每个定日镜对应一个唯一聚焦点
+		focus_center_index = 0;		// 每个定日镜对应一个唯一聚焦点
 		CylinderRecv* recv = dynamic_cast<CylinderRecv*>(recvs[0]);
 		focus_center = recv->get_focus_center(helio_pos);
 		Vector3d image_plane_normal = (helio_pos - focus_center).normalized();

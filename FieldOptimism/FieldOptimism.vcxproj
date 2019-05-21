@@ -50,7 +50,7 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;WIN64;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <OpenMPSupport>true</OpenMPSupport>
+      <OpenMPSupport>false</OpenMPSupport>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>DebugFastLink</GenerateDebugInformation>
@@ -97,7 +97,6 @@
     <ClInclude Include="CalcPolygonCenter\CalcPolygonCenter.h" />
     <ClInclude Include="Common\CommonFunc.h" />
     <ClInclude Include="Common\global_function.cuh" />
-    <ClInclude Include="Common\utils.h" />
     <ClInclude Include="Common\vector_arithmetic.cuh" />
     <ClInclude Include="DataStructure\Clipper\clipper.hpp" />
     <ClInclude Include="DataStructure\Heliostat.h" />

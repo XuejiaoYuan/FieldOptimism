@@ -34,20 +34,20 @@ void SdBkCalc::saveCalcRes(const string s)
 double SdBkCalc::_helio_calc(int index, int DNI)
 {
 	Heliostat* helio = solar_scene->helios[index];
-	unordered_set<int> rela_shadow_index;
+	unordered_set<int> rela_shadow_index, rela_block_index;
 	int fc_index = solar_scene->helios[index]->focus_center_index;
 	Vector3d reflect_dir = (helio->focus_center - helio->helio_pos).normalized();
 	GridDDA dda_handler;
-	dda_handler.rayCastGridDDA(solar_scene, helio, -solar_scene->sunray_dir, rela_shadow_index, true);
+	dda_handler.rayCastGridDDA(solar_scene, helio, -solar_scene->sunray_dir, rela_shadow_index);
+	dda_handler.getBlockGrid2HelioIndex(solar_scene, rela_block_grid_index[index], rela_block_index, helio);
 
 	vector<Vector3d> dir = { -solar_scene->sunray_dir, reflect_dir };
-	vector<unordered_set<int>> estimate_grids = { rela_shadow_index, rela_block_index[index] };
+	vector<unordered_set<int>> estimate_grids = { rela_shadow_index, rela_block_index };
 	helio->sd_bk = helioClipper(helio, dir, estimate_grids);
 	if (gl != NULL)
 		helio->flux_sum = calcFluxMap(helio, DNI);
 	helio->total_e = (1 - helio->sd_bk)*helio->flux_sum;
 	helio->fluxCalc = true;
-
 
 	return helio->total_e;
 }
@@ -124,15 +124,15 @@ double SdBkCalc::helioClipper(Heliostat * helio, const vector<Vector3d>& dir, co
 }
 
 
-void SdBkCalc::initBlockRelaIndex(const Vector3d & dir)
+void SdBkCalc::initBlockRelaIndex()
 {
 	GridDDA dda_handler;
 	vector<Heliostat*>& helios = solar_scene->helios;
-	rela_block_index.clear();
-	rela_block_index.resize(helios.size());
+	rela_block_grid_index.clear();
+	rela_block_grid_index.resize(helios.size());
 #pragma omp parallel for
 	for (int i = 0; i < helios.size(); ++i) {
-		dda_handler.rayCastGridDDA(solar_scene, helios[i], -dir, rela_block_index[i], false);
+		dda_handler.rayCastGridDDA(solar_scene, helios[i], rela_block_grid_index[i]);
 	}
 
 }
@@ -254,7 +254,7 @@ float SdBkCalc::flux_grid_from_recv(vector<Vector3d>& recv_v, const int rows, co
 	Matrix4d world2local, local2world;
 	GeometryFunc::getImgPlaneMatrixs(reverse_dir, fc_center, local2world, world2local, 1);
 
-	Vector3d proj_v = GeometryFunc::mulMatrix(fc_center, world2local);
+	//Vector3d proj_v = GeometryFunc::mulMatrix(fc_center, world2local);
 
 	double sum = 0;
 	double grid_area = 0.0;
@@ -262,12 +262,12 @@ float SdBkCalc::flux_grid_from_recv(vector<Vector3d>& recv_v, const int rows, co
 		grid_area += recv_v[i].x()*recv_v[(i + 1) % 4].y() - recv_v[i].y()*recv_v[(i + 1) % 4].x();
 	grid_area = fabs(grid_area / 2.0 / rows / cols);
 
-	fstream outFile(save_path +"grid_lw_cb_ro_" + to_string(helio->helio_index) + ".txt", ios_base::out);
+	fstream outFile(save_path +"m11_" + to_string(helio->helio_index) + ".txt", ios_base::out);
 
 	Vector3d i_center_bias(0, 0, 0);
 	if (calcCenterMode) {
 		Vector3d h_center_bias(helio->centerBias.x, helio->centerBias.y, helio->centerBias.z);
-		GeometryFunc::calcIntersection(reverse_dir, fc_center, h_center_bias, reverse_dir, i_center_bias);
+		GeometryFunc::calcIntersection(reverse_dir, fc_center, h_center_bias, -reverse_dir, i_center_bias);
 		i_center_bias = GeometryFunc::mulMatrix(i_center_bias, world2local);
 	}
 	for (int i = 0; i < rows; ++i) {
@@ -275,7 +275,7 @@ float SdBkCalc::flux_grid_from_recv(vector<Vector3d>& recv_v, const int rows, co
 			Vector3d start_v = recv_v[0] + i*row_gap + j*col_gap;
 			Vector3d inter_v;
 			GeometryFunc::calcIntersection(reverse_dir, fc_center, start_v, reverse_dir, inter_v);
-			Vector3d proj_v = GeometryFunc::mulMatrix(inter_v, world2local) - i_center_bias;
+			Vector3d proj_v = GeometryFunc::mulMatrix(inter_v, world2local) -i_center_bias;
 			Vector3d trans_v;
 
 			trans_v.x() = proj_v.x()*cos(helio->rotate_theta) + proj_v.z()*sin(helio->rotate_theta);
@@ -554,14 +554,12 @@ double SdBkCalc::calcSingleShadowBlock(int helio_index)
 {
 	Heliostat* helio = solar_scene->helios[helio_index];
 	vector<unordered_set<int>> estimate_index(2);
-	int fc_index = solar_scene->helios[helio_index]->focus_center_index;
 	Vector3d reflect_dir = (helio->focus_center - helio->helio_pos).normalized();
 	GridDDA dda_handler;
-	dda_handler.rayCastGridDDA(solar_scene, helio, -solar_scene->sunray_dir, estimate_index[0], true);
-	if (rela_block_index.empty())
-		dda_handler.rayCastGridDDA(solar_scene, helio, -solar_scene->sunray_dir, estimate_index[1], false);
-	else
-		estimate_index[1] = rela_block_index[helio_index];
+	dda_handler.rayCastGridDDA(solar_scene, helio, -solar_scene->sunray_dir, estimate_index[0]);
+	if (rela_block_grid_index.empty())
+		dda_handler.rayCastGridDDA(solar_scene, helio, rela_block_grid_index[helio_index]);
+	dda_handler.getBlockGrid2HelioIndex(solar_scene, rela_block_grid_index[helio_index], estimate_index[1], helio);
 
 	vector<Vector3d> dir = { -solar_scene->sunray_dir, reflect_dir };
 	helio->sd_bk = helioClipper(helio, dir, estimate_index);
@@ -1181,7 +1179,13 @@ void SdBkCalcTest::use3dddaSdBk() {
 void SdBkCalcTest::checkEstimateHelio(Vector3d& dir, unordered_set<int>& helio_set, int& ac, unordered_set<int>& gt_helio_set, bool shadowDir) {
 	Heliostat* helio = solar_scene->helios[helio_index];
 	GridDDA dda_handler;
-	dda_handler.rayCastGridDDA(solar_scene, helio, -solar_scene->sunray_dir, helio_set, shadowDir);
+	if(shadowDir)
+		dda_handler.rayCastGridDDA(solar_scene, helio, -solar_scene->sunray_dir, helio_set);
+	else {
+		set<vector<int>> rela_grid_label;
+		dda_handler.rayCastGridDDA(solar_scene, helio, rela_grid_label);
+		dda_handler.getBlockGrid2HelioIndex(solar_scene, rela_grid_label, helio_set, helio);
+	}
 	for (auto& index : helio_set) {
 		if (gt_helio_set.count(index)) ++ac;
 	}

@@ -1,4 +1,4 @@
-Identity=HelioEnergy\RectangleReceiverFluxIntegral\RectRecvFluxIntegral.cu
+Identity=HelioEnergy\ReceiverEnergyCalc\RectangleReceiverFluxIntegral\RectRecvFluxIntegral.cu
 AdditionalCompilerOptions=
 AdditionalCompilerOptions=
 AdditionalDependencies=

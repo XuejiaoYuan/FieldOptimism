@@ -12,7 +12,14 @@ void GridDDA::predictRelatedHelio(SolarScene* solar_scene, RayCastHelioDeviceArg
 #pragma omp parallel for
 	for (int i = 0; i < helios.size(); ++i) {
 		unordered_set<int> helio_label;
-		rayCastGridDDA(solar_scene, helios[i], -sunray_dir, helio_label, shadowDir);
+		if (shadowDir) {
+			rayCastGridDDA(solar_scene, helios[i], -sunray_dir, helio_label);
+		}
+		else {
+			set<vector<int>> grid_label;
+			rayCastGridDDA(solar_scene, helios[i], grid_label);
+			getBlockGrid2HelioIndex(solar_scene, grid_label, helio_label, helios[i]);
+		}
 		int j = 0;
 		for (auto& iter : helio_label) {
 			h_rela_index[i*h_args.helio_list_size + j] = iter;
@@ -20,6 +27,7 @@ void GridDDA::predictRelatedHelio(SolarScene* solar_scene, RayCastHelioDeviceArg
 		}
 		if (j < h_args.helio_list_size) h_rela_index[i*h_args.helio_list_size + j] = -1;		// 设置相关定日镜个数
 	}
+	
 
 	// 2. 将数据拷贝至GPU用于后续ray cast计算
 	int*& d_rela_index = shadowDir ? h_args.d_rela_shadow_helio_index : h_args.d_rela_block_helio_index;
@@ -40,7 +48,6 @@ bool GridDDA::checkBoundingBox(const Vector3d & Hloc, const Vector3d & Hnormal, 
 
 void GridDDA::testHandler(SolarScene* solar_scene)
 {
-
 	RayCastHelioDeviceArgument h_args;
 	Vector3d helio_size = solar_scene->helios[0]->helio_size;
 	h_args.setHelioDeviceOrigins(0.01, helio_size.x(), helio_size.z());		// 第一次调用cuda程序耗时较长
@@ -52,16 +59,40 @@ void GridDDA::testHandler(SolarScene* solar_scene)
 
 }
 
-void GridDDA::rayCastGridDDA(SolarScene* solar_scene, Heliostat * helio, Vector3d dir, unordered_set<int>& rela_helio_index, bool shadowDir)
+void GridDDA::rayCastGridDDA(SolarScene * solar_scene, Heliostat * helio, set<vector<int>>& rela_grid_index)
 {
-	// 1. 获取光线方向
-	Vector3d sunray_dir = -dir;
-	Layout*& layout = solar_scene->layouts[0];
-	Vector3d curNormal = helio->helio_normal;
-	if (!shadowDir) {
-		int fc_index = helio->focus_center_index;
-		dir = (helio->focus_center - helio->helio_pos).normalized();
+	Vector3d bk_dir = (helio->focus_center - helio->helio_pos).normalized();
+	double radius = GridDDACore(bk_dir, helio, solar_scene->layouts[0], rela_grid_index);
+}
+
+void GridDDA::getBlockGrid2HelioIndex(SolarScene * solar_scene, set<vector<int>>& rela_grid_label, unordered_set<int>& rela_helio_index, Heliostat* helio)
+{
+	Vector3d dir = (helio->focus_center - helio->helio_pos).normalized();
+	getGrid2HelioIndex(solar_scene, rela_grid_label, rela_helio_index, dir, helio);
+}
+
+void GridDDA::rayCastGridDDA(SolarScene* solar_scene, Heliostat * helio, Vector3d dir, unordered_set<int>& rela_helio_index)
+{
+	set<vector<int>> relative_grid_label;
+	double radius = GridDDACore(dir, helio, solar_scene->layouts[0], relative_grid_label);
+	getGrid2HelioIndex(solar_scene, relative_grid_label, rela_helio_index, dir, helio);
+}
+
+void GridDDA::saveTestRes(const string& file_name, int helioNum, int* d_related_index, int list_size)
+{
+	fstream outFile(file_name + "_gpu.txt", ios_base::app | ios_base::out);
+	for (int i = 0; i < helioNum; ++i) {
+		outFile << i << ' ';
+		for (int j = 0; j < list_size && d_related_index[i*list_size+j]!=-1; ++j)
+			outFile << d_related_index[i * list_size + j] << ' ';
+		outFile << endl;
 	}
+	outFile.close();
+
+}
+
+double GridDDA::GridDDACore(Vector3d& dir, Heliostat* helio, Layout* layout, set<vector<int>>& relative_grid_label)
+{
 	Vector2d ray_dir(dir.x(), dir.z());
 	ray_dir.normalized();
 	Vector2d tangent_dir(ray_dir.y(), -ray_dir.x());
@@ -85,12 +116,12 @@ void GridDDA::rayCastGridDDA(SolarScene* solar_scene, Heliostat * helio, Vector3
 	};
 
 	// 4. 确定定日镜反射光线在镜场中的grid范围
-	Vector2d boundBox[4] = { 
+	Vector2d boundBox[4] = {
 		GeometryFunc::fminf(proj_origin[0], upper_v[0]), GeometryFunc::fmaxf(proj_origin[0], upper_v[0]),
 		GeometryFunc::fminf(proj_origin[1], upper_v[1]), GeometryFunc::fmaxf(proj_origin[1], upper_v[1])
 	};		// min boundary, max boundary
 
-																							// 5. 确定layout下各网格的矩阵间隔
+			// 5. 确定layout下各网格的矩阵间隔
 	Vector2d cellDimension = Vector2d(layout->helio_interval.x(), layout->helio_interval.z());
 
 	int helio_col = static_cast<int>((Hloc.x() - layout->layout_first_helio_center.x()) / cellDimension.x());			// smaller x is, smaller col is
@@ -98,13 +129,13 @@ void GridDDA::rayCastGridDDA(SolarScene* solar_scene, Heliostat * helio, Vector3
 
 
 	// 4. DDA求交
-	set<vector<int>> relative_helio_label;
+	//set<vector<int>> relative_helio_label;
 	for (int i = 0; i < 2; ++i) {
 		// 4.0 设置光线范围
-		int minCol = static_cast<int>((boundBox[2*i].x() - layout->layout_first_helio_center.x()) / cellDimension.x());
-		int minRow = static_cast<int>((boundBox[2*i].y() - layout->layout_first_helio_center.z()) / cellDimension.y());
-		int maxCol = static_cast<int>((boundBox[2*i+1].x() - layout->layout_first_helio_center.x()) / cellDimension.x() + 0.5);
-		int maxRow = static_cast<int>((boundBox[2*i+1].y() - layout->layout_first_helio_center.z()) / cellDimension.y() + 0.5);
+		int minCol = static_cast<int>((boundBox[2 * i].x() - layout->layout_first_helio_center.x()) / cellDimension.x());
+		int minRow = static_cast<int>((boundBox[2 * i].y() - layout->layout_first_helio_center.z()) / cellDimension.y());
+		int maxCol = static_cast<int>((boundBox[2 * i + 1].x() - layout->layout_first_helio_center.x()) / cellDimension.x() + 0.5);
+		int maxRow = static_cast<int>((boundBox[2 * i + 1].y() - layout->layout_first_helio_center.z()) / cellDimension.y() + 0.5);
 
 		minCol = std::max(0, minCol);
 		minRow = std::max(0, minRow);
@@ -150,7 +181,7 @@ void GridDDA::rayCastGridDDA(SolarScene* solar_scene, Heliostat * helio, Vector3
 				grid_label.y() < minCol || grid_label.y() > maxCol)
 				break;
 			else
-				relative_helio_label.insert({ grid_label.x(), grid_label.y() });
+				relative_grid_label.insert({ grid_label.x(), grid_label.y() });
 
 			if (t.x() < t.y()) {
 				t.x() += deltaT.x();
@@ -169,28 +200,19 @@ void GridDDA::rayCastGridDDA(SolarScene* solar_scene, Heliostat * helio, Vector3
 		}
 	}
 
-	// 5. 计算相关定日镜
-	for (auto& iter = relative_helio_label.begin(); iter != relative_helio_label.end(); ++iter) {
+	return radius;
+}
+
+void GridDDA::getGrid2HelioIndex(SolarScene * solar_scene, set<vector<int>>& rela_grid_label, unordered_set<int>& rela_helio_index, Vector3d & dir, Heliostat * helio)
+{
+	double radius = sqrt(pow(helio->helio_size.x(), 2) + pow(helio->helio_size.z(), 2)) / 2.0;
+	for (auto& iter = rela_grid_label.begin(); iter != rela_grid_label.end(); ++iter) {
 		for (auto& rela_helio : solar_scene->layouts[0]->helio_layout[(*iter)[0]][(*iter)[1]]) {
 			if (rela_helio == helio || rela_helio_index.count(rela_helio->helio_index)) continue;
-			if (checkBoundingBox(helio->helio_pos, helio->helio_normal, rela_helio->helio_pos, dir, 2*radius)) {
+			if (checkBoundingBox(helio->helio_pos, helio->helio_normal, rela_helio->helio_pos, dir, 2 * radius)) {
 				rela_helio_index.insert(rela_helio->helio_index);
 			}
 		}
 	}
-
-}
-
-void GridDDA::saveTestRes(const string& file_name, int helioNum, int* d_related_index, int list_size)
-{
-	fstream outFile(file_name + "_gpu.txt", ios_base::app | ios_base::out);
-	for (int i = 0; i < helioNum; ++i) {
-		outFile << i << ' ';
-		for (int j = 0; j < list_size && d_related_index[i*list_size+j]!=-1; ++j)
-			outFile << d_related_index[i * list_size + j] << ' ';
-		outFile << endl;
-	}
-	outFile.close();
-
 }
 
