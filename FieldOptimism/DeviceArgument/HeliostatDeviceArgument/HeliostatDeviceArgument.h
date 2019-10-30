@@ -2,7 +2,7 @@
 #include "../../Common/CommonFunc.h"
 #include "../../DataStructure/SolarScene.h"
 #include "../../Common/vector_arithmetic.cuh"
-#include "../../DataStructure/Timer.h"
+#include "../../Tool/Timer/Timer.h"
 
 class HeliostatDeviceArgument {
 public:

@@ -1,4 +1,4 @@
-#include "CalcPolygonCenter.h"
+#include "PolygonCenterCalculator.h"
 
 double PolygonCenterCalculator::calcPolygonCenter(const Paths & solution, Vector3d& center, bool calcCenter)
 {

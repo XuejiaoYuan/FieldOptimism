@@ -12,7 +12,7 @@ void CylinderReceiverDeviceArgument::setRecvDeviceArguments(Receiver & recv, vec
 	for (int i = 0; i < numberOfReceivers; ++i) {
 		h_recv_focus_pos[i] = GeometryFunc::convert3(helios[i]->focus_center);
 		h_recv_normal[i] = GeometryFunc::convert3((helios[i]->focus_center - recv.recv_pos).normalized());
-		vector<Vector3d> recv_vertex = recv.get_recv_vertex(helios[i]->focus_center)[0];
+		vector<Vector3d> recv_vertex = recv.getRecvVertex(helios[i]->focus_center)[0];
 		for (int j = 0; j < 4; ++j)
 			h_recv_vertexes[4 * i + j] = GeometryFunc::convert3(recv_vertex[j]);
 	}

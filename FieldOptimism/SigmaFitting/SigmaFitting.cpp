@@ -10,9 +10,6 @@ void SigmaFitting::fromFluxPeak2Sigma(const string peak_file, vector<Heliostat*>
 	}
 }
 
-void SigmaFitting::fitSigmaSurface()
-{
-}
 
 void SigmaFitting::readFluxPeakFile(const string peak_file)
 {

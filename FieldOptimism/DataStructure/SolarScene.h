@@ -9,33 +9,27 @@
 
 #include "Layout.h"
 #include "Receiver.h"
-
+#include "../Tool/ArgumentParser/ArgumentParser.h"
 
 
 class SolarScene {
 public:
-    SolarScene(){
-        scene_length = 0;
-        scene_width = 0;
-        layouts.clear();
-        helios.clear();
-        recvs.clear();
-    }
-	bool changeHeliosNormal(const Vector3d&sunray_dir, bool calcLWRatio = true, bool calcSimga = true);		//change the surface normal of heiliostats
-
-	// function for parameter optimisim
-	bool initFieldParam(const string&file_name);
-	bool adjustFieldParam(const vector<vector<double>*>& field_args);
-
+    SolarScene():model_type(HFLCAL), calc_sigma(true){}
+	~SolarScene();
+	bool changeHeliosNormal(const Vector3d&sunray_dir);		//change the surface normal of heiliostats
 	void saveSolarScene(string scene_savepath);
-
-    double scene_length;           //heliostat ground's length and width
-    double scene_width;
+	void saveHeSolarScene(string scene_savepath);
+	void setModelStatus(const ModelType& model_type, const bool& calc_sigma);
+	ModelType getModelType() { return model_type; }
 
     vector<Layout*>  layouts;
     vector<Heliostat*> helios;
 	vector<Receiver*> recvs;
 	Vector3d sunray_dir;
+
+private:
+	ModelType model_type;
+	bool calc_sigma;
 };
 
 #endif //HELIOSHADOW_SOLARSCENE_H

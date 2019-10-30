@@ -41,7 +41,7 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v10.1\include;$(IncludePath)</IncludePath>
+    <IncludePath>C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v10.1\include;E:\xjYuan\003 ZJU\002 Solar\004 Codes\190326_Solar\FieldOptimism\FieldOptimism\3rdparty;$(IncludePath)</IncludePath>
     <LibraryPath>C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v10.1\lib\x64;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -87,62 +87,64 @@
     </CudaCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <CudaCompile Include="DiscreteRayCaster\RayCasterCore.cu" />
     <CudaCompile Include="GaussLegendre\GaussLegendre.cu" />
     <CudaCompile Include="HelioEnergy\ReceiverEnergyCalc\CylinderReceiverFluxIntegral\CylinderRecvFluxIntegral.cu" />
     <CudaCompile Include="HelioEnergy\ReceiverEnergyCalc\RectangleReceiverFluxIntegral\RectRecvFluxIntegral.cu" />
     <CudaCompile Include="HelioEnergy\ReceiverEnergyCalc\RecvEnergyCalc.cu" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="CalcPolygonCenter\CalcPolygonCenter.h" />
     <ClInclude Include="Common\CommonFunc.h" />
     <ClInclude Include="Common\global_function.cuh" />
     <ClInclude Include="Common\vector_arithmetic.cuh" />
-    <ClInclude Include="DataStructure\Clipper\clipper.hpp" />
     <ClInclude Include="DataStructure\Heliostat.h" />
     <ClInclude Include="DataStructure\Layout.h" />
     <ClInclude Include="DataStructure\Receiver.h" />
     <ClInclude Include="DataStructure\SolarScene.h" />
-    <ClInclude Include="DataStructure\SPA.h" />
     <ClInclude Include="DataStructure\SunRay.h" />
-    <ClInclude Include="DataStructure\Timer.h" />
-    <ClInclude Include="DiscreteRayCaster\DiscreteRayCaster.h" />
-    <ClInclude Include="DiscreteRayCaster\RayCasterCore.cuh" />
+    <ClInclude Include="DeviceArgument\HeliostatDeviceArgument\HeliostatDeviceArgument.h" />
+    <ClInclude Include="DeviceArgument\ReceiverDeviceArgument\CylinderReceiverDeviceArgument.h" />
+    <ClInclude Include="DeviceArgument\ReceiverDeviceArgument\ReceiverDeviceArgument.h" />
+    <ClInclude Include="DifferentialEvolution\DifferentialEvolution.h" />
+    <ClInclude Include="FieldOptimismPipeline\FieldOptimismPipeline.h" />
     <ClInclude Include="GaussLegendre\GaussLegendre.cuh" />
     <ClInclude Include="GaussLegendre\GaussLegendre.h" />
     <ClInclude Include="GridDDA\GridDDA.h" />
     <ClInclude Include="HelioEnergy\EnergyCalcPipeline.h" />
+    <ClInclude Include="HelioEnergy\EnergyCalculator.h" />
     <ClInclude Include="HelioEnergy\ReceiverEnergyCalc\CylinderReceiverFluxIntegral\CylinderRecvFluxIntegral.cuh" />
     <ClInclude Include="HelioEnergy\ReceiverEnergyCalc\RectangleReceiverFluxIntegral\RectRecvFluxIntegral.cuh" />
     <ClInclude Include="HelioEnergy\ReceiverEnergyCalc\RecvEnergyCalc.cuh" />
-    <ClInclude Include="RayCastingArgument\HeliostatDeviceArgument\HeliostatDeviceArgument.h" />
-    <ClInclude Include="RayCastingArgument\ReceiverDeviceArgument\CylinderReceiverDeviceArgument.h" />
-    <ClInclude Include="RayCastingArgument\ReceiverDeviceArgument\ReceiverDeviceArgument.h" />
-    <ClInclude Include="sdbkCalculator\sdbkCalculator.h" />
+    <ClInclude Include="PolygonCenterCalculator\PolygonCenterCalculator.h" />
+    <ClInclude Include="ShadowBlockCalculator\ShadowBlockCalculator.h" />
     <ClInclude Include="SigmaFitting\SigmaFitting.h" />
-    <ClInclude Include="TestHandler\TestHandler.h" />
+    <ClInclude Include="Tool\ArgumentParser\ArgumentParser.h" />
+    <ClInclude Include="Tool\Clipper\clipper.hpp" />
+    <ClInclude Include="Tool\SPA\SPA.h" />
+    <ClInclude Include="Tool\Timer\Timer.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="CalcPolygonCenter\CalcPolygonCenter.cpp" />
-    <ClCompile Include="DataStructure\Clipper\clipper.cpp" />
     <ClCompile Include="DataStructure\Heliostat.cpp" />
     <ClCompile Include="DataStructure\Layout.cpp" />
     <ClCompile Include="DataStructure\Receiver.cpp" />
     <ClCompile Include="DataStructure\SolarScene.cpp" />
-    <ClCompile Include="DataStructure\SPA.cpp" />
     <ClCompile Include="DataStructure\SunRay.cpp" />
-    <ClCompile Include="DataStructure\Timer.cpp" />
-    <ClCompile Include="DiscreteRayCaster\DiscreteRayCaster.cpp" />
+    <ClCompile Include="DeviceArgument\HeliostatDeviceArgument\HeliostatDeviceArgument.cpp" />
+    <ClCompile Include="DeviceArgument\ReceiverDeviceArgument\CylinderReceiverDeviceArgument.cpp" />
+    <ClCompile Include="DeviceArgument\ReceiverDeviceArgument\ReceiverDeviceArgument.cpp" />
+    <ClCompile Include="DifferentialEvolution\DifferentialEvolution.cpp" />
+    <ClCompile Include="FieldOptimismPipeline\FieldOptimismPipeline.cpp" />
     <ClCompile Include="GaussLegendre\GaussLegendre.cpp" />
-    <ClCompile Include="GridDDA\GridDDA_cpu.cpp" />
+    <ClCompile Include="GridDDA\GridDDA.cpp" />
     <ClCompile Include="HelioEnergy\EnergyCalcPipeline.cpp" />
+    <ClCompile Include="HelioEnergy\EnergyCalculator.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="RayCastingArgument\HeliostatDeviceArgument\HeliostatDeviceArgument.cpp" />
-    <ClCompile Include="RayCastingArgument\ReceiverDeviceArgument\CylinderReceiverDeviceArgument.cpp" />
-    <ClCompile Include="RayCastingArgument\ReceiverDeviceArgument\ReceiverDeviceArgument.cpp" />
-    <ClCompile Include="sdbkCalculator\sdbkCalculator.cpp" />
+    <ClCompile Include="PolygonCenterCalculator\PolygonCenterCalculator.cpp" />
+    <ClCompile Include="ShadowBlockCalculator\ShadowBlockCalculator.cpp" />
     <ClCompile Include="SigmaFitting\SigmaFitting.cpp" />
-    <ClCompile Include="TestHandler\TestHandler.cpp" />
+    <ClCompile Include="Tool\ArgumentParser\ArgumentParser.cpp" />
+    <ClCompile Include="Tool\Clipper\clipper.cpp" />
+    <ClCompile Include="Tool\SPA\SPA.cpp" />
+    <ClCompile Include="Tool\Timer\Timer.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

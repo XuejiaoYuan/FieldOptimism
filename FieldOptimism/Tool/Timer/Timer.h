@@ -1,5 +1,5 @@
 #pragma once
-#include "../Common/CommonFunc.h"
+#include "../../Common/CommonFunc.h"
 
 class Timer {
 public:

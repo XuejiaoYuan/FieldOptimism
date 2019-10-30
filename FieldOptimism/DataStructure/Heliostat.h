@@ -8,54 +8,25 @@
 
 #include "../DataStructure/Receiver.h"
 
+
 typedef enum {
 	RectangularHelioType, ParaboloidHelioType, SubHelioType
 }HelioType;
 
-class SubHelio;
+typedef enum {
+	HFLCAL, Gracia, iHFLCAL, bHFLCAL
+}ModelType;
+
 class Receiver;
 
 class Heliostat {
 public:
-	Heliostat(const HelioType& _type){}
-	Heliostat(const HelioType&_type, const Vector2d& _gap, const Vector2i& _matrix, const Vector3d& _size, 
-		const int _index, const Vector3d& _pos, const Vector3d& _poly_pos = Vector3d(0,0,0)) {
-		helio_type = _type;
-		helio_matrix = _matrix;
-		helio_gap = _gap;
-		helio_pos = _pos;
-		helio_size = _size;
-		helio_normal = Vector3d(0, 0, 0);
-		sd_bk = 0;
-		rou = HELIOSTAT_REFLECTIVITY;
-		sigma = 1.31;
-		helio_index = _index;
-		//calcLsfParam();
-	};
-	~Heliostat() {
-		for (auto&sub : subhelios) {
-			delete sub;
-			sub = nullptr;
-		}
-		vertex.clear();
-		subhelios.clear();
-	}
-	void initHeliostat(stringstream& line_stream, fstream& inFile, LayoutType layout_type, const Vector2d& helio_gap,
-		const Vector2i& helio_matrix, const vector<Vector3d>& focus_center, const Vector3d& sunray_dir = Vector3d(0, 0, 0));
+	Heliostat(const HelioType& _type) :helio_type(_type), helio_normal(Vector3d(0, 0, 0)), sd_bk(0), sigma(0) {};
+	void initHelio(json& config);
 	void initFluxParam(const vector<Receiver*>& recvs);
-	void getSubHelioVertex(vector<Vector3d>& subhelio_vertex);
-	void initializeSubHelio(const Vector3d&focus_center, const Vector3d&sunray_dir);
-	bool initSurfaceNormal(const vector<Vector3d>& focus_center, const Vector3d& sunray_dir);   // Calculate the normal of heliostat surface
-	void changeSurfaceNormal(const Vector3d& sunray_dir, bool calcLWRatio, bool calcSimga);
-	void changeSubHelio(const Vector3d& focus_center, const Vector3d& sunray_dir);
-	double calcSunHelioAngle(const Vector3d& sunray_dir);
-	vector<double> set_focus_center_index(const vector<Receiver*>& recvs);
-	void calcFluxParam(const Vector3d& focus_center, bool calcLWRatio, bool calcSigma);
-	void calcLsfParam();
-	double calcSigma();
+	void changeSurfaceNormal(const Vector3d& sunray_dir, const ModelType& type, const bool& calc_sigma);
 
 	vector<Vector3d> vertex;		//Heliostat's vertex
-	vector<SubHelio*> subhelios;
 	HelioType helio_type;			//Heliostat's type
 	Vector3d helio_pos;           //The position of the heliostat's center
 	Vector3d helio_poly_pos;		//The poly postion of the heliostat's center
@@ -68,68 +39,32 @@ public:
 	Matrix4d local2worldM;		//Heliostat's transform matrixs
 	Matrix4d world2localM;
 	double sd_bk;				// Heliostat's shadow and block ratio
-	double flux_sum;				// flux_sum = 0.5 * S * cos_w * rou * mAA * l_w_ration / pi
-	double total_e;				// (1-sdbk)*flux_sum
-	bool fluxCalc = false;
 	double mAA;					// Heliostat's atomospheric attenuation factor
 	double cos_w;				// Heliostat's incidence cosine efficiency
 	vector<double> cos_phi;		// Receiver cosine efficiencies
 	double S;					// Heliostat's surface area
-	double rou;					// Heliostat's reflectivity
 	double l_w_ratio;			// Heliostat's projection length and width on image plane
 	double sigma;				// Heliostat's sigma
-	vector<double> sigma_list;	// dis, sigma_sun, sigma_bq, sigma_ast, sigma_t, cos_rev
 	double flux_param;			// flux_param = 0.5 * S * cos_w * rou * l_w_ration * mAA / pi
-	MatrixXd lsf_param_M, lsf_param_v;			// 用于计算LSF曲面的参数
 	float3 centerBias;			// 由于阴影遮挡导致的重心偏移位置
 	double rotate_theta;			// 定日镜投影到image plane产生的轴旋转角度
 	Vector3d focus_center;			// 定日镜在接收器平面聚焦中心
 
 protected:
-	bool initialized;
-	//void calc_flux_param(const Vector3d& focus_center);
+	vector<double> sigma_list;	// dis, sigma_sun, sigma_bq, sigma_ast, sigma_t, cos_rev
+
 	void setHelioVertex();
+	vector<double> setFocusCenterIndex(const vector<Receiver*>& recvs);
+	void calcFluxParam(const ModelType& type, const bool& calc_sigma);
+	double calcSigma();
+
 };
 
-//class RectangularHelio :public Heliostat {
-//public:
-//	RectangularHelio() :Heliostat(RectangularHelioType) {};
-//	bool initSurfaceNormal(const Vector3d& focus_center, const Vector3d& sunray_dir);
-//
-//private:
-//
-//};
-//
-//class ParaboloidHelio :public Heliostat {
-//public:
-//	ParaboloidHelio() :Heliostat(ParaboloidHelioType) {};
-//	bool initSurfaceNormal(const Vector3d& focus_center, const Vector3d& sunray_dir) { return true; }
-//
-//};
-
-class SubHelio :public Heliostat {
+class HeliostatCreator {
 public:
-	SubHelio() :Heliostat(SubHelioType) {}
-	void setVertex(const Heliostat* root_helio, const vector<Vector3d>& root_dir,
-		const int sub_index, const Vector3d&focus_center, const Vector3d&sunray_dir, const bool init = false);
-
-private:
+	static Heliostat* getHeliostat(const HelioType& type) {
+		return new Heliostat(type);
+	}
 };
-
-//class HeliostatCreator {
-//public:
-//	Heliostat* getHeliostat(const HelioType&helio_type) {
-//		switch (helio_type) {
-//		case RectangularHelioType:
-//			return new RectangularHelio();
-//		case ParaboloidHelioType:
-//			return new ParaboloidHelio();
-//		case SubHelioType:
-//			return new SubHelio();
-//		default:
-//			return nullptr;
-//		}
-//	}
-//};
 
 #endif //HELIOSHADOW_HELIOSTAT_H

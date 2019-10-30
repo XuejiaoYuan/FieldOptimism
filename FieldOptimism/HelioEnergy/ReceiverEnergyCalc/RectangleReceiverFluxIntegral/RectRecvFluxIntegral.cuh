@@ -1,6 +1,6 @@
 #include "../../../Common/CommonFunc.h"
-#include "../../../RayCastingArgument/ReceiverDeviceArgument/ReceiverDeviceArgument.h"
-#include "../../../RayCastingArgument/HeliostatDeviceArgument/HeliostatDeviceArgument.h"
+#include "../../../DeviceArgument/ReceiverDeviceArgument/ReceiverDeviceArgument.h"
+#include "../../../DeviceArgument/HeliostatDeviceArgument/HeliostatDeviceArgument.h"
 #include "../../../GaussLegendre/GaussLegendre.cuh"
 
 __global__ void calcRectRecvFluxSum(IntegralHelioDeviceArgumet h_args, ReceiverDeviceArgument r_args, GaussLegendre gl, float* d_total_energy, const int m, const int n);

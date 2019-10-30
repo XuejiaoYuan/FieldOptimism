@@ -1,9 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <CudaCompile Include="DiscreteRayCaster\RayCasterCore.cu">
-      <Filter>DiscreteRayCaster</Filter>
-    </CudaCompile>
     <CudaCompile Include="GaussLegendre\GaussLegendre.cu">
       <Filter>GaussLegendre</Filter>
     </CudaCompile>
@@ -27,38 +24,14 @@
     <Filter Include="GaussLegendre">
       <UniqueIdentifier>{998796af-076f-4e79-9853-62d635f8ead2}</UniqueIdentifier>
     </Filter>
-    <Filter Include="SdBkCalculator">
-      <UniqueIdentifier>{acbaae4e-6b46-4b72-99f4-7641e91dd241}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="DataStructure\Clipper">
-      <UniqueIdentifier>{7db42207-2033-4467-b99f-5c5bf7a16525}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="DiscreteRayCaster">
-      <UniqueIdentifier>{07ebda66-1407-4c1d-921d-8e742026db65}</UniqueIdentifier>
-    </Filter>
     <Filter Include="GridDDA">
       <UniqueIdentifier>{0d0db5ad-7a3e-4a91-9b24-124fa518c313}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="RayCastingArgument">
-      <UniqueIdentifier>{64643333-159f-4579-b6b4-a73bc94d94fc}</UniqueIdentifier>
     </Filter>
     <Filter Include="HelioEnergy">
       <UniqueIdentifier>{d22e7846-3625-4cbf-b51f-50f182dbe922}</UniqueIdentifier>
     </Filter>
-    <Filter Include="TestHandler">
-      <UniqueIdentifier>{cbcabe50-597c-4e9b-87df-732555671a79}</UniqueIdentifier>
-    </Filter>
     <Filter Include="SigmaFitting">
       <UniqueIdentifier>{9451a4da-0cf0-48b8-992c-008760fcc696}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="CalcPolygonCenter">
-      <UniqueIdentifier>{14731b65-cad4-46c8-a7ed-d6471df88f55}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="RayCastingArgument\ReceiverDeviceArgument">
-      <UniqueIdentifier>{5b8ce237-c669-46ee-b19c-e3479d64e2e4}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="RayCastingArgument\HeliostatDeviceArgument">
-      <UniqueIdentifier>{de27aefd-90d5-4390-80a3-f9674500b4a8}</UniqueIdentifier>
     </Filter>
     <Filter Include="HelioEnergy\ReceiverEnergyCalc">
       <UniqueIdentifier>{8b4dd180-f09c-4de1-be8d-958ceb4c3a73}</UniqueIdentifier>
@@ -69,14 +42,44 @@
     <Filter Include="HelioEnergy\ReceiverEnergyCalc\RectangleReceiverFluxIntegral">
       <UniqueIdentifier>{545907a9-443e-4b59-88a1-c104f9c53d5a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="FieldOptimismPipeline">
+      <UniqueIdentifier>{169e6c16-eaf3-432d-ad54-c1a6374b4698}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tool">
+      <UniqueIdentifier>{50765a36-c84f-4ea0-906d-84f9a46bdd16}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DifferentialEvolution">
+      <UniqueIdentifier>{2e02a662-6aef-42a9-93e0-c038bd5efe8c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tool\ArgumentParser">
+      <UniqueIdentifier>{4864a326-f466-47ec-acb2-6619668de98a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tool\Timer">
+      <UniqueIdentifier>{9a9ea766-3a8a-4545-8646-bcc39dda886a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DeviceArgument">
+      <UniqueIdentifier>{64643333-159f-4579-b6b4-a73bc94d94fc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DeviceArgument\ReceiverDeviceArgument">
+      <UniqueIdentifier>{5b8ce237-c669-46ee-b19c-e3479d64e2e4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DeviceArgument\HeliostatDeviceArgument">
+      <UniqueIdentifier>{de27aefd-90d5-4390-80a3-f9674500b4a8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="PolygonCenterCalculator">
+      <UniqueIdentifier>{14731b65-cad4-46c8-a7ed-d6471df88f55}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ShadowBlockCalculator">
+      <UniqueIdentifier>{acbaae4e-6b46-4b72-99f4-7641e91dd241}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tool\SPA">
+      <UniqueIdentifier>{5d9a4324-f458-4744-896a-eaf6f11e7ebd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tool\Clipper">
+      <UniqueIdentifier>{e963bffa-b78c-45c8-a78b-cc4d84e6a790}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="DataStructure\Clipper\clipper.hpp">
-      <Filter>DataStructure\Clipper</Filter>
-    </ClInclude>
-    <ClInclude Include="DataStructure\Timer.h">
-      <Filter>DataStructure</Filter>
-    </ClInclude>
     <ClInclude Include="Common\CommonFunc.h">
       <Filter>Common</Filter>
     </ClInclude>
@@ -92,17 +95,8 @@
     <ClInclude Include="DataStructure\SolarScene.h">
       <Filter>DataStructure</Filter>
     </ClInclude>
-    <ClInclude Include="DataStructure\SPA.h">
-      <Filter>DataStructure</Filter>
-    </ClInclude>
     <ClInclude Include="DataStructure\SunRay.h">
       <Filter>DataStructure</Filter>
-    </ClInclude>
-    <ClInclude Include="sdbkCalculator\sdbkCalculator.h">
-      <Filter>SdBkCalculator</Filter>
-    </ClInclude>
-    <ClInclude Include="DiscreteRayCaster\DiscreteRayCaster.h">
-      <Filter>DiscreteRayCaster</Filter>
     </ClInclude>
     <ClInclude Include="GridDDA\GridDDA.h">
       <Filter>GridDDA</Filter>
@@ -113,35 +107,14 @@
     <ClInclude Include="Common\vector_arithmetic.cuh">
       <Filter>Common</Filter>
     </ClInclude>
-    <ClInclude Include="DiscreteRayCaster\RayCasterCore.cuh">
-      <Filter>DiscreteRayCaster</Filter>
-    </ClInclude>
     <ClInclude Include="GaussLegendre\GaussLegendre.cuh">
       <Filter>GaussLegendre</Filter>
     </ClInclude>
     <ClInclude Include="GaussLegendre\GaussLegendre.h">
       <Filter>GaussLegendre</Filter>
     </ClInclude>
-    <ClInclude Include="TestHandler\TestHandler.h">
-      <Filter>TestHandler</Filter>
-    </ClInclude>
     <ClInclude Include="SigmaFitting\SigmaFitting.h">
       <Filter>SigmaFitting</Filter>
-    </ClInclude>
-    <ClInclude Include="CalcPolygonCenter\CalcPolygonCenter.h">
-      <Filter>CalcPolygonCenter</Filter>
-    </ClInclude>
-    <ClInclude Include="RayCastingArgument\HeliostatDeviceArgument\HeliostatDeviceArgument.h">
-      <Filter>RayCastingArgument\HeliostatDeviceArgument</Filter>
-    </ClInclude>
-    <ClInclude Include="RayCastingArgument\ReceiverDeviceArgument\ReceiverDeviceArgument.h">
-      <Filter>RayCastingArgument\ReceiverDeviceArgument</Filter>
-    </ClInclude>
-    <ClInclude Include="RayCastingArgument\ReceiverDeviceArgument\CylinderReceiverDeviceArgument.h">
-      <Filter>RayCastingArgument\ReceiverDeviceArgument</Filter>
-    </ClInclude>
-    <ClInclude Include="HelioEnergy\EnergyCalcPipeline.h">
-      <Filter>HelioEnergy</Filter>
     </ClInclude>
     <ClInclude Include="HelioEnergy\ReceiverEnergyCalc\RecvEnergyCalc.cuh">
       <Filter>HelioEnergy\ReceiverEnergyCalc</Filter>
@@ -152,14 +125,47 @@
     <ClInclude Include="HelioEnergy\ReceiverEnergyCalc\CylinderReceiverFluxIntegral\CylinderRecvFluxIntegral.cuh">
       <Filter>HelioEnergy\ReceiverEnergyCalc\CylinderReceiverFluxIntegral</Filter>
     </ClInclude>
+    <ClInclude Include="FieldOptimismPipeline\FieldOptimismPipeline.h">
+      <Filter>FieldOptimismPipeline</Filter>
+    </ClInclude>
+    <ClInclude Include="HelioEnergy\EnergyCalculator.h">
+      <Filter>HelioEnergy</Filter>
+    </ClInclude>
+    <ClInclude Include="HelioEnergy\EnergyCalcPipeline.h">
+      <Filter>HelioEnergy</Filter>
+    </ClInclude>
+    <ClInclude Include="DifferentialEvolution\DifferentialEvolution.h">
+      <Filter>DifferentialEvolution</Filter>
+    </ClInclude>
+    <ClInclude Include="Tool\ArgumentParser\ArgumentParser.h">
+      <Filter>Tool\ArgumentParser</Filter>
+    </ClInclude>
+    <ClInclude Include="Tool\Timer\Timer.h">
+      <Filter>Tool\Timer</Filter>
+    </ClInclude>
+    <ClInclude Include="DeviceArgument\HeliostatDeviceArgument\HeliostatDeviceArgument.h">
+      <Filter>DeviceArgument\HeliostatDeviceArgument</Filter>
+    </ClInclude>
+    <ClInclude Include="PolygonCenterCalculator\PolygonCenterCalculator.h">
+      <Filter>PolygonCenterCalculator</Filter>
+    </ClInclude>
+    <ClInclude Include="ShadowBlockCalculator\ShadowBlockCalculator.h">
+      <Filter>ShadowBlockCalculator</Filter>
+    </ClInclude>
+    <ClInclude Include="DeviceArgument\ReceiverDeviceArgument\CylinderReceiverDeviceArgument.h">
+      <Filter>DeviceArgument\ReceiverDeviceArgument</Filter>
+    </ClInclude>
+    <ClInclude Include="DeviceArgument\ReceiverDeviceArgument\ReceiverDeviceArgument.h">
+      <Filter>DeviceArgument\ReceiverDeviceArgument</Filter>
+    </ClInclude>
+    <ClInclude Include="Tool\SPA\SPA.h">
+      <Filter>Tool\SPA</Filter>
+    </ClInclude>
+    <ClInclude Include="Tool\Clipper\clipper.hpp">
+      <Filter>Tool\Clipper</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="DataStructure\Clipper\clipper.cpp">
-      <Filter>DataStructure\Clipper</Filter>
-    </ClCompile>
-    <ClCompile Include="DataStructure\Timer.cpp">
-      <Filter>DataStructure</Filter>
-    </ClCompile>
     <ClCompile Include="DataStructure\Heliostat.cpp">
       <Filter>DataStructure</Filter>
     </ClCompile>
@@ -172,45 +178,57 @@
     <ClCompile Include="DataStructure\SolarScene.cpp">
       <Filter>DataStructure</Filter>
     </ClCompile>
-    <ClCompile Include="DataStructure\SPA.cpp">
-      <Filter>DataStructure</Filter>
-    </ClCompile>
     <ClCompile Include="DataStructure\SunRay.cpp">
       <Filter>DataStructure</Filter>
     </ClCompile>
-    <ClCompile Include="sdbkCalculator\sdbkCalculator.cpp">
-      <Filter>SdBkCalculator</Filter>
-    </ClCompile>
-    <ClCompile Include="DiscreteRayCaster\DiscreteRayCaster.cpp">
-      <Filter>DiscreteRayCaster</Filter>
-    </ClCompile>
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="GridDDA\GridDDA_cpu.cpp">
-      <Filter>GridDDA</Filter>
-    </ClCompile>
     <ClCompile Include="GaussLegendre\GaussLegendre.cpp">
       <Filter>GaussLegendre</Filter>
-    </ClCompile>
-    <ClCompile Include="TestHandler\TestHandler.cpp">
-      <Filter>TestHandler</Filter>
     </ClCompile>
     <ClCompile Include="SigmaFitting\SigmaFitting.cpp">
       <Filter>SigmaFitting</Filter>
     </ClCompile>
-    <ClCompile Include="CalcPolygonCenter\CalcPolygonCenter.cpp">
-      <Filter>CalcPolygonCenter</Filter>
+    <ClCompile Include="FieldOptimismPipeline\FieldOptimismPipeline.cpp">
+      <Filter>FieldOptimismPipeline</Filter>
     </ClCompile>
-    <ClCompile Include="RayCastingArgument\HeliostatDeviceArgument\HeliostatDeviceArgument.cpp">
-      <Filter>RayCastingArgument\HeliostatDeviceArgument</Filter>
-    </ClCompile>
-    <ClCompile Include="RayCastingArgument\ReceiverDeviceArgument\ReceiverDeviceArgument.cpp">
-      <Filter>RayCastingArgument\ReceiverDeviceArgument</Filter>
-    </ClCompile>
-    <ClCompile Include="RayCastingArgument\ReceiverDeviceArgument\CylinderReceiverDeviceArgument.cpp">
-      <Filter>RayCastingArgument\ReceiverDeviceArgument</Filter>
+    <ClCompile Include="HelioEnergy\EnergyCalculator.cpp">
+      <Filter>HelioEnergy</Filter>
     </ClCompile>
     <ClCompile Include="HelioEnergy\EnergyCalcPipeline.cpp">
       <Filter>HelioEnergy</Filter>
+    </ClCompile>
+    <ClCompile Include="DifferentialEvolution\DifferentialEvolution.cpp">
+      <Filter>DifferentialEvolution</Filter>
+    </ClCompile>
+    <ClCompile Include="GridDDA\GridDDA.cpp">
+      <Filter>GridDDA</Filter>
+    </ClCompile>
+    <ClCompile Include="Tool\ArgumentParser\ArgumentParser.cpp">
+      <Filter>Tool\ArgumentParser</Filter>
+    </ClCompile>
+    <ClCompile Include="Tool\Timer\Timer.cpp">
+      <Filter>Tool\Timer</Filter>
+    </ClCompile>
+    <ClCompile Include="DeviceArgument\HeliostatDeviceArgument\HeliostatDeviceArgument.cpp">
+      <Filter>DeviceArgument\HeliostatDeviceArgument</Filter>
+    </ClCompile>
+    <ClCompile Include="PolygonCenterCalculator\PolygonCenterCalculator.cpp">
+      <Filter>PolygonCenterCalculator</Filter>
+    </ClCompile>
+    <ClCompile Include="ShadowBlockCalculator\ShadowBlockCalculator.cpp">
+      <Filter>ShadowBlockCalculator</Filter>
+    </ClCompile>
+    <ClCompile Include="DeviceArgument\ReceiverDeviceArgument\CylinderReceiverDeviceArgument.cpp">
+      <Filter>DeviceArgument\ReceiverDeviceArgument</Filter>
+    </ClCompile>
+    <ClCompile Include="DeviceArgument\ReceiverDeviceArgument\ReceiverDeviceArgument.cpp">
+      <Filter>DeviceArgument\ReceiverDeviceArgument</Filter>
+    </ClCompile>
+    <ClCompile Include="Tool\SPA\SPA.cpp">
+      <Filter>Tool\SPA</Filter>
+    </ClCompile>
+    <ClCompile Include="Tool\Clipper\clipper.cpp">
+      <Filter>Tool\Clipper</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

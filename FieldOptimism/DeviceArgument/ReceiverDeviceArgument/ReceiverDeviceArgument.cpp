@@ -5,9 +5,9 @@ void ReceiverDeviceArgument::setRecvDeviceArguments(Receiver& recv, vector<Helio
 	vector<vector<Vector3d>> recv_vertex;
 	vector<Vector3d> recv_normal_list, focus_center;
 
-	recv_vertex = recv.get_recv_vertex();
-	recv_normal_list = recv.get_normal_list();
-	focus_center = recv.get_focus_center();
+	recv_vertex = recv.getRecvVertex();
+	recv_normal_list = recv.getNormalList();
+	focus_center = recv.getFocusCenter();
 	numberOfReceivers = recv_vertex.size();
 
 	cudaMalloc((void**)&d_recv_vertexes, sizeof(float3) * 4 * numberOfReceivers);

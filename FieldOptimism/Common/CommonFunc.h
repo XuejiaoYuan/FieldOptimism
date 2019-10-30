@@ -16,19 +16,21 @@ using namespace std;
 
 #include "../3rdparty/Eigen/Core"
 #include "../3rdparty/Eigen/LU"
-//#include "../3rdparty/Eigen/Geometry"
 #include "../3rdparty/Eigen/src/Geometry/OrthoMethods.h"
 using namespace Eigen;
 
-//#include "cuda_runtime.h"
 #include "../Common/vector_arithmetic.cuh"
 #include <device_launch_parameters.h>
 #include <device_atomic_functions.h>
 #include <vector_types.h>
 
+#include <jsoncons\json.hpp>
+using namespace jsoncons;
+
+
 
 #define Epsilon		1e-6
-#define VERTEXSCALE 100000
+#define VERTEXSCALE 1000000000
 #define PI acos(double(-1))
 #define HELIOSTAT_REFLECTIVITY 0.88 
 #define RECEIVER_SLICE 0.05		// *ATTENTION*: w与l应被RECEIVER_SLICE整除
@@ -48,27 +50,9 @@ using namespace Eigen;
 //#define DEBUG
 //#define OUTPUTRES
 //#define READFILE
-#define CLIPPER
+//#define CLIPPER
 //#define CALC_TIME
-
-
-typedef enum {
-	Initial, GroundMode, ReceiverMode, LayoutMode, HeliostatMode
-}InputMode;
 
 typedef enum {
 	RectLayoutType, CrossRectLayoutType, FermatLayoutType, RadialLayoutType
 }LayoutType;
-
-typedef enum {
-	TestMode, FastMode
-}CalcMode;
-
-enum FieldUpdateMode
-{
-	SunUpdateMode, HelioUpdateMode
-};
-
-typedef enum {
-	HelioEnergyMode, TotalEnergyMode
-}EnergyResMode;

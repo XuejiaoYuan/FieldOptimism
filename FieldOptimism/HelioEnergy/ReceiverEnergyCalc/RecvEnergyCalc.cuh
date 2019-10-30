@@ -2,9 +2,9 @@
 #include "../../DataStructure/SolarScene.h"
 #include "../../DataStructure/Receiver.h"
 #include "../../GaussLegendre/GaussLegendre.cuh"
-#include "../../RayCastingArgument/HeliostatDeviceArgument/HeliostatDeviceArgument.h"
-#include "../../RayCastingArgument/ReceiverDeviceArgument/ReceiverDeviceArgument.h"
-#include "../../RayCastingArgument/ReceiverDeviceArgument/CylinderReceiverDeviceArgument.h"
+#include "../../DeviceArgument/HeliostatDeviceArgument/HeliostatDeviceArgument.h"
+#include "../../DeviceArgument/ReceiverDeviceArgument/ReceiverDeviceArgument.h"
+#include "../../DeviceArgument/ReceiverDeviceArgument/CylinderReceiverDeviceArgument.h"
 #include "RectangleReceiverFluxIntegral/RectRecvFluxIntegral.cuh"
 #include "CylinderReceiverFluxIntegral/CylinderRecvFluxIntegral.cuh"
 

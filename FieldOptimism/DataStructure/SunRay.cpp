@@ -3,7 +3,6 @@
 //
 
 #include "SunRay.h"
-#include "SPA.h"
 
 Vector3d SunRay::calcSunRay(const string &spa_data_file) {
     fstream inFile(spa_data_file);
@@ -147,8 +146,8 @@ double SunRay::calcDNI(const vector<int>& time_param)
 	double c = 0.2711 + 0.01858 * (2.5 - ALT) * (2.5 - ALT);
 
 	double fair = this->current_altitude * PI / 180.0;
-	double DNI = 1000 * E0 * (a + b * exp(-c / sin(fair)));
-	// double DNI = E0 * (a + b * exp(-c / sin(fair)));  // 为减小数量级修改了计算式
+	double DNI = 1000 * E0 * (a + b * exp(-c / sin(fair)));		// W/m^2
+	 //double DNI = E0 * (a + b * exp(-c / sin(fair)));  // 为减小数量级修改了计算式
 	this->current_DNI = DNI;
 	return DNI;
 }

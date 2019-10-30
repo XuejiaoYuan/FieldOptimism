@@ -1,6 +1,6 @@
 #include "../../../Common/CommonFunc.h"
-#include "../../../RayCastingArgument/ReceiverDeviceArgument/ReceiverDeviceArgument.h"
-#include "../../../RayCastingArgument/HeliostatDeviceArgument/HeliostatDeviceArgument.h"
+#include "../../../DeviceArgument/ReceiverDeviceArgument/ReceiverDeviceArgument.h"
+#include "../../../DeviceArgument/HeliostatDeviceArgument/HeliostatDeviceArgument.h"
 #include "../../../GaussLegendre/GaussLegendre.cuh"
 #include "../RectangleReceiverFluxIntegral/RectRecvFluxIntegral.cuh"
 

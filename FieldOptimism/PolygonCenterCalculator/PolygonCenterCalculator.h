@@ -1,6 +1,6 @@
 #pragma once
 #include "../Common/CommonFunc.h"
-#include "../DataStructure/Clipper/clipper.hpp"
+#include "../Tool/Clipper/clipper.hpp"
 using namespace ClipperLib;
 
 class PolygonCenterCalculator {

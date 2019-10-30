@@ -6,9 +6,9 @@
 #define HELIOSHADOW_SUNRAY_H
 
 #include "../Common/CommonFunc.h"
-#include "SPA.h"
 
-//using namespace std;
+#include "../Tool/SPA/SPA.h"
+
 
 class SunRay {
 public:
@@ -20,6 +20,7 @@ public:
 	double calcDNI(const vector<int>& time_param);
 	double current_altitude, current_azimuth;
 	double current_DNI;
+
 private:
 	int calcDay(const vector<int>& time_param);
 	spa_data spa;
