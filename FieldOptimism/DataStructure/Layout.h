@@ -20,20 +20,20 @@ class Layout {
 public:
     Layout(const LayoutType&_layout_type){
         layout_type = _layout_type;
-		helio_interval = Vector3d(0, 0, 0);
-		layout_bound_pos = Vector3d(0, 0, 0);
-        layout_size = Vector3d(0, 0, 0);
+		helio_interval = Vector2d(0, 0);
+		layout_bound_pos = Vector2d(0, 0);
+        layout_size = Vector2d(0, 0);
 		layout_row_col = Vector2i(0, 0);
     }
 	virtual void createHelioAndLayout(ArgumentParser& argumentParser, json& field_args, vector<Heliostat*>& helios);
 	void storeHelioToLayout(vector<Heliostat*>& helios);
 
-	Vector3d helio_interval;					//Interval between heliostat's center
+	Vector2d helio_interval;					//Interval between heliostat's center
     int real_helio_num;								//The real number of heliostat in the field.(Optimization result)
     LayoutType layout_type;						//Heliostat field's layout type
-	Vector3d layout_bound_pos;					// The bounding box of layout
-	Vector3d layout_first_helio_center;			// The first heliostat center's position in the field
-	Vector3d layout_size;						//Size of the layout, length/thickness/width
+	Vector2d layout_bound_pos;					// The bounding box of layout
+	Vector2d layout_first_helio_center;			// The first heliostat center's position in the field
+	Vector2d layout_size;						//Size of the layout, length/thickness/width
 	Vector2i layout_row_col;					//The rows and cols of the layout
 	vector<vector<vector<Heliostat*>>> helio_layout;				//List the index of heliostats in the field
 
@@ -67,8 +67,9 @@ public:
 	vector<double> helio_gap;
 
 private:
-	void setCircleHelios(Heliostat& helio_temp, const double R, const double gap, const int rows, const double angle_delta, vector<Heliostat*>& helios, const vector<Receiver*>& recvs);
-	void calcCircleParams(vector<double>& recv_dis, vector<int>& n_rows, vector<double>& angle_delta, json& field_args, double dm);
+	void setCircleHelios(Heliostat& h_tmp, const int idx, vector<double>& recv_dis, vector<int>& rows, const double gap,
+		const int col, vector<Heliostat*>& helios, const vector<Receiver*>& recvs);
+	void calcCircleParams(vector<double>& recv_dis, vector<int>& n_rows, vector<int>& n_cols, json& field_args, double dm);
 };
 
 class RadialLayout:public Layout{

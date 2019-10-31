@@ -1,2 +1,127 @@
-﻿  FieldOptimism.vcxproj -> E:\xjYuan\003 ZJU\002 Solar\004 Codes\190326_Solar\FieldOptimism\x64\Debug\FieldOptimism.exe
+﻿  Compiling CUDA source file EnergyCalculatePipeline\ReceiverEnergyCalculator\ReceiverEnergyCalculator.cu...
+  
+  E:\xjYuan\003 ZJU\002 Solar\004 Codes\190326_Solar\FieldOptimism\FieldOptimism>"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v10.1\bin\nvcc.exe" -gencode=arch=compute_35,code=\"sm_35,compute_35\" --use-local-env -ccbin "D:\Visual Studio\VC\bin\x86_amd64" -x cu -rdc=true -I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v10.1\include" -I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v10.1\include"  -G   --keep-dir x64\Debug -maxrregcount=0  --machine 64 --compile -cudart static --expt-relaxed-constexpr -g   -DWIN32 -DWIN64 -D_DEBUG -D_CONSOLE -D_MBCS -Xcompiler "/EHsc /W3 /nologo /Od /Fdx64\Debug\vc140.pdb /FS /Zi /RTC1 /MDd " -o x64\Debug\ReceiverEnergyCalculator.cu.obj "E:\xjYuan\003 ZJU\002 Solar\004 Codes\190326_Solar\FieldOptimism\FieldOptimism\EnergyCalculatePipeline\ReceiverEnergyCalculator\ReceiverEnergyCalculator.cu" 
+c:\program files\nvidia gpu computing toolkit\cuda\v10.1\include\crt\math_functions.h : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+c:\program files\nvidia gpu computing toolkit\cuda\v10.1\include\crt\math_functions.h(825): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+c:\program files\nvidia gpu computing toolkit\cuda\v10.1\include\crt\math_functions.h(1760): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+c:\program files\nvidia gpu computing toolkit\cuda\v10.1\include\crt\math_functions.h(2622): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+c:\program files\nvidia gpu computing toolkit\cuda\v10.1\include\crt\math_functions.h(3461): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+c:\program files\nvidia gpu computing toolkit\cuda\v10.1\include\crt\math_functions.h(4404): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+c:\program files\nvidia gpu computing toolkit\cuda\v10.1\include\crt\math_functions.h(5302): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+c:\program files\nvidia gpu computing toolkit\cuda\v10.1\include\crt\math_functions.h(6213): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+c:\program files\nvidia gpu computing toolkit\cuda\v10.1\include\crt\math_functions.h(7094): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+c:\program files\nvidia gpu computing toolkit\cuda\v10.1\include\crt\math_functions.h(7893): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+c:\program files\nvidia gpu computing toolkit\cuda\v10.1\include\crt/device_functions.h : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+c:\program files\nvidia gpu computing toolkit\cuda\v10.1\include\crt/device_functions.h(774): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+c:\program files\nvidia gpu computing toolkit\cuda\v10.1\include\crt/device_functions.h(1629): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+c:\program files\nvidia gpu computing toolkit\cuda\v10.1\include\crt\device_double_functions.h : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+c:\program files\nvidia gpu computing toolkit\cuda\v10.1\include\sm_20_intrinsics.h : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+c:\program files\nvidia gpu computing toolkit\cuda\v10.1\include\sm_20_intrinsics.h(926): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v10.1\include\cuda_fp16.h : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\3rdparty\eigen\src/Core/arch/CUDA/Half.h(302): warning : calling a __host__ function from a __host__ __device__ function is not allowed
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\3rdparty\eigen\src/Core/arch/CUDA/Half.h(305): warning : calling a __host__ function from a __host__ __device__ function is not allowed
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\3rdparty\eigen\src/Core/products/Parallelizer.h(20): warning : variable "m_maxThreads" was set but never used
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\3rdparty\eigen\src/Core/ArrayWrapper.h(94): warning : __declspec attributes ignored
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\../Common/global_function.cuh(28): warning : invalid narrowing conversion from "int" to "double"
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\../DataStructure/Receiver.h(43): warning : initial value of reference to non-const must be an lvalue
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\../DataStructure/Receiver.h(68): warning : function "Receiver::getFocusCenter()" is hidden by "CylinderRecv::getFocusCenter" -- virtual function override intended?
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\../DataStructure/Receiver.h(69): warning : initial value of reference to non-const must be an lvalue
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\3rdparty\eigen\src/Core/AssignEvaluator.h(836): warning : calling a __host__ function from a __host__ __device__ function is not allowed
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\3rdparty\eigen\src/Core/AssignEvaluator.h(836): warning : calling a __host__ function from a __host__ __device__ function is not allowed
+c:\program files\nvidia gpu computing toolkit\cuda\v10.1\include\crt\math_functions.h : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+c:\program files\nvidia gpu computing toolkit\cuda\v10.1\include\crt\math_functions.h(825): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+c:\program files\nvidia gpu computing toolkit\cuda\v10.1\include\crt\math_functions.h(1760): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+c:\program files\nvidia gpu computing toolkit\cuda\v10.1\include\crt\math_functions.h(2622): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+c:\program files\nvidia gpu computing toolkit\cuda\v10.1\include\crt\math_functions.h(3461): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+c:\program files\nvidia gpu computing toolkit\cuda\v10.1\include\crt\math_functions.h(4404): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+c:\program files\nvidia gpu computing toolkit\cuda\v10.1\include\crt\math_functions.h(5302): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+c:\program files\nvidia gpu computing toolkit\cuda\v10.1\include\crt\math_functions.h(6213): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+c:\program files\nvidia gpu computing toolkit\cuda\v10.1\include\crt\math_functions.h(7094): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+c:\program files\nvidia gpu computing toolkit\cuda\v10.1\include\crt\math_functions.h(7893): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+c:\program files\nvidia gpu computing toolkit\cuda\v10.1\include\crt/device_functions.h : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+c:\program files\nvidia gpu computing toolkit\cuda\v10.1\include\crt/device_functions.h(774): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+c:\program files\nvidia gpu computing toolkit\cuda\v10.1\include\crt/device_functions.h(1629): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+c:\program files\nvidia gpu computing toolkit\cuda\v10.1\include\crt\device_double_functions.h : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+c:\program files\nvidia gpu computing toolkit\cuda\v10.1\include\sm_20_intrinsics.h : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+c:\program files\nvidia gpu computing toolkit\cuda\v10.1\include\sm_20_intrinsics.h(926): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v10.1\include\cuda_fp16.h : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\3rdparty\eigen\src/Core/ArrayWrapper.h(94): warning : __declspec attributes ignored
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\../Common/global_function.cuh(28): warning : invalid narrowing conversion from "int" to "double"
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\../DataStructure/Receiver.h(43): warning : initial value of reference to non-const must be an lvalue
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\../DataStructure/Receiver.h(68): warning : function "Receiver::getFocusCenter()" is hidden by "CylinderRecv::getFocusCenter" -- virtual function override intended?
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\../DataStructure/Receiver.h(69): warning : initial value of reference to non-const must be an lvalue
+  ReceiverEnergyCalculator.cu
+  host_defines.h is an internal header file and must not be used directly.  This file will be removed in a future CUDA release.  Please use cuda_runtime_api.h or cuda_runtime.h instead.
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\../Common/global_function.cuh(39): warning C4244: “参数”: 从“const double”转换到“float”，可能丢失数据
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\../Common/global_function.cuh(43): warning C4244: “参数”: 从“const double”转换到“float”，可能丢失数据
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\../Common/global_function.cuh(62): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\../Common/global_function.cuh(180): warning C4267: “初始化”: 从“size_t”转换到“int”，可能丢失数据
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\energycalculatepipeline\receiverenergycalculator\../../DeviceArgument/HeliostatDeviceArgument/HeliostatDeviceArgument.h(67): warning C4244: “=”: 从“double”转换到“int”，可能丢失数据
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\energycalculatepipeline\receiverenergycalculator\../../DeviceArgument/HeliostatDeviceArgument/HeliostatDeviceArgument.h(68): warning C4244: “=”: 从“double”转换到“int”，可能丢失数据
+E:/xjYuan/003 ZJU/002 Solar/004 Codes/190326_Solar/FieldOptimism/FieldOptimism/EnergyCalculatePipeline/ReceiverEnergyCalculator/ReceiverEnergyCalculator.cu(37): warning C4267: “初始化”: 从“size_t”转换到“int”，可能丢失数据
+E:/xjYuan/003 ZJU/002 Solar/004 Codes/190326_Solar/FieldOptimism/FieldOptimism/EnergyCalculatePipeline/ReceiverEnergyCalculator/ReceiverEnergyCalculator.cu(55): warning C4267: “初始化”: 从“size_t”转换到“int”，可能丢失数据
+c:\program files\nvidia gpu computing toolkit\cuda\v10.1\include\crt\math_functions.h : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+c:\program files\nvidia gpu computing toolkit\cuda\v10.1\include\crt\math_functions.h(825): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+c:\program files\nvidia gpu computing toolkit\cuda\v10.1\include\crt\math_functions.h(1760): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+c:\program files\nvidia gpu computing toolkit\cuda\v10.1\include\crt\math_functions.h(2622): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+c:\program files\nvidia gpu computing toolkit\cuda\v10.1\include\crt\math_functions.h(3461): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+c:\program files\nvidia gpu computing toolkit\cuda\v10.1\include\crt\math_functions.h(4404): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+c:\program files\nvidia gpu computing toolkit\cuda\v10.1\include\crt\math_functions.h(5302): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+c:\program files\nvidia gpu computing toolkit\cuda\v10.1\include\crt\math_functions.h(6213): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+c:\program files\nvidia gpu computing toolkit\cuda\v10.1\include\crt\math_functions.h(7094): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+c:\program files\nvidia gpu computing toolkit\cuda\v10.1\include\crt\math_functions.h(7893): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+  Layout.cpp
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\common\global_function.cuh(28): warning C4838: 从“int”转换到“double”需要收缩转换
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\common\global_function.cuh(32): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\common\global_function.cuh(39): warning C4244: “参数”: 从“const double”转换到“float”，可能丢失数据
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\common\global_function.cuh(43): warning C4244: “参数”: 从“const double”转换到“float”，可能丢失数据
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\common\global_function.cuh(62): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\common\global_function.cuh(180): warning C4267: “初始化”: 从“size_t”转换到“int”，可能丢失数据
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\layout.cpp(10): warning C4244: “=”: 从“double”转换到“int”，可能丢失数据
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\layout.cpp(11): warning C4244: “=”: 从“double”转换到“int”，可能丢失数据
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\layout.cpp(29): warning C4244: “=”: 从“double”转换到“int”，可能丢失数据
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\layout.cpp(30): warning C4244: “=”: 从“double”转换到“int”，可能丢失数据
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\layout.cpp(62): warning C4267: “=”: 从“size_t”转换到“unsigned int”，可能丢失数据
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\layout.cpp(91): warning C4267: “=”: 从“size_t”转换到“unsigned int”，可能丢失数据
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\layout.cpp(135): warning C4267: “=”: 从“size_t”转换到“unsigned int”，可能丢失数据
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\layout.cpp(155): warning C4267: “初始化”: 从“size_t”转换到“int”，可能丢失数据
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\layout.cpp(178): warning C4244: “参数”: 从“double”转换到“int”，可能丢失数据
+  正在生成代码...
+  正在跳过...(未检测到相关更改)
+  main.cpp
+  ShadowBlockCalculator.cpp
+  GridDDA.cpp
+  FieldSimulationController.cpp
+  EnergyCalculator.cpp
+  EnergyCalculatePipeline.cpp
+  ReceiverDeviceArgument.cpp
+  CylinderReceiverDeviceArgument.cpp
+  HeliostatDeviceArgument.cpp
+  SolarScene.cpp
+  
+  E:\xjYuan\003 ZJU\002 Solar\004 Codes\190326_Solar\FieldOptimism\FieldOptimism>"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v10.1\bin\nvcc.exe" -dlink -o x64\Debug\FieldOptimism.device-link.obj -Xcompiler "/EHsc /W3 /nologo /Od /Zi /RTC1 /MDd " -L"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v10.1\lib\x64" -L"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v10.1\lib\x64" cudart_static.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib cublas.lib cuda.lib cudadevrt.lib cudart.lib OpenCL.lib opencv_world310d.lib  -gencode=arch=compute_35,code=sm_35 -G --machine 64 x64\Debug\CylinderRecvFluxIntegral.cu.obj x64\Debug\ReceiverEnergyCalculator.cu.obj x64\Debug\RectRecvFluxIntegral.cu.obj x64\Debug\GaussLegendre.cu.obj 
+  cudart_static.lib
+  kernel32.lib
+  user32.lib
+  gdi32.lib
+  winspool.lib
+  comdlg32.lib
+  advapi32.lib
+  shell32.lib
+  ole32.lib
+  oleaut32.lib
+  uuid.lib
+  odbc32.lib
+  odbccp32.lib
+  cublas.lib
+  cuda.lib
+  cudadevrt.lib
+  cudart.lib
+  OpenCL.lib
+  opencv_world310d.lib
+  CylinderRecvFluxIntegral.cu.obj
+  ReceiverEnergyCalculator.cu.obj
+  RectRecvFluxIntegral.cu.obj
+  GaussLegendre.cu.obj
+  FieldOptimism.vcxproj -> E:\xjYuan\003 ZJU\002 Solar\004 Codes\190326_Solar\FieldOptimism\x64\Debug\FieldOptimism.exe
   FieldOptimism.vcxproj -> E:\xjYuan\003 ZJU\002 Solar\004 Codes\190326_Solar\FieldOptimism\x64\Debug\FieldOptimism.pdb (Partial PDB)

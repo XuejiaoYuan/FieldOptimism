@@ -10,7 +10,7 @@
 
 
 typedef enum {
-	RectangularHelioType, ParaboloidHelioType, SubHelioType
+	RectangularHelioType, ParaboloidHelioType
 }HelioType;
 
 typedef enum {

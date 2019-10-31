@@ -4,14 +4,14 @@
     <CudaCompile Include="GaussLegendre\GaussLegendre.cu">
       <Filter>GaussLegendre</Filter>
     </CudaCompile>
-    <CudaCompile Include="HelioEnergy\ReceiverEnergyCalc\RecvEnergyCalc.cu">
-      <Filter>HelioEnergy\ReceiverEnergyCalc</Filter>
+    <CudaCompile Include="EnergyCalculatePipeline\ReceiverEnergyCalculator\CylinderReceiverFluxIntegral\CylinderRecvFluxIntegral.cu">
+      <Filter>EnergyCalculatePipeline\ReceiverEnergyCalculator\CylinderReceiverFluxIntegral</Filter>
     </CudaCompile>
-    <CudaCompile Include="HelioEnergy\ReceiverEnergyCalc\RectangleReceiverFluxIntegral\RectRecvFluxIntegral.cu">
-      <Filter>HelioEnergy\ReceiverEnergyCalc\RectangleReceiverFluxIntegral</Filter>
+    <CudaCompile Include="EnergyCalculatePipeline\ReceiverEnergyCalculator\RectangleReceiverFluxIntegral\RectRecvFluxIntegral.cu">
+      <Filter>EnergyCalculatePipeline\ReceiverEnergyCalculator\RectangleReceiverFluxIntegral</Filter>
     </CudaCompile>
-    <CudaCompile Include="HelioEnergy\ReceiverEnergyCalc\CylinderReceiverFluxIntegral\CylinderRecvFluxIntegral.cu">
-      <Filter>HelioEnergy\ReceiverEnergyCalc\CylinderReceiverFluxIntegral</Filter>
+    <CudaCompile Include="EnergyCalculatePipeline\ReceiverEnergyCalculator\ReceiverEnergyCalculator.cu">
+      <Filter>EnergyCalculatePipeline\ReceiverEnergyCalculator</Filter>
     </CudaCompile>
   </ItemGroup>
   <ItemGroup>
@@ -27,20 +27,8 @@
     <Filter Include="GridDDA">
       <UniqueIdentifier>{0d0db5ad-7a3e-4a91-9b24-124fa518c313}</UniqueIdentifier>
     </Filter>
-    <Filter Include="HelioEnergy">
-      <UniqueIdentifier>{d22e7846-3625-4cbf-b51f-50f182dbe922}</UniqueIdentifier>
-    </Filter>
     <Filter Include="SigmaFitting">
       <UniqueIdentifier>{9451a4da-0cf0-48b8-992c-008760fcc696}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="HelioEnergy\ReceiverEnergyCalc">
-      <UniqueIdentifier>{8b4dd180-f09c-4de1-be8d-958ceb4c3a73}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="HelioEnergy\ReceiverEnergyCalc\CylinderReceiverFluxIntegral">
-      <UniqueIdentifier>{1ade22b7-7310-4eca-b4d1-06acb4943d81}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="HelioEnergy\ReceiverEnergyCalc\RectangleReceiverFluxIntegral">
-      <UniqueIdentifier>{545907a9-443e-4b59-88a1-c104f9c53d5a}</UniqueIdentifier>
     </Filter>
     <Filter Include="Tool">
       <UniqueIdentifier>{50765a36-c84f-4ea0-906d-84f9a46bdd16}</UniqueIdentifier>
@@ -77,6 +65,18 @@
     </Filter>
     <Filter Include="FieldSimulationController">
       <UniqueIdentifier>{1b4c0fd3-ce03-4331-b42d-218ecb78175d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="EnergyCalculatePipeline">
+      <UniqueIdentifier>{d22e7846-3625-4cbf-b51f-50f182dbe922}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="EnergyCalculatePipeline\ReceiverEnergyCalculator">
+      <UniqueIdentifier>{8b4dd180-f09c-4de1-be8d-958ceb4c3a73}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="EnergyCalculatePipeline\ReceiverEnergyCalculator\CylinderReceiverFluxIntegral">
+      <UniqueIdentifier>{1ade22b7-7310-4eca-b4d1-06acb4943d81}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="EnergyCalculatePipeline\ReceiverEnergyCalculator\RectangleReceiverFluxIntegral">
+      <UniqueIdentifier>{545907a9-443e-4b59-88a1-c104f9c53d5a}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -116,21 +116,6 @@
     <ClInclude Include="SigmaFitting\SigmaFitting.h">
       <Filter>SigmaFitting</Filter>
     </ClInclude>
-    <ClInclude Include="HelioEnergy\ReceiverEnergyCalc\RecvEnergyCalc.cuh">
-      <Filter>HelioEnergy\ReceiverEnergyCalc</Filter>
-    </ClInclude>
-    <ClInclude Include="HelioEnergy\ReceiverEnergyCalc\RectangleReceiverFluxIntegral\RectRecvFluxIntegral.cuh">
-      <Filter>HelioEnergy\ReceiverEnergyCalc\RectangleReceiverFluxIntegral</Filter>
-    </ClInclude>
-    <ClInclude Include="HelioEnergy\ReceiverEnergyCalc\CylinderReceiverFluxIntegral\CylinderRecvFluxIntegral.cuh">
-      <Filter>HelioEnergy\ReceiverEnergyCalc\CylinderReceiverFluxIntegral</Filter>
-    </ClInclude>
-    <ClInclude Include="HelioEnergy\EnergyCalculator.h">
-      <Filter>HelioEnergy</Filter>
-    </ClInclude>
-    <ClInclude Include="HelioEnergy\EnergyCalcPipeline.h">
-      <Filter>HelioEnergy</Filter>
-    </ClInclude>
     <ClInclude Include="DifferentialEvolution\DifferentialEvolution.h">
       <Filter>DifferentialEvolution</Filter>
     </ClInclude>
@@ -164,6 +149,21 @@
     <ClInclude Include="FieldSimulationController\FieldSimulationController.h">
       <Filter>FieldSimulationController</Filter>
     </ClInclude>
+    <ClInclude Include="EnergyCalculatePipeline\EnergyCalculatePipeline.h">
+      <Filter>EnergyCalculatePipeline</Filter>
+    </ClInclude>
+    <ClInclude Include="EnergyCalculatePipeline\EnergyCalculator.h">
+      <Filter>EnergyCalculatePipeline</Filter>
+    </ClInclude>
+    <ClInclude Include="EnergyCalculatePipeline\ReceiverEnergyCalculator\CylinderReceiverFluxIntegral\CylinderRecvFluxIntegral.cuh">
+      <Filter>EnergyCalculatePipeline\ReceiverEnergyCalculator\CylinderReceiverFluxIntegral</Filter>
+    </ClInclude>
+    <ClInclude Include="EnergyCalculatePipeline\ReceiverEnergyCalculator\RectangleReceiverFluxIntegral\RectRecvFluxIntegral.cuh">
+      <Filter>EnergyCalculatePipeline\ReceiverEnergyCalculator\RectangleReceiverFluxIntegral</Filter>
+    </ClInclude>
+    <ClInclude Include="EnergyCalculatePipeline\ReceiverEnergyCalculator\ReceiverEnergyCalculator.cuh">
+      <Filter>EnergyCalculatePipeline\ReceiverEnergyCalculator</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DataStructure\Heliostat.cpp">
@@ -187,12 +187,6 @@
     </ClCompile>
     <ClCompile Include="SigmaFitting\SigmaFitting.cpp">
       <Filter>SigmaFitting</Filter>
-    </ClCompile>
-    <ClCompile Include="HelioEnergy\EnergyCalculator.cpp">
-      <Filter>HelioEnergy</Filter>
-    </ClCompile>
-    <ClCompile Include="HelioEnergy\EnergyCalcPipeline.cpp">
-      <Filter>HelioEnergy</Filter>
     </ClCompile>
     <ClCompile Include="DifferentialEvolution\DifferentialEvolution.cpp">
       <Filter>DifferentialEvolution</Filter>
@@ -229,6 +223,12 @@
     </ClCompile>
     <ClCompile Include="FieldSimulationController\FieldSimulationController.cpp">
       <Filter>FieldSimulationController</Filter>
+    </ClCompile>
+    <ClCompile Include="EnergyCalculatePipeline\EnergyCalculatePipeline.cpp">
+      <Filter>EnergyCalculatePipeline</Filter>
+    </ClCompile>
+    <ClCompile Include="EnergyCalculatePipeline\EnergyCalculator.cpp">
+      <Filter>EnergyCalculatePipeline</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

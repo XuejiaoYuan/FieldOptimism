@@ -232,6 +232,8 @@ double SdBkCalc::calcHelioShadowBlock(int helio_index)
 //
 void SdBkCalc::calcSceneFluxDistribution(vector<int>& test_helio_index, const double DNI, json& config) {
 	gl = new GaussLegendreCPU(config["M"].as<int>(), config["N"].as<int>(), config["m"].as<int>(), config["n"].as<int>());
+	int rows = solar_scene->recvs[0]->recv_size.x() / config["receiver_pixel_length"].as<double>();
+	int cols = solar_scene->recvs[0]->recv_size.z() / config["receiver_pixel_length"].as<double>();
 	for (int h_index : test_helio_index) {
 		Heliostat* helio = solar_scene->helios[h_index];
 		int fc_index = helio->focus_center_index;
@@ -256,7 +258,7 @@ void SdBkCalc::calcSceneFluxDistribution(vector<int>& test_helio_index, const do
 					proj_v.push_back(Vector2d(inter_v.x(), inter_v.z()));
 		
 				}
-				double res = calcHelio2RecvEnergy(recv_vertex[i], recv_normal[i], 240, 240, helio, helio->focus_center, DNI, helio->cos_phi[i]);
+				double res = calcHelio2RecvEnergy(recv_vertex[i], recv_normal[i], rows, cols, helio, helio->focus_center, DNI, helio->cos_phi[i]);
 			}
 		}
 	}
@@ -602,7 +604,7 @@ void SdBkCalcTest::getStartEndIndex(Heliostat* helio, int& start, int& end) {
 	case RectLayoutType:
 	case CrossRectLayoutType: {
 		start = helio->helio_index;
-		double gap = 2 * solar_scene->layouts[0]->helio_interval.z();
+		double gap = 2 * solar_scene->layouts[0]->helio_interval.y();
 		while (start >= 0 && helios[start]->helio_pos.z() <= cur_row + gap) --start;
 		if (start != helio->helio_index)
 			++start;

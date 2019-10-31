@@ -15,7 +15,7 @@
 
 
 typedef enum {
-	RectangularRecvType, CylinderRecvType, CircularTruncatedConeRecvType, PolyhedronRecvType
+	RectangularRecvType, CylinderRecvType, PolyhedronRecvType
 }ReceiverType;
 
 class Receiver {
@@ -51,7 +51,7 @@ protected:
 	vector<Vector3d> focus_center;				//The focus center of the receiver
 	vector<Vector3d> recv_normal_list;
 	vector<vector<Vector3d>> recv_vertex;
-	void readRecvFromJson(json& config);
+	virtual void readRecvFromJson(json& config);
 	vector<Vector3d> getRecvVertexCore(Vector3d& center, double half_l, double half_w, Vector3d& recv_normal);
 	void initRecvCore();
 };
@@ -69,12 +69,9 @@ public:
 	vector<vector<Vector3d>> getRecvVertex(Vector3d& focus_center = Vector3d(0, 0, 0));
 
 private:
+	virtual void readRecvFromJson(json& config);
 };
 
-class CircularTruncatedConeRecv :public Receiver {
-public:
-	CircularTruncatedConeRecv() :Receiver(CircularTruncatedConeRecvType) {};
-};
 
 class PolyhedronRecv :public Receiver {
 public:
@@ -93,8 +90,6 @@ public:
 			return new RectangularRecv();
 		case CylinderRecvType:
 			return new CylinderRecv();
-		case CircularTruncatedConeRecvType:
-			return new CircularTruncatedConeRecv();
 		case PolyhedronRecvType:
 			return new PolyhedronRecv();
 		default:

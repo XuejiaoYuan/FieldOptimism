@@ -23,6 +23,6 @@ void FluxSimulationController::handler(int argc, char** argv) {
 	argumenParser.parser(argc, argv);
 
 	// 2. Calculate receiver flux distribution
-	EnergyCalcPipeline* e_handler = EnergyCalcCreator::getPipeline(FluxDensityMode);
+	EnergyCalculatePipeline* e_handler = EnergyCalculateCreator::getPipeline(FluxDensityMode);
 	e_handler->handler(argumenParser, argumenParser.getConfig()["FieldArgs"].as<json>());
 }

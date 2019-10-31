@@ -1,4 +1,4 @@
-Identity=HelioEnergy\ReceiverEnergyCalc\CylinderReceiverFluxIntegral\CylinderRecvFluxIntegral.cu
+Identity=EnergyCalculatePipeline\ReceiverEnergyCalculator\CylinderReceiverFluxIntegral\CylinderRecvFluxIntegral.cu
 AdditionalCompilerOptions=
 AdditionalCompilerOptions=
 AdditionalDependencies=

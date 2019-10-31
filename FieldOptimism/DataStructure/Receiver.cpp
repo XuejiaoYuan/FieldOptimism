@@ -8,7 +8,7 @@ void Receiver::initRecv(json& config) {
 void Receiver::initRecvCore() {
 	focus_center.push_back(recv_pos + Vector3d(recv_normal.array() * recv_size.array() / 2));
 	recv_normal_list.push_back(recv_normal);
-	vector<Vector3d> vertex = getRecvVertexCore(focus_center[0], recv_size.y() / 2.0, recv_size.y() / 2.0, recv_normal);
+	vector<Vector3d> vertex = getRecvVertexCore(focus_center[0], recv_size.x() / 2.0, recv_size.y() / 2.0, recv_normal);
 	recv_vertex.push_back(vertex);
 }
 
@@ -81,5 +81,11 @@ vector<vector<Vector3d>> CylinderRecv::getRecvVertex(Vector3d& focus_center)
 	vector<Vector3d> vertex = getRecvVertexCore(recv_pos, recv_size.y() / 2.0, recv_size.x(), recv_normal);
 	recv_vertex.push_back(vertex);
 	return recv_vertex;
+}
+
+void CylinderRecv::readRecvFromJson(json & config)
+{
+	recv_size = Vector3d(config["size"]["radius"].as_double(), config["size"]["height"].as_double(), 0);
+	recv_pos = Vector3d(config["pos"]["x"].as_double(), config["pos"]["y"].as_double(), config["pos"]["z"].as_double());
 }
 

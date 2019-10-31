@@ -174,9 +174,6 @@ vector<double> Heliostat::setFocusCenterIndex(const vector<Receiver*>& recvs)
 		ret_cos = cos_phi.back();
 		break;
 	}
-	case CircularTruncatedConeRecvType:
-		throw std::runtime_error("[Error Heliostat] Not implement yet!!!\n");
-		break;
 	default:
 		throw std::runtime_error("[Error Heliostat] Wrong receiver type!!!\n");
 		break;

@@ -44,9 +44,10 @@ void SolarScene::saveSolarScene(string scene_savepath)
 		outFile << "\n# Grid" << i << " attributes" << endl;
 		Layout* layout = layouts[i - 1];
 		outFile << "Grid 0" << endl;
-		outFile << "pos " << layout->layout_bound_pos.x() << ' ' << layout->layout_bound_pos.y() << ' ' << layout->layout_bound_pos.z() << endl;
-		outFile << "size " << layout->layout_size.x() << ' ' << layout->layout_size.y() << ' ' << layout->layout_size.z() << endl;
-		outFile << "inter " << layout->helio_interval.x() << ' ' << layout->helio_interval.y() << ' ' << layout->helio_interval.z() << endl;
+		outFile << "pos " << layout->layout_bound_pos.x() << ' ' << 0 << ' ' << layout->layout_bound_pos.y() << endl;
+		// TODO: There may some error for QMCRT
+		outFile << "size " << layout->layout_size.x() << ' ' << layout->helio_interval.x() << ' ' << layout->layout_size.y() << endl;
+		outFile << "inter " << layout->helio_interval.x() << ' ' << layout->helio_interval.x() << ' ' << layout->helio_interval.y() << endl;
 		outFile << "n " << helios.size() << endl;
 		outFile << "type 0" << endl;
 		outFile << "end" << endl;

@@ -1,5 +1,5 @@
 #pragma once
-#include "../HelioEnergy/EnergyCalcPipeline.h"
+#include "../EnergyCalculatePipeline/EnergyCalculatePipeline.h"
 #include "../DifferentialEvolution/DifferentialEvolution.h"
 
 enum ControllerType

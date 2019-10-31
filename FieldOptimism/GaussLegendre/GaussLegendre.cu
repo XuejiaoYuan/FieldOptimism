@@ -14,7 +14,6 @@ void GaussLegendre::initNodeWeight(const int _M, const int _N)
 __device__
 float GaussLegendre::calcInte(const float4& x, const float4& y, const float sigma, const float ratio)
 {
-
 	float sum = 0.0;
 	for (int i = 0; i < M; i++) {
 		for (int j = 0; j < N; j++) {
