@@ -21,6 +21,7 @@ public:
 	void saveHeSolarScene(string scene_savepath);
 	void setModelStatus(const ModelType& model_type, const bool& calc_sigma);
 	ModelType getModelType() { return model_type; }
+	bool isCalcSigma() { return calc_sigma; }
 
     vector<Layout*>  layouts;
     vector<Heliostat*> helios;

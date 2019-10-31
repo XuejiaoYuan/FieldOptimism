@@ -4,7 +4,7 @@
 
 class EnergyCalculator {
 public:
-	static float calcEnergySum(SolarScene* solar_scene, int M, int N, int m, int n);
+	static float calcEnergySum(SolarScene* solar_scene,json& gaussian_params);
 	~EnergyCalculator();
 
 private:

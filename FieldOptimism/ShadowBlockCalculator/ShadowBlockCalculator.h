@@ -19,7 +19,7 @@ public:
 	
 protected:
 	GaussLegendreCPU* gl;
-	vector<set<vector<int>>> rela_block_grid_index;
+	map<int, set<vector<int>>> rela_block_grid_index;
 	SolarScene* solar_scene;
 	bool calcCenterMode;
 	string output_path;

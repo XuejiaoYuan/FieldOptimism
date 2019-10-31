@@ -38,7 +38,6 @@ public:
 	vector<int> getTimeParams(TimeType type);
 	int getMinuteGap() { return minute_gap; }
 	SunRay getSunray() { return sunray; }
-	int getIterations() { return iterations; }
 
 private:
 	string config_path;
@@ -71,9 +70,6 @@ private:
 	vector<int> days;
 	vector<int> hours;
 	int minute_gap;
-
-	// DE
-	int iterations;
 
 	void getTimeParams();
 };

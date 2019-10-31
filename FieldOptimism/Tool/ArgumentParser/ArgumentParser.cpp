@@ -1,7 +1,8 @@
 #include "ArgumentParser.h"
+#include <direct.h>
 
 bool ArgumentParser::parser(int argc, char** argv) {
-	if (argc != 2) {
+	if (argc != 3) {
 		cout << "The number of arguments is wrong!" << endl;
 		return false;
 	}
@@ -19,6 +20,7 @@ bool ArgumentParser::parser(int argc, char** argv) {
 		output_path = path["OutputPath"].as_string();
 		sunray_fn = path["SunrayFile"].as_string();
 		output_fn = path["OutputFileName"].as_string();
+		_mkdir(output_path.c_str());
 		sunray.calcSunRay(sunray_fn);
 		
 		auto scene = config.get_with_default("Scene");
@@ -36,10 +38,7 @@ bool ArgumentParser::parser(int argc, char** argv) {
 		receiver->initRecv(recv);
 		recvs.push_back(receiver);
 
-		getTimeParams();
-		
-		auto de = config.get_with_default("DE");
-		iterations = de["iterations"].as<int>();
+		getTimeParams();	
 	}
 	catch (const std::exception&)
 	{

@@ -4,9 +4,13 @@
 
 float* EnergyCalculator::d_energy_sum;
 
-float EnergyCalculator::calcEnergySum(SolarScene * solar_scene, int M, int N, int m, int n)
+float EnergyCalculator::calcEnergySum(SolarScene * solar_scene, json& gaussian_params)
 {
 	// 1. Get guass legendre calculation handler
+	int M = gaussian_params.get_with_default("M").as<int>();
+	int N = gaussian_params.get_with_default("N").as<int>();
+	int m = gaussian_params.get_with_default("m").as<int>();
+	int n = gaussian_params.get_with_default("n").as<int>();
 	GaussLegendre* gl_hander = GaussLegendre::getInstance(M, N);
 
 	// 2. Calculate receiver flux integral

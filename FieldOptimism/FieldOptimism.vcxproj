@@ -105,7 +105,7 @@
     <ClInclude Include="DeviceArgument\ReceiverDeviceArgument\CylinderReceiverDeviceArgument.h" />
     <ClInclude Include="DeviceArgument\ReceiverDeviceArgument\ReceiverDeviceArgument.h" />
     <ClInclude Include="DifferentialEvolution\DifferentialEvolution.h" />
-    <ClInclude Include="FieldOptimismPipeline\FieldOptimismPipeline.h" />
+    <ClInclude Include="FieldSimulationController\FieldSimulationController.h" />
     <ClInclude Include="GaussLegendre\GaussLegendre.cuh" />
     <ClInclude Include="GaussLegendre\GaussLegendre.h" />
     <ClInclude Include="GridDDA\GridDDA.h" />
@@ -132,7 +132,7 @@
     <ClCompile Include="DeviceArgument\ReceiverDeviceArgument\CylinderReceiverDeviceArgument.cpp" />
     <ClCompile Include="DeviceArgument\ReceiverDeviceArgument\ReceiverDeviceArgument.cpp" />
     <ClCompile Include="DifferentialEvolution\DifferentialEvolution.cpp" />
-    <ClCompile Include="FieldOptimismPipeline\FieldOptimismPipeline.cpp" />
+    <ClCompile Include="FieldSimulationController\FieldSimulationController.cpp" />
     <ClCompile Include="GaussLegendre\GaussLegendre.cpp" />
     <ClCompile Include="GridDDA\GridDDA.cpp" />
     <ClCompile Include="HelioEnergy\EnergyCalcPipeline.cpp" />

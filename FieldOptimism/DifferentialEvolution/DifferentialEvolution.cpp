@@ -7,7 +7,8 @@ json DifferentialEvolution::fieldOptimism(ArgumentParser & argumentParser)
 	initialization();
 	
 	// 2. Iteration
-	for (int i = 0; i < argumentParser.getIterations(); ++i) {
+	json config = argumentParser.getConfig();
+	for (int i = 0; i < config["Iterations"].as<int>(); ++i) {
 		// 2.1 Mutation
 
 		// 2.2 Crossover

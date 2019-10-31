@@ -21,13 +21,15 @@ protected:
 	SolarScene* solar_scene;
 	ArgumentParser* argumentParser;
 	void initSolarScene(json& field_args);
-	virtual double handlerCore(vector<int>& time_param, SunRay& sunray, SdBkCalc* sdbk_handler);
+	double handlerCore(vector<int>& time_param, SunRay& sunray, SdBkCalc* sdbk_handler);
+	virtual double handlerFunc(SolarScene* solar_scene, vector<int>& time_param, SunRay& sunray, SdBkCalc* sdbkHandler);
 };
 
 
 class FluxCalcPipeline :public EnergyCalcPipeline{
 public:
-	double handlerCore(vector<int>& time_param, SunRay& sunray, SdBkCalc* sdbk_handler);
+	//double handlerCore(vector<int>& time_param, SunRay& sunray, SdBkCalc* sdbk_handler);
+	double handlerFunc(SolarScene* solar_scene, vector<int>& time_param, SunRay& sunray, SdBkCalc* sdbkHandler);
 };
 
 class EnergyCalcCreator {

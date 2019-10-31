@@ -23,12 +23,6 @@ double SdBkCalc::helioClipper(Heliostat * helio, const vector<Vector3d>& dir, co
 		subj[0] << IntPoint(VERTEXSCALE*local_v[i].x, VERTEXSCALE*local_v[i].y);
 	}
 
-	double total_area = PolygonCenterCalculator::calcArea(local_v);
-	if (total_area == 0) {
-		cout << "Project surface is 0!" << endl;
-		return 0;
-	}
-
 	for (int index = 0; index < 2; index++) {
 		Vector3d reverse_dir = -dir[index];
 		vector<Vector3d> pro(4), tmp_pro(4);
@@ -59,7 +53,6 @@ double SdBkCalc::helioClipper(Heliostat * helio, const vector<Vector3d>& dir, co
 	c.AddPaths(clips, ptClip, true);
 	c.Execute(ctIntersection, solution, pftNonZero, pftNonZero);
 
-
 	// º∆À„ £”‡√Êª˝
 	c.Clear();
 	c.AddPaths(subj, ptSubject, true);
@@ -72,7 +65,7 @@ double SdBkCalc::helioClipper(Heliostat * helio, const vector<Vector3d>& dir, co
 		h_local_centerBias = GeometryFunc::mulMatrix(h_local_centerBias, helio->local2worldM);
 		helio->centerBias = make_float3(h_local_centerBias.x(), h_local_centerBias.y(), h_local_centerBias.z());
 	}
-	double res = area / total_area;
+	double res = area / helio->S;
 
 #ifdef CLIPPER	
 	unordered_set<int> test_helio_index = { 75, 1699, 2600, 4000, 5297, 6000, 7252 };
@@ -118,7 +111,6 @@ double SdBkCalc::helioClipper(Heliostat * helio, const vector<Vector3d>& dir, co
 		outFile.close();
 	}
 #endif // CLIPPER
-
 
 	return 1.0 - fabs(res);
 }
@@ -224,8 +216,9 @@ double SdBkCalc::calcHelioShadowBlock(int helio_index)
 	Vector3d reflect_dir = (helio->focus_center - helio->helio_pos).normalized();
 	GridDDA dda_handler;
 	dda_handler.rayCastForShadow(solar_scene, helio, -solar_scene->sunray_dir, estimate_index[0]);
-	if (rela_block_grid_index.empty())
+	if (!rela_block_grid_index.count(helio_index)) {
 		dda_handler.rayCastForBlock(solar_scene, helio, rela_block_grid_index[helio_index]);
+	}
 	dda_handler.getBlockHelioFromGrid(solar_scene, rela_block_grid_index[helio_index], estimate_index[1], helio);
 
 	vector<Vector3d> dir = { -solar_scene->sunray_dir, reflect_dir };
@@ -274,6 +267,7 @@ void SdBkCalc::calcSceneFluxDistribution(vector<int>& test_helio_index, const do
 void SdBkCalc::calcSceneShadowBlock()
 {
 	vector<Heliostat*> helios = solar_scene->helios;
+
 #pragma omp parallel for
 	for (int i = 0; i < helios.size(); i++) {
 		calcHelioShadowBlock(i);
