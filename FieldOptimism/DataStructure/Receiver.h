@@ -35,6 +35,7 @@ public:
 	Vector3d recv_normal;                   //The normal of the first receiver's face
 	int recv_face;							//The index of the receiver's face
 	int recv_face_num;
+	Vector2i rows_cols;
 	virtual void initRecv(json& config);
 	
 	virtual vector<Vector3d> getFocusCenter() {
@@ -43,7 +44,7 @@ public:
 	virtual vector<vector<Vector3d>> getRecvVertex(Vector3d& focus_center = Vector3d(0, 0, 0)) {
 		return recv_vertex;
 	}
-	virtual vector<Vector3d> getNormalList() {
+	virtual vector<Vector3d> getNormalList(Vector3d& focus_center = Vector3d(0,0,0)) {
 		return recv_normal_list;
 	}
 
@@ -67,6 +68,8 @@ public:
 	void initRecv(json& config);
 	Vector3d getFocusCenter(Vector3d& helio_pos);
 	vector<vector<Vector3d>> getRecvVertex(Vector3d& focus_center = Vector3d(0, 0, 0));
+	Vector2i getRowsCols(const double recv_pixel_length) { return Vector2i(recv_size.x() / recv_pixel_length, PI*recv_size.z() / recv_pixel_length); }
+	vector<Vector3d> getNormalList(Vector3d& focus_center = Vector3d(0, 0, 0)) { return{(focus_center - recv_pos).normalized() };}
 
 private:
 	virtual void readRecvFromJson(json& config);

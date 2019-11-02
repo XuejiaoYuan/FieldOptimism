@@ -106,7 +106,6 @@
     <ClInclude Include="DeviceArgument\ReceiverDeviceArgument\ReceiverDeviceArgument.h" />
     <ClInclude Include="DifferentialEvolution\DifferentialEvolution.h" />
     <ClInclude Include="EnergyCalculatePipeline\EnergyCalculatePipeline.h" />
-    <ClInclude Include="EnergyCalculatePipeline\EnergyCalculator.h" />
     <ClInclude Include="EnergyCalculatePipeline\ReceiverEnergyCalculator\CylinderReceiverFluxIntegral\CylinderRecvFluxIntegral.cuh" />
     <ClInclude Include="EnergyCalculatePipeline\ReceiverEnergyCalculator\ReceiverEnergyCalculator.cuh" />
     <ClInclude Include="EnergyCalculatePipeline\ReceiverEnergyCalculator\RectangleReceiverFluxIntegral\RectRecvFluxIntegral.cuh" />
@@ -133,7 +132,6 @@
     <ClCompile Include="DeviceArgument\ReceiverDeviceArgument\ReceiverDeviceArgument.cpp" />
     <ClCompile Include="DifferentialEvolution\DifferentialEvolution.cpp" />
     <ClCompile Include="EnergyCalculatePipeline\EnergyCalculatePipeline.cpp" />
-    <ClCompile Include="EnergyCalculatePipeline\EnergyCalculator.cpp" />
     <ClCompile Include="FieldSimulationController\FieldSimulationController.cpp" />
     <ClCompile Include="GaussLegendre\GaussLegendre.cpp" />
     <ClCompile Include="GridDDA\GridDDA.cpp" />

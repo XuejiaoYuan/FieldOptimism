@@ -6,7 +6,6 @@ int main(int argc, char** argv) {
 		cout << "Usage: [InputJson] [SimulationType: -o -f]" << endl;
 		return -1;
 	}
-	cout << argv[2] << endl;
 	ControllerType controller_type = string(argv[2]) == "-f" ? FluxSimulationType : FieldOptimismType;
 	BaseController* controller = ControllerCreator::getController(controller_type);
 	controller->handler(argc, argv);

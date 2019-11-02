@@ -58,7 +58,23 @@ double EnergyCalculatePipeline::handlerCore(vector<int>& time_param, SunRay& sun
 }
 
 double EnergyCalculatePipeline::handlerFunc(SolarScene* solar_scene, vector<int>& time_param, SunRay& sunray, SdBkCalc* sdbk_handler) {
-	return EnergyCalculator::calcEnergySum(solar_scene, argumentParser->getConfig()["FluxParams"]["GaussianParams"].as<json>());
+	// 1. Get guass legendre calculation handler
+	json gaussian_params = argumentParser->getConfig()["FluxParams"]["GaussianParams"].as<json>();
+	int M = gaussian_params.get_with_default("M").as<int>();
+	int N = gaussian_params.get_with_default("N").as<int>();
+	int m = gaussian_params.get_with_default("m").as<int>();
+	int n = gaussian_params.get_with_default("n").as<int>();
+	GaussLegendre* gl_hander = GaussLegendre::getInstance(M, N);
+
+	// 2. Calculate receiver flux integral
+	bool calcCenterMode = false;
+	if (solar_scene->getModelType() == bHFLCAL)
+		calcCenterMode = true;
+	ReceiverEnergyCalculator recv_energy_calc(solar_scene, gl_hander, m, n, calcCenterMode);
+	float res = recv_energy_calc.calcRecvEnergySum();
+
+	return res * sunray.current_DNI;
+
 }
 
 
@@ -90,7 +106,7 @@ double FluxCalculatePipeline::handlerFunc(SolarScene* solar_scene, vector<int>& 
 	}
 
 	sdbk_handler->setOutputPath(argumentParser->getOutputPath() + time_str);
-	sdbk_handler->calcSceneFluxDistribution(test_helio_index, DNI, flux.get_with_default("GaussianParams").as<json>());
-
+	//sdbk_handler->calcSceneFluxDistribution(test_helio_index, DNI, flux.get_with_default("GaussianParams").as<json>());
+	//float sum = EnergyCalculatePipeline::handlerFunc(solar_scene, time_param, sunray, sdbk_handler);
 	return 0;
 }

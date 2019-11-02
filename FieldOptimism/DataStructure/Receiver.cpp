@@ -8,7 +8,7 @@ void Receiver::initRecv(json& config) {
 void Receiver::initRecvCore() {
 	focus_center.push_back(recv_pos + Vector3d(recv_normal.array() * recv_size.array() / 2));
 	recv_normal_list.push_back(recv_normal);
-	vector<Vector3d> vertex = getRecvVertexCore(focus_center[0], recv_size.x() / 2.0, recv_size.y() / 2.0, recv_normal);
+	vector<Vector3d> vertex = getRecvVertexCore(focus_center[0], recv_size.y() / 2.0, recv_size.x() / 2.0, recv_normal);
 	recv_vertex.push_back(vertex);
 }
 
@@ -18,6 +18,10 @@ void Receiver::readRecvFromJson(json& config) {
 	recv_normal = Vector3d(config["norm"]["x"].as_double(), config["norm"]["y"].as_double(), config["norm"]["z"].as_double());
 	recv_size = Vector3d(config["size"]["x"].as_double(), config["size"]["y"].as_double(), config["size"]["z"].as_double());
 	recv_pos = Vector3d(config["pos"]["x"].as_double(), config["pos"]["y"].as_double(), config["pos"]["z"].as_double());
+	if (config.contains("receiver_pixel_length")) {
+		double recv_pixel_length = config["receiver_pixel_length"].as<double>();
+		rows_cols = Vector2i(recv_size.y() / recv_pixel_length + 0.5, recv_size.x() / recv_pixel_length + 0.5);
+	}
 }
 
 vector<Vector3d> Receiver::getRecvVertexCore(Vector3d & center, double half_l, double half_w, Vector3d & recv_normal)
@@ -87,5 +91,9 @@ void CylinderRecv::readRecvFromJson(json & config)
 {
 	recv_size = Vector3d(config["size"]["radius"].as_double(), config["size"]["height"].as_double(), 0);
 	recv_pos = Vector3d(config["pos"]["x"].as_double(), config["pos"]["y"].as_double(), config["pos"]["z"].as_double());
+	if (config.contains("receiver_pixel_length")) {
+		double recv_pixel_length = config["receiver_pixel_length"].as<double>();
+		rows_cols = Vector2i(recv_size.y() / recv_pixel_length + 0.5, PI*recv_size.x() / recv_pixel_length + 0.5);
+	}
 }
 

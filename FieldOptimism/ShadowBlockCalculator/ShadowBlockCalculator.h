@@ -25,7 +25,7 @@ protected:
 	string output_path;
 	double calcHelioShadowBlock(int helio_index);
 	double helioClipper(Heliostat * helio, const vector<Vector3d>& dir, const vector<unordered_set<int>>& estimate_grids);
-	float calcHelio2RecvEnergy(vector<Vector3d>& recv_v, Vector3d& recv_n, const int rows, const int cols, Heliostat* helio, Vector3d& fc_center, double DNI, double cos_phi);
+	float calcHelio2RecvEnergy(vector<Vector3d>& recv_v, Vector3d& recv_n, Vector2i& rows_cols, Heliostat* helio, Vector3d& fc_center, double DNI, double cos_phi);
 };
 
 

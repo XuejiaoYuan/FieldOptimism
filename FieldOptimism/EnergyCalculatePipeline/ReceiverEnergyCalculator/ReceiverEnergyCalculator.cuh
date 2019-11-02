@@ -12,11 +12,19 @@ class ReceiverEnergyCalculator
 {
 public:
 	ReceiverEnergyCalculator(SolarScene *solar_scene, GaussLegendre* gl_handler, int m, int n, bool calcCenterMode = false) :
-		m(m), n(n), solar_scene(solar_scene), gl_handler(gl_handler), calcCenterMode(calcCenterMode) {}
-	void calcRecvEnergySum(float* d_total_energy);
+		m(m), n(n), solar_scene(solar_scene), gl_handler(gl_handler), calcCenterMode(calcCenterMode), h_helio_energy(nullptr), d_helio_energy(nullptr) {}
+	float calcRecvEnergySum();
 	~ReceiverEnergyCalculator() {
 		solar_scene = nullptr;
 		gl_handler = nullptr;
+
+		h_args.clear();
+		r_args->clear();
+		delete r_args;
+		delete[] h_helio_energy;
+		cudaFree(d_helio_energy);
+		h_helio_energy = nullptr;
+		d_helio_energy = nullptr;
 	}
 
 private:
@@ -26,7 +34,10 @@ private:
 	GaussLegendre* gl_handler;
 	IntegralHelioDeviceArgumet h_args;
 	ReceiverDeviceArgument* r_args;
-	void calcRectRecvEnergySum(float* d_total_energy);
-	void calcCylinderRecvEnergySum(float* d_total_energy);
+	float *h_helio_energy, *d_helio_energy;
+	void setDeviceHelioEnergy();
+	float calcHelioEnergySum();
+	float calcRectRecvEnergySum();
+	float calcCylinderRecvEnergySum();
 };
 

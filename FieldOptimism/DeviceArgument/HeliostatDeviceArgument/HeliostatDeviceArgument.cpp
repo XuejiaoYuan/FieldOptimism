@@ -110,6 +110,25 @@ void IntegralHelioDeviceArgumet::setHelioRecvArguments(vector<Heliostat*>& helio
 	cudaMemcpy(d_gauss_param, h_gauss_param, sizeof(float2)*numberOfHeliostats, cudaMemcpyHostToDevice);
 	cudaMemcpy(d_factor, h_factor, sizeof(float)*numberOfHeliostats, cudaMemcpyHostToDevice);
 
+	//fstream outFile("gauss.txt", ios_base::out);
+	//for (int i = 0; i < numberOfHeliostats; ++i) {
+	//	outFile << h_gauss_param[i].x << ' ' << h_gauss_param[i].y << endl;
+	//}
+	//outFile.close();
+
+	//outFile.open("factor.txt", ios_base::out);
+	//for (int i = 0; i < numberOfHeliostats; ++i)
+	//	outFile << h_factor[i] << endl;
+	//outFile.close();
+	fstream out("m.txt", ios_base::out);
+	for(int i = 0; i < numberOfHeliostats; ++i) {
+		for (int j = 0; j < 4; ++j) {
+			float4 m = h_imgplane_world2local[4 * i + j];
+			out << m.x << ' ' << m.y << ' ' << m.z << ' ' << m.w << endl;
+		}
+	}
+	out.close();
+
 	//delete[] h_focus_index;
 	delete[] h_imgplane_world2local;
 	delete[] h_gauss_param;

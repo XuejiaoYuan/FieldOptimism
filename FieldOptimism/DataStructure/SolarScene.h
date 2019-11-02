@@ -27,6 +27,7 @@ public:
     vector<Heliostat*> helios;
 	vector<Receiver*> recvs;
 	Vector3d sunray_dir;
+	double DNI;
 
 private:
 	ModelType model_type;

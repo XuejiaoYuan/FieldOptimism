@@ -120,9 +120,11 @@ double SdBkCalc::helioClipper(Heliostat * helio, const vector<Vector3d>& dir, co
 //
 //	[采样计算通量密度] 以接收器中心点通量密度代表区域通量平均通量密度
 //		将接收器网格中心点
-//
-float SdBkCalc::calcHelio2RecvEnergy(vector<Vector3d>& recv_v, Vector3d& recv_n, const int rows, const int cols, 
+//	TODO: 当接收器为圆柱体时，由于圆柱体的grid与image plane夹角均不同，因此不能使用，需要进一步修正
+float SdBkCalc::calcHelio2RecvEnergy(vector<Vector3d>& recv_v, Vector3d& recv_n, Vector2i& rows_cols, 
 	Heliostat* helio, Vector3d& fc_center, double DNI, double cos_phi) {
+	int rows = rows_cols.x();
+	int cols = rows_cols.y();
 	Vector3d row_gap = (recv_v[1] - recv_v[0]) / rows;
 	Vector3d col_gap = (recv_v[3] - recv_v[0]) / cols;
 
@@ -184,7 +186,6 @@ float SdBkCalc::calcHelio2RecvEnergy(vector<Vector3d>& recv_v, Vector3d& recv_n,
 	}
 	outFile << i_center_bias.x() << ' ' << i_center_bias.z() << endl;
 	outFile.close();
-
 	return sum;
 }
 
@@ -232,8 +233,7 @@ double SdBkCalc::calcHelioShadowBlock(int helio_index)
 //
 void SdBkCalc::calcSceneFluxDistribution(vector<int>& test_helio_index, const double DNI, json& config) {
 	gl = new GaussLegendreCPU(config["M"].as<int>(), config["N"].as<int>(), config["m"].as<int>(), config["n"].as<int>());
-	int rows = solar_scene->recvs[0]->recv_size.x() / config["receiver_pixel_length"].as<double>();
-	int cols = solar_scene->recvs[0]->recv_size.z() / config["receiver_pixel_length"].as<double>();
+	Vector2i rows_cols = solar_scene->recvs[0]->rows_cols;
 	for (int h_index : test_helio_index) {
 		Heliostat* helio = solar_scene->helios[h_index];
 		int fc_index = helio->focus_center_index;
@@ -244,7 +244,7 @@ void SdBkCalc::calcSceneFluxDistribution(vector<int>& test_helio_index, const do
 		GeometryFunc::getImgPlaneMatrixs(reverse_dir, helio->focus_center, local2worldM, world2localM, 1);
 		
 		vector<vector<Vector3d>> recv_vertex = recvs[0]->getRecvVertex(helio->focus_center);
-		vector<Vector3d> recv_normal = recvs[0]->getNormalList();
+		vector<Vector3d> recv_normal = recvs[0]->getNormalList(helio->focus_center);
 		for (int i = 0; i < helio->cos_phi.size(); i++) {
 			if (helio->cos_phi[i] > Epsilon) {
 				vector<Vector2d> proj_v;
@@ -258,7 +258,7 @@ void SdBkCalc::calcSceneFluxDistribution(vector<int>& test_helio_index, const do
 					proj_v.push_back(Vector2d(inter_v.x(), inter_v.z()));
 		
 				}
-				double res = calcHelio2RecvEnergy(recv_vertex[i], recv_normal[i], rows, cols, helio, helio->focus_center, DNI, helio->cos_phi[i]);
+				double res = calcHelio2RecvEnergy(recv_vertex[i], recv_normal[i], rows_cols, helio, helio->focus_center, DNI, helio->cos_phi[i]);
 			}
 		}
 	}

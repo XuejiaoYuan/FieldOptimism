@@ -1,9 +1,8 @@
 #pragma once
 #include "../Tool/ArgumentParser/ArgumentParser.h"
 #include "../ShadowBlockCalculator/ShadowBlockCalculator.h"
-#include "../EnergyCalculatePipeline/EnergyCalculator.h"
 #include "../SigmaFitting/SigmaFitting.h"
-
+#include "ReceiverEnergyCalculator/ReceiverEnergyCalculator.cuh"
 
 enum EnergyCalcMode
 {

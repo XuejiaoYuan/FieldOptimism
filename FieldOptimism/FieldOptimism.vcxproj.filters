@@ -152,9 +152,6 @@
     <ClInclude Include="EnergyCalculatePipeline\EnergyCalculatePipeline.h">
       <Filter>EnergyCalculatePipeline</Filter>
     </ClInclude>
-    <ClInclude Include="EnergyCalculatePipeline\EnergyCalculator.h">
-      <Filter>EnergyCalculatePipeline</Filter>
-    </ClInclude>
     <ClInclude Include="EnergyCalculatePipeline\ReceiverEnergyCalculator\CylinderReceiverFluxIntegral\CylinderRecvFluxIntegral.cuh">
       <Filter>EnergyCalculatePipeline\ReceiverEnergyCalculator\CylinderReceiverFluxIntegral</Filter>
     </ClInclude>
@@ -225,9 +222,6 @@
       <Filter>FieldSimulationController</Filter>
     </ClCompile>
     <ClCompile Include="EnergyCalculatePipeline\EnergyCalculatePipeline.cpp">
-      <Filter>EnergyCalculatePipeline</Filter>
-    </ClCompile>
-    <ClCompile Include="EnergyCalculatePipeline\EnergyCalculator.cpp">
       <Filter>EnergyCalculatePipeline</Filter>
     </ClCompile>
   </ItemGroup>
