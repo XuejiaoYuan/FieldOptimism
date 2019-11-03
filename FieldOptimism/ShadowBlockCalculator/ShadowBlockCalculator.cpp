@@ -234,6 +234,7 @@ double SdBkCalc::calcHelioShadowBlock(int helio_index)
 void SdBkCalc::calcSceneFluxDistribution(vector<int>& test_helio_index, const double DNI, json& config) {
 	gl = new GaussLegendreCPU(config["M"].as<int>(), config["N"].as<int>(), config["m"].as<int>(), config["n"].as<int>());
 	Vector2i rows_cols = solar_scene->recvs[0]->rows_cols;
+	double sum = 0;
 	for (int h_index : test_helio_index) {
 		Heliostat* helio = solar_scene->helios[h_index];
 		int fc_index = helio->focus_center_index;
@@ -247,22 +248,12 @@ void SdBkCalc::calcSceneFluxDistribution(vector<int>& test_helio_index, const do
 		vector<Vector3d> recv_normal = recvs[0]->getNormalList(helio->focus_center);
 		for (int i = 0; i < helio->cos_phi.size(); i++) {
 			if (helio->cos_phi[i] > Epsilon) {
-				vector<Vector2d> proj_v;
-				vector<Vector3d> tmp_v;
-		
-				for (auto& v : recv_vertex[i]) {
-					Vector3d inter_v;
-					GeometryFunc::calcIntersection(reverse_dir, helio->focus_center, v, reverse_dir, inter_v);
-					tmp_v.push_back(inter_v);
-					inter_v = GeometryFunc::mulMatrix(inter_v, world2localM);
-					proj_v.push_back(Vector2d(inter_v.x(), inter_v.z()));
-		
-				}
-				double res = calcHelio2RecvEnergy(recv_vertex[i], recv_normal[i], rows_cols, helio, helio->focus_center, DNI, helio->cos_phi[i]);
+				sum += calcHelio2RecvEnergy(recv_vertex[i], recv_normal[i], rows_cols, helio, helio->focus_center, DNI, helio->cos_phi[i]);
 			}
 		}
 	}
 	delete gl;
+	cout << sum/DNI << endl;
 }
 
 

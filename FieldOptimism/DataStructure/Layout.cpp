@@ -9,6 +9,8 @@ void Layout::initLayoutParams() {
 	layout_first_helio_center = layout_bound_pos + 0.5 * helio_interval;
 	layout_row_col.x() = layout_size.y() / helio_interval.y();		//row
 	layout_row_col.y() = layout_size.x() / helio_interval.x();		//col
+	helio_interval.y() = layout_size.y() / layout_row_col.x();
+	helio_interval.x() = layout_size.x() / layout_row_col.y();
 	helio_layout.clear();
 	helio_layout.resize(layout_row_col.x(), vector<vector<Heliostat*>>(layout_row_col.y()));
 }
@@ -110,16 +112,19 @@ void FermatLayout::createHelioAndLayout(ArgumentParser& argumentParser, json& fi
 
 	calcCircleParams(recv_dis, n_rows, n_cols, field_args, dm);
 
-	for (int i = 0; i < n_rows.size(); ++i)
-		setCircleHelios(h_tmp, i, recv_dis, n_rows, helio_gap[i], n_cols[i], helios, argumentParser.getReceivers());
+	for (int i = 0; i < n_rows.size(); ++i) {
+		bool status = setCircleHelios(h_tmp, i, recv_dis, n_rows, helio_gap[i], n_cols[i], helios, argumentParser.getReceivers());
+		if (!status)
+			break;
+	}
 
-	layout_bound_pos = Vector2d(-recv_dis.back() - 0.5, -recv_dis.back() - 0.5);
-	layout_size = Vector2d(2 * recv_dis.back() + 1, 2 * recv_dis.back() + 1);
+	layout_bound_pos = Vector2d(-recv_dis.back(), -recv_dis.back());
+	layout_size = Vector2d(2 * recv_dis.back(), 2 * recv_dis.back());
 	initLayoutParams();
 }
 
 
-void FermatLayout::setCircleHelios(Heliostat& h_tmp, const int idx, vector<double>& recv_dis, vector<int>& rows, const double gap,
+bool FermatLayout::setCircleHelios(Heliostat& h_tmp, const int idx, vector<double>& recv_dis, vector<int>& rows, const double gap,
 	const int col, vector<Heliostat*>& helios, const vector<Receiver*>& recvs)
 {
 	Heliostat* helio;
@@ -142,9 +147,10 @@ void FermatLayout::setCircleHelios(Heliostat& h_tmp, const int idx, vector<doubl
 			recv_dis.resize(idx + 1);
 			recv_dis.push_back(recv_dis[idx] + (i+1) * gap);
 			rows.back() = i + 1;
-			break;
+			return false;;
 		}
 	}
+	return true;
 }
 
 void FermatLayout::calcCircleParams(vector<double>& recv_dis, vector<int>& n_rows, vector<int>& n_cols, json& field_args, double dm) {

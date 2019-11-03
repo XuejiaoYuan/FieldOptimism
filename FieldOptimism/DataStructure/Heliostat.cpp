@@ -76,6 +76,7 @@ void Heliostat::calcFluxParam(const ModelType& type, const bool& calc_sigma)
 	
 		double w_l = ip_w / ip_l;
 		l_w_ratio = 1 +  abs(log10(2 - 0.5*w_l));	
+		rotate_theta = 0;
 	}
 	else if (type == iHFLCAL) {
 		rotate_theta = 0;

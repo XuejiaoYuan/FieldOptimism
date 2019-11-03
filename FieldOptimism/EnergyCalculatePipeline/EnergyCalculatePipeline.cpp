@@ -72,9 +72,8 @@ double EnergyCalculatePipeline::handlerFunc(SolarScene* solar_scene, vector<int>
 		calcCenterMode = true;
 	ReceiverEnergyCalculator recv_energy_calc(solar_scene, gl_hander, m, n, calcCenterMode);
 	float res = recv_energy_calc.calcRecvEnergySum();
-
+	cout << res << endl;
 	return res * sunray.current_DNI;
-
 }
 
 
@@ -90,7 +89,10 @@ EnergyCalculatePipeline::~EnergyCalculatePipeline()
 
 double FluxCalculatePipeline::handlerFunc(SolarScene* solar_scene, vector<int>& time_param, SunRay& sunray, SdBkCalc* sdbk_handler) {
 	json flux = argumentParser->getConfig()["FluxParams"].as<json>();
-	vector<int> test_helio_index(flux["TestHelioIndex"].as<vector<int>>());
+	//vector<int> test_helio_index(flux["TestHelioIndex"].as<vector<int>>());
+	vector<int> test_helio_index;
+	for (auto& h : solar_scene->helios)
+		test_helio_index.push_back(h->helio_index);
 
 	double DNI = sunray.calcDNI(time_param);
 	string time_str = "M" + to_string(time_param[0]) + "D" + to_string(time_param[1])
@@ -106,7 +108,7 @@ double FluxCalculatePipeline::handlerFunc(SolarScene* solar_scene, vector<int>& 
 	}
 
 	sdbk_handler->setOutputPath(argumentParser->getOutputPath() + time_str);
-	//sdbk_handler->calcSceneFluxDistribution(test_helio_index, DNI, flux.get_with_default("GaussianParams").as<json>());
-	//float sum = EnergyCalculatePipeline::handlerFunc(solar_scene, time_param, sunray, sdbk_handler);
+	sdbk_handler->calcSceneFluxDistribution(test_helio_index, DNI, flux.get_with_default("GaussianParams").as<json>());
+	double sum = EnergyCalculatePipeline::handlerFunc(solar_scene, time_param, sunray, sdbk_handler);
 	return 0;
 }

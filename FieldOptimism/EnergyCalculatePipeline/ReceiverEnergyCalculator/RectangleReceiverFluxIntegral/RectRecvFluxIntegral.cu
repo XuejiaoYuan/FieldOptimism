@@ -31,9 +31,11 @@ __device__ float calcRectRecvFluxIntegralCore(IntegralHelioDeviceArgumet& h_args
 }
 
 __device__ float calcRecvFluxIntegralCore(IntegralHelioDeviceArgumet& h_args, ReceiverDeviceArgument& r_args, GaussLegendre& gl, int helioIndex, int recvIndex, int i, int j, int m, int n) {
-	float3 recv_pos = r_args.d_recv_focus_pos[recvIndex];
+	//float3 recv_pos = r_args.d_recv_focus_pos[recvIndex];
+	int focus_idx = h_args.d_focus_index[helioIndex];		// TODO: ºÏ≤È «∑Ò”–cylinder  ≈‰
+	float3 focus_pos = r_args.d_recv_focus_pos[focus_idx];
 	float3 recv_normal = r_args.d_recv_normal[recvIndex];
-	float3 imgplane_normal = normalize(h_args.d_helio_pos[helioIndex] - recv_pos);
+	float3 imgplane_normal = normalize(h_args.d_helio_pos[helioIndex] - focus_pos);
 	float cos_phi = dot(recv_normal, imgplane_normal);
 	if (cos_phi < Epsilon) return;
 
@@ -47,12 +49,12 @@ __device__ float calcRecvFluxIntegralCore(IntegralHelioDeviceArgumet& h_args, Re
 	float3 i_center_bias = make_float3(0, 0, 0);
 	if (h_args.d_center_bias) {
 		h_center_bias = h_args.d_center_bias[helioIndex];
-		GeometryFunc::calcIntersection(reverse_dir, recv_pos, h_center_bias, reverse_dir, i_center_bias);
+		GeometryFunc::calcIntersection(reverse_dir, focus_pos, h_center_bias, -reverse_dir, i_center_bias);
 		i_center_bias = GeometryFunc::multMatrix(i_center_bias, imgplane_m);
 	}
 
 	for (int i = 0; i < 4; ++i) {
-		GeometryFunc::calcIntersection(reverse_dir, recv_pos, recv_v[i], reverse_dir, inter_v);
+		GeometryFunc::calcIntersection(reverse_dir, focus_pos, recv_v[i], reverse_dir, inter_v);
 		inter_v = GeometryFunc::multMatrix(inter_v, imgplane_m);
 		proj_v[i] = make_float2(inter_v.x - i_center_bias.x, inter_v.z - i_center_bias.z);
 	}
@@ -79,6 +81,7 @@ __device__ float calcRecvFluxIntegralCore(IntegralHelioDeviceArgumet& h_args, Re
 	);
 
 	float sum = gl.calcInte(tmp_x, tmp_y, sigma, l_w_ratio) * h_args.d_factor[helioIndex]; // *cos_phi;
+	//sum = gl.calcInte(tmp_x, tmp_y, sigma, l_w_ratio) * h_args.d_factor[helioIndex]*cos_phi;
 
 	return sum;
 

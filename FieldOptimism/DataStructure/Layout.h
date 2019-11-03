@@ -67,7 +67,7 @@ public:
 	vector<double> helio_gap;
 
 private:
-	void setCircleHelios(Heliostat& h_tmp, const int idx, vector<double>& recv_dis, vector<int>& rows, const double gap,
+	bool setCircleHelios(Heliostat& h_tmp, const int idx, vector<double>& recv_dis, vector<int>& rows, const double gap,
 		const int col, vector<Heliostat*>& helios, const vector<Receiver*>& recvs);
 	void calcCircleParams(vector<double>& recv_dis, vector<int>& n_rows, vector<int>& n_cols, json& field_args, double dm);
 };
