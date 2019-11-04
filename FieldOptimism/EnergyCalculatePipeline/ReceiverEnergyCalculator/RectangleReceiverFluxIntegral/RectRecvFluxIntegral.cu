@@ -31,8 +31,7 @@ __device__ float calcRectRecvFluxIntegralCore(IntegralHelioDeviceArgumet& h_args
 }
 
 __device__ float calcRecvFluxIntegralCore(IntegralHelioDeviceArgumet& h_args, ReceiverDeviceArgument& r_args, GaussLegendre& gl, int helioIndex, int recvIndex, int i, int j, int m, int n) {
-	//float3 recv_pos = r_args.d_recv_focus_pos[recvIndex];
-	int focus_idx = h_args.d_focus_index[helioIndex];		// TODO: ºÏ≤È «∑Ò”–cylinder  ≈‰
+	int focus_idx = h_args.d_focus_index[helioIndex];
 	float3 focus_pos = r_args.d_recv_focus_pos[focus_idx];
 	float3 recv_normal = r_args.d_recv_normal[recvIndex];
 	float3 imgplane_normal = normalize(h_args.d_helio_pos[helioIndex] - focus_pos);
@@ -42,21 +41,27 @@ __device__ float calcRecvFluxIntegralCore(IntegralHelioDeviceArgumet& h_args, Re
 	float3 reverse_dir = imgplane_normal;		// The normal of image plane
 	float3* recv_v = r_args.d_recv_vertexes + 4 * recvIndex;
 	float4* imgplane_m = h_args.d_imgplane_world2local + 4 * helioIndex;
-	float2 proj_v[4];
+	float2 proj_v[4], trans_v[4];
 	float3 inter_v;
 
 	float3 h_center_bias = make_float3(0, 0, 0);
 	float3 i_center_bias = make_float3(0, 0, 0);
+	float rotate_theta = 0;
 	if (h_args.d_center_bias) {
 		h_center_bias = h_args.d_center_bias[helioIndex];
 		GeometryFunc::calcIntersection(reverse_dir, focus_pos, h_center_bias, -reverse_dir, i_center_bias);
 		i_center_bias = GeometryFunc::multMatrix(i_center_bias, imgplane_m);
+		rotate_theta = h_args.d_rotate_theta[helioIndex];
 	}
 
 	for (int i = 0; i < 4; ++i) {
 		GeometryFunc::calcIntersection(reverse_dir, focus_pos, recv_v[i], reverse_dir, inter_v);
 		inter_v = GeometryFunc::multMatrix(inter_v, imgplane_m);
 		proj_v[i] = make_float2(inter_v.x - i_center_bias.x, inter_v.z - i_center_bias.z);
+		float2 trans_v;
+		trans_v.x = proj_v[i].x*cos(rotate_theta) + proj_v[i].y*sin(rotate_theta);
+		trans_v.y = proj_v[i].y*cos(rotate_theta) - proj_v[i].x*sin(rotate_theta);
+		proj_v[i] = trans_v;
 	}
 
 	float2 row_gap = (proj_v[3] - proj_v[0]) / m;
@@ -80,8 +85,7 @@ __device__ float calcRecvFluxIntegralCore(IntegralHelioDeviceArgumet& h_args, Re
 		(proj_v[0] + i*row_gap + (j + 1)*col_gap).y
 	);
 
-	float sum = gl.calcInte(tmp_x, tmp_y, sigma, l_w_ratio) * h_args.d_factor[helioIndex]; // *cos_phi;
-	//sum = gl.calcInte(tmp_x, tmp_y, sigma, l_w_ratio) * h_args.d_factor[helioIndex]*cos_phi;
+	float sum = gl.calcInte(tmp_x, tmp_y, sigma, l_w_ratio) * h_args.d_factor[helioIndex];
 
 	return sum;
 

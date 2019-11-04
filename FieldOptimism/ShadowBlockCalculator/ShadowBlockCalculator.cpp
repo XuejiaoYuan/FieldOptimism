@@ -173,7 +173,7 @@ float SdBkCalc::calcHelio2RecvEnergy(vector<Vector3d>& recv_v, Vector3d& recv_n,
 
 	vector<string> model_name = {"m1", "m2", "m3", "m4"};
 	_mkdir(output_path.c_str());
-	fstream outFile(output_path + model_name[model_type] + '_' + to_string(helio->helio_index) + ".txt", ios_base::out);
+	//fstream outFile(output_path + model_name[model_type] + '_' + to_string(helio->helio_index) + ".txt", ios_base::out);
 	for (int i = 0; i < rows; ++i) {
 		for (int j = 0; j < cols; ++j) {
 			Vector3d start_v = recv_v[0] + i*row_gap + j*col_gap;
@@ -193,17 +193,17 @@ float SdBkCalc::calcHelio2RecvEnergy(vector<Vector3d>& recv_v, Vector3d& recv_n,
 			else {
 				GeometryFunc::calcIntersection(reverse_dir, fc_center, start_v, reverse_dir, inter_v);
 				Vector3d proj_v = GeometryFunc::mulMatrix(inter_v, world2local) - i_center_bias;
+				helio->rotate_theta = 0;
 				trans_v.x() = proj_v.x()*cos(helio->rotate_theta) + proj_v.z()*sin(helio->rotate_theta);
 				trans_v.z() = proj_v.z()*cos(helio->rotate_theta) - proj_v.x()*sin(helio->rotate_theta);
 				res = DNI*(1 - helio->sd_bk)*cos_phi*helio->flux_param * gl->flux_func(trans_v.x(), trans_v.z(), sigma, helio->l_w_ratio);
 			}
-			
-			sum += res * grid_area;
-			outFile << start_v.x() << ' ' << start_v.y() << ' ' << res << endl;
+			sum += res *grid_area /cos_phi;
+			//outFile << start_v.x() << ' ' << start_v.y() << ' ' << res << endl;
 		}
 	}
-	outFile << i_center_bias.x() << ' ' << i_center_bias.z() << endl;
-	outFile.close();
+	//outFile << i_center_bias.x() << ' ' << i_center_bias.z() << endl;
+	//outFile.close();
 	return sum;
 }
 
@@ -271,7 +271,7 @@ void SdBkCalc::calcSceneFluxDistribution(vector<int>& test_helio_index, const do
 		}
 	}
 	delete gl;
-	//cout << sum/DNI << endl;
+	cout << sum/DNI << endl;
 }
 
 

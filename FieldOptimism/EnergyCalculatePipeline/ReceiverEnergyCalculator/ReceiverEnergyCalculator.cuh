@@ -20,7 +20,7 @@ public:
 
 		h_args.clear();
 		r_args->clear();
-		delete r_args;
+		//delete r_args;
 		//delete[] h_helio_energy;
 		cudaFree(d_helio_energy);
 		h_helio_energy = nullptr;

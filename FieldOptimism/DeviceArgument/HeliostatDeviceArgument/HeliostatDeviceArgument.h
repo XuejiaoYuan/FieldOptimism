@@ -98,10 +98,11 @@ public:
 	float2* d_gauss_param;				// 各定日镜在image plane上的边长比, sigma
 	float* d_factor;					// 各定日镜各项因子参数
 	float3* d_center_bias;				// 各定日镜阴影遮挡后区域中心位置
+	float* d_rotate_theta;				// 各定日镜旋转角度
 	float sigma;						// iHFCAL积分参数
 	float DNI;							// 当前时刻DNI
 	IntegralHelioDeviceArgumet() : d_focus_index(nullptr), d_imgplane_world2local(nullptr), d_gauss_param(nullptr),
-		d_factor(nullptr), d_center_bias(nullptr) {}
+		d_factor(nullptr), d_center_bias(nullptr), d_rotate_theta(nullptr) {}
 	~IntegralHelioDeviceArgumet() {
 		clearArguments();
 	}
@@ -114,6 +115,7 @@ public:
 		d_gauss_param = nullptr;
 		d_factor = nullptr;
 		d_center_bias = nullptr;
+		d_rotate_theta = nullptr;
 	}
 	void clear() {
 		HeliostatDeviceArgument::clear();
@@ -136,6 +138,10 @@ public:
 		if (d_center_bias) {
 			cudaFree(d_center_bias);
 			d_center_bias = nullptr;
+		}
+		if (d_rotate_theta) {
+			cudaFree(d_rotate_theta);
+			d_rotate_theta = nullptr;
 		}
 	}
 };

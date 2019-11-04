@@ -121,13 +121,20 @@ void IntegralHelioDeviceArgumet::setHelioCenterBias(vector<Heliostat*>& helios, 
 		cudaFree(d_center_bias);
 		d_center_bias = nullptr;
 	}
-	if (!d_center_bias)
+	if (!d_center_bias) {
 		cudaMalloc((void**)&d_center_bias, sizeof(float3)*numberOfHeliostats);
+		cudaMalloc((void**)&d_rotate_theta, sizeof(float)*numberOfHeliostats);
+	}
 	float3* h_center_bias = new float3[numberOfHeliostats];
+	float* h_rotate_theta = new float[numberOfHeliostats];
 #pragma omp parallel for
-	for (int i = 0; i < helios.size(); ++i)
+	for (int i = 0; i < helios.size(); ++i) {
 		h_center_bias[i] = helios[i]->centerBias;
+		h_rotate_theta[i] = helios[i]->rotate_theta;
+	}
 
 	cudaMemcpy(d_center_bias, h_center_bias, sizeof(float3)*numberOfHeliostats, cudaMemcpyHostToDevice);
+	cudaMemcpy(d_rotate_theta, h_rotate_theta, sizeof(float)*numberOfHeliostats, cudaMemcpyHostToDevice);
 	delete[] h_center_bias;
+	delete[] h_rotate_theta;
 }
