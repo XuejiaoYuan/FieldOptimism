@@ -134,10 +134,6 @@ float SdBkCalc::calcHelio2RecvEnergy(vector<Vector3d>& recv_v, Vector3d& recv_n,
 
 	double sum = 0;
 	double grid_area = 0.0;
-	for (int i = 0; i < recv_v.size(); i++)
-		grid_area += recv_v[i].x()*recv_v[(i + 1) % 4].y() - recv_v[i].y()*recv_v[(i + 1) % 4].x();
-	grid_area = fabs(grid_area / 2.0 / rows / cols);
-
 
 	Vector3d i_center_bias(0, 0, 0);
 	if (calcCenterMode) {
@@ -149,10 +145,31 @@ float SdBkCalc::calcHelio2RecvEnergy(vector<Vector3d>& recv_v, Vector3d& recv_n,
 	double sigma = helio->sigma;
 	Matrix4d hWorld2local, hLocal2World;
 	ModelType model_type = solar_scene->getModelType();
-	if (model_type == Gracia)
+	vector<Vector3d> proj_v(4);
+	if (model_type == Gracia) {
 		GeometryFunc::getHelioMatrix(helio->helio_normal, helio->helio_pos, hLocal2World, hWorld2local);
-	else if (model_type == HFLCAL)
+		for (int i = 0; i < 4; ++i) {
+			GeometryFunc::calcIntersection(helio->helio_normal, helio->helio_pos, recv_v[i], reverse_dir, proj_v[i]);
+			proj_v[i] = GeometryFunc::mulMatrix(proj_v[i], hWorld2local);
+		}
+		for (int i = 0; i < 4; ++i)
+			grid_area += proj_v[i].x()*proj_v[(i + 1) % 4].z() - proj_v[i].z()*proj_v[(i + 1) % 4].x();
+		grid_area = fabs(grid_area / 2.0 / rows / cols);
+	}
+	else if (model_type == HFLCAL) {
 		GeometryFunc::getHelioMatrix(recv_n, fc_center, hLocal2World, hWorld2local);
+		grid_area = (recv_v[1] - recv_v[0]).norm() * (recv_v[3] - recv_v[0]).norm() / rows / cols;
+	}
+	else {
+		for (int i = 0; i < 4; ++i) {
+			GeometryFunc::calcIntersection(reverse_dir, fc_center, recv_v[i], reverse_dir, proj_v[i]);
+			proj_v[i] = GeometryFunc::mulMatrix(proj_v[i], world2local);
+		}
+
+		for (int i = 0; i < 4; ++i)
+			grid_area += proj_v[i].x()*proj_v[(i + 1) % 4].z() - proj_v[i].z()*proj_v[(i + 1) % 4].x();
+		grid_area = fabs(grid_area / 2.0 / rows / cols);
+	}
 
 	vector<string> model_name = {"m1", "m2", "m3", "m4"};
 	_mkdir(output_path.c_str());
@@ -161,16 +178,17 @@ float SdBkCalc::calcHelio2RecvEnergy(vector<Vector3d>& recv_v, Vector3d& recv_n,
 		for (int j = 0; j < cols; ++j) {
 			Vector3d start_v = recv_v[0] + i*row_gap + j*col_gap;
 			Vector3d trans_v, inter_v;
+
 			double res = 0;
 
 			if(model_type == Gracia) {
 				GeometryFunc::calcIntersection(helio->helio_normal, helio->helio_pos, start_v, -reverse_dir, inter_v);
 				trans_v = GeometryFunc::mulMatrix(inter_v, hWorld2local);
-				res = DNI*(1 - helio->sd_bk)*cos_phi*helio->mAA*helio->S*HELIOSTAT_REFLECTIVITY / 2. / PI*gl->flux_func(trans_v.x(), trans_v.z(), sigma, 1);
+				res = DNI*(1 - helio->sd_bk)*helio->mAA*helio->S*HELIOSTAT_REFLECTIVITY / 2. / PI*gl->flux_func(trans_v.x(), trans_v.z(), sigma, 1)*cos_phi;
 			}
 			else if (model_type == HFLCAL) {
 				trans_v = GeometryFunc::mulMatrix(start_v, hWorld2local);
-				res = DNI*cos_phi*helio->flux_param * gl->flux_func(trans_v.x(), trans_v.z(), sigma, 1);
+				res = DNI*helio->flux_param * gl->flux_func(trans_v.x(), trans_v.z(), sigma, 1);
 			}
 			else {
 				GeometryFunc::calcIntersection(reverse_dir, fc_center, start_v, reverse_dir, inter_v);
@@ -253,7 +271,7 @@ void SdBkCalc::calcSceneFluxDistribution(vector<int>& test_helio_index, const do
 		}
 	}
 	delete gl;
-	cout << sum/DNI << endl;
+	//cout << sum/DNI << endl;
 }
 
 

@@ -74,7 +74,7 @@ Vector3d SunRay::calcSunRay(const string &spa_data_file) {
 
 	double min = 60.0*(spa.sunset - (int)(spa.sunset));
 	double sec = 60.0*(min - (int)min);
-	printf("Sunset:        %02d:%02d:%02d Local Time\n", (int)(spa.sunset), (int)min, (int)sec);
+	//printf("Sunset:        %02d:%02d:%02d Local Time\n", (int)(spa.sunset), (int)min, (int)sec);
 
     return sunray_dir;
 }

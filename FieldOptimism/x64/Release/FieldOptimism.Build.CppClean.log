@@ -1,31 +1,36 @@
 e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\x64\release\vc140.pdb
-e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\x64\release\sigmafitting.obj
 e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\x64\release\sdbkcalculator.obj
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\x64\release\main.obj
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\x64\release\testhandler.obj
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\x64\release\sigmafitting.obj
 e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\x64\release\receiverdeviceargument.obj
 e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\x64\release\cylinderreceiverdeviceargument.obj
 e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\x64\release\heliostatdeviceargument.obj
-e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\x64\release\main.obj
 e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\x64\release\energycalcpipeline.obj
 e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\x64\release\griddda_cpu.obj
 e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\x64\release\gausslegendre.obj
 e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\x64\release\discreteraycaster.obj
 e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\x64\release\timer.obj
 e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\x64\release\sunray.obj
-e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\x64\release\spa.obj
 e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\x64\release\solarscene.obj
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\x64\release\spa.obj
 e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\x64\release\receiver.obj
-e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\x64\release\lsffieldsegment.obj
 e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\x64\release\layout.obj
 e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\x64\release\heliostat.obj
 e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\x64\release\clipper.obj
 e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\x64\release\calcpolygoncenter.obj
-e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\x64\release\testhandler.obj
-x64\release\devicelist.cu.obj
-x64\release\raycastercore.cu.obj
-x64\release\gausslegendre.cu.obj
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\x64\release\argumentparser.obj
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\x64\release\shadowblockcalculator.obj
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\x64\release\polygoncentercalculator.obj
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\x64\release\energycalculator.obj
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\x64\release\griddda.obj
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\x64\release\fieldsimulationcontroller.obj
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\x64\release\differentialevolution.obj
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\x64\release\energycalculatepipeline.obj
 x64\release\cylinderrecvfluxintegral.cu.obj
+x64\release\receiverenergycalculator.cu.obj
 x64\release\rectrecvfluxintegral.cu.obj
-x64\release\recvenergycalc.cu.obj
+x64\release\gausslegendre.cu.obj
 e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\x64\release\fieldoptimism.lib
 e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\x64\release\fieldoptimism.exp
 e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\x64\release\fieldoptimism.exe
@@ -36,13 +41,16 @@ e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\x
 e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\x64\release\devicelist.cu.cache
 e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\x64\release\gausslegendre.cu.cache
 e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\x64\release\raycastercore.cu.cache
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\x64\release\receiverenergycalculator.cu.cache
 e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\x64\release\rectrecvfluxintegral.cu.cache
 e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\x64\release\recvenergycalc.cu.cache
 e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\x64\release\cylinderrecvfluxintegral.cu.obj
 e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\x64\release\devicelist.cu.obj
 e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\x64\release\fieldoptimism.device-link.obj
 e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\x64\release\gausslegendre.cu.obj
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\x64\release\lsffieldsegment.obj
 e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\x64\release\raycastercore.cu.obj
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\x64\release\receiverenergycalculator.cu.obj
 e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\x64\release\rectrecvfluxintegral.cu.obj
 e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\x64\release\recvenergycalc.cu.obj
 e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\x64\release\fieldoptimism.tlog\cl.command.1.tlog

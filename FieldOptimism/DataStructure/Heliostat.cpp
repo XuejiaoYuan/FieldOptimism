@@ -67,16 +67,26 @@ void Heliostat::calcFluxParam(const ModelType& type, const bool& calc_sigma)
 		col_dir = (inter_v[2] - inter_v[0]).normalized();
 		row_dir = (inter_v[1] - inter_v[0]).normalized();
 		double cos_eta_col = col_dir.dot(img_x_axis);
+		double cos_eta_row = row_dir.dot(img_y_axis);
 		rotate_theta = acos(abs(cos_eta_col));
+		//double distortion_theta = acos(abs(cos_eta_row));
+		double distortion_theta = 0;
 
 		if (col_dir.dot(img_y_axis) < 0) rotate_theta = -rotate_theta;
+		if (row_dir.dot(img_x_axis) < 0) distortion_theta = -distortion_theta;
+
+		rotate_theta += distortion_theta;
 
 		double ip_w = (inter_v[1] - inter_v[0]).norm();
 		double ip_l = (inter_v[2] - inter_v[0]).norm();
 	
 		double w_l = ip_w / ip_l;
-		l_w_ratio = 1 +  abs(log10(2 - 0.5*w_l));	
-		rotate_theta = 0;
+		l_w_ratio = 1 +  abs(log10(2 - 0.5*w_l));
+		//l_w_ratio = 1 + abs(log10(w_l));
+
+		//l_w_ratio = 1 + log10(w_l);
+		//l_w_ratio = 1;
+
 	}
 	else if (type == iHFLCAL) {
 		rotate_theta = 0;
@@ -88,7 +98,7 @@ void Heliostat::calcFluxParam(const ModelType& type, const bool& calc_sigma)
 		double ip_w = (inter_v[1] - inter_v[0]).norm();
 		double ip_l = (inter_v[2] - inter_v[0]).norm();
 
-		double w_l = ip_w / ip_l;
+		double w_l = ip_l / ip_w;
 		l_w_ratio = 1 + log10(w_l);
 	}
 	else {
