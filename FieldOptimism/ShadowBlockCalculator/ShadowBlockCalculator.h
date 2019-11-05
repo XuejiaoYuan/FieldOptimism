@@ -12,6 +12,8 @@ public:
 	SdBkCalc(SolarScene* _solar_scene) :calcCenterMode(false), output_path("") {
 		this->solar_scene = _solar_scene;
 		if (solar_scene->getModelType() == bHFLCAL) this->calcCenterMode = true;
+		rela_block_grid_index.resize(solar_scene->helios.size());
+		block_grid_init.resize(solar_scene->helios.size(), false);
 	}
 	void calcSceneShadowBlock();
 	void calcSceneFluxDistribution(vector<int>& test_helio_index, const double DNI, json& config);
@@ -19,7 +21,9 @@ public:
 	
 protected:
 	GaussLegendreCPU* gl;
-	map<int, set<vector<int>>> rela_block_grid_index;
+	//map<int, set<vector<int>>> rela_block_grid_index;
+	vector<set<vector<int>>> rela_block_grid_index;
+	vector<bool> block_grid_init;
 	SolarScene* solar_scene;
 	bool calcCenterMode;
 	string output_path;

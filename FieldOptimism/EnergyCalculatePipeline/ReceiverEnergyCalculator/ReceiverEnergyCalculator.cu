@@ -43,12 +43,9 @@ float ReceiverEnergyCalculator::calcHelioEnergySum() {
 	int helioNum = solar_scene->helios.size();
 	cudaMemcpy(h_helio_energy, d_helio_energy, sizeof(float)*helioNum, cudaMemcpyDeviceToHost);
 	float sum = 0;
-	fstream out("cuda.txt", ios_base::out);
 	for (int i = 0; i < helioNum; ++i) {
 		sum += h_helio_energy[i];
-		out << h_helio_energy[i] << endl;
 	}
-	out.close();
 	delete[] h_helio_energy;
 	return sum;
 }
@@ -86,7 +83,6 @@ float ReceiverEnergyCalculator::calcCylinderRecvEnergySum()
 	GeometryFunc::setThreadsBlocks(nBlocks, nThreads, m*n*helioNum);
 	
 	setDeviceHelioEnergy();
-	//calcCylinderRecvFluxSum << <nBlocks, nThreads >> > (h_args, *r_args, *gl_handler, d_total_energy, m, n);
 	calcHelioCylinderRecvFlux << <nBlocks, nThreads >> > (h_args, *r_args, *gl_handler, d_helio_energy, m, n);
 	cudaDeviceSynchronize();
 	float sum = calcHelioEnergySum();

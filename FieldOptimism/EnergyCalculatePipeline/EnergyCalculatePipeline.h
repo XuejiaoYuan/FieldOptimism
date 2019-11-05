@@ -12,8 +12,10 @@ enum EnergyCalcMode
 class EnergyCalculatePipeline
 {
 public:
-	double handler(ArgumentParser& argumentParser, json& field_args);
-	EnergyCalculatePipeline();
+	EnergyCalculatePipeline(ArgumentParser& argumentParser) : argumentParser(&argumentParser) {
+		solar_scene = new SolarScene();
+	};
+	double handler(json& field_args);
 	virtual ~EnergyCalculatePipeline();
 
 protected:
@@ -27,18 +29,19 @@ protected:
 
 class FluxCalculatePipeline :public EnergyCalculatePipeline {
 public:
+	FluxCalculatePipeline(ArgumentParser& argumentParser) :EnergyCalculatePipeline(argumentParser) {}
 	double handlerFunc(SolarScene* solar_scene, vector<int>& time_param, SunRay& sunray, SdBkCalc* sdbkHandler);
 };
 
 class EnergyCalculateCreator {
 public:
-	static EnergyCalculatePipeline* getPipeline(EnergyCalcMode mode) {
+	static EnergyCalculatePipeline* getPipeline(EnergyCalcMode mode, ArgumentParser& argumentParser) {
 		switch (mode)
 		{
 		case SceneEnergyMode:
-			return new EnergyCalculatePipeline();
+			return new EnergyCalculatePipeline(argumentParser);
 		case FluxDensityMode:
-			return new FluxCalculatePipeline();
+			return new FluxCalculatePipeline(argumentParser);
 		default:
 			cerr << "Wrong mode!" << endl;
 			return NULL;

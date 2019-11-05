@@ -15,12 +15,16 @@ void Layout::initLayoutParams() {
 	helio_layout.resize(layout_row_col.x(), vector<vector<Heliostat*>>(layout_row_col.y()));
 }
 
-void Layout::loadFieldArgs(json& field_args, double& z_start, int& rows, int& cols) {
+void Layout::loadFieldArgs(ArgumentParser& argumentParser, json& field_args, double& z_start, int& rows, int& cols) {
+	rows = argumentParser.getConfig()["Layout"]["rows"].as<int>();
+	cols = argumentParser.getConfig()["Layout"]["cols"].as<int>();
 	z_start = field_args["z_start"].as_double();
-	rows = field_args["rows"].as<int>();
-	cols = field_args["cols"].as<int>();
-	helio_interval = Vector2d(field_args["interval"]["x"].as_double(), field_args["interval"]["z"].as_double());
-	layout_bound_pos = Vector2d(-(cols / 2.0) *  helio_interval.x(), z_start - (rows + 0.5)*helio_interval.y());
+	double interval_ratio_x = field_args["interval_ratio_x"].as_double();
+	double interval_ratio_y = field_args["interval_ratio_z"].as_double();
+	Vector3d helio_size = argumentParser.getHelio().helio_size;
+	double dm = sqrt(pow(helio_size.x(), 2) + pow(helio_size.z(), 2));
+	helio_interval = Vector2d(dm*interval_ratio_x, dm*interval_ratio_y);
+	layout_bound_pos = Vector2d(-(cols / 2.0) *  helio_interval.x(), z_start - (rows+0.5)*helio_interval.y());
 	layout_size = Vector2d(helio_interval.x()*cols, helio_interval.y()*rows);
 }
 
@@ -46,7 +50,7 @@ void Layout::createHelioAndLayout(ArgumentParser& argumentParser, json& field_ar
 	// 1. Load field arguments
 	double z_start;
 	int rows, cols;
-	loadFieldArgs(field_args, z_start, rows, cols);
+	loadFieldArgs(argumentParser, field_args, z_start, rows, cols);
 
 	// 2. Initialize layout parameters
 	initLayoutParams();
@@ -76,7 +80,7 @@ void CrossRectLayout::createHelioAndLayout(ArgumentParser& argumentParser, json&
 	// 1. Load field arguments
 	double z_start;
 	int rows, cols;
-	loadFieldArgs(field_args, z_start, rows, cols);
+	loadFieldArgs(argumentParser, field_args, z_start, rows, cols);
 
 	// 2. Initialize layout parameters
 	initLayoutParams();
@@ -105,7 +109,7 @@ void FermatLayout::createHelioAndLayout(ArgumentParser& argumentParser, json& fi
 	vector<double> recv_dis;
 	vector<int> n_rows, n_cols;
 	Heliostat h_tmp  = argumentParser.getHelio();
-	double dm = sqrt(pow(h_tmp.helio_size.x(), 2) + pow(h_tmp.helio_size.y(), 2)) + dsep;	// 定日镜对角线长度
+	double dm = sqrt(pow(h_tmp.helio_size.x(), 2) + pow(h_tmp.helio_size.z(), 2)) + dsep;	// 定日镜对角线长度
 	helio_interval = Vector2d(dm, dm);
 	dsep = field_args["dsep"].as_double();
 	real_helio_num = argumentParser.getNumOfHelio();

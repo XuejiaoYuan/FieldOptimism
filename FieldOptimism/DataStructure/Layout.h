@@ -40,7 +40,7 @@ public:
 protected:
 	void initLayoutParams();
 	void storeHelioToLayoutCore(Heliostat* helio);
-	virtual void loadFieldArgs(json& field_args, double& z_start, int& rows, int& cols);
+	virtual void loadFieldArgs(ArgumentParser& argumentParser, json& field_args, double& z_start, int& rows, int& cols);
 };
 
 //

@@ -235,7 +235,8 @@ double SdBkCalc::calcHelioShadowBlock(int helio_index)
 	Vector3d reflect_dir = (helio->focus_center - helio->helio_pos).normalized();
 	GridDDA dda_handler;
 	dda_handler.rayCastForShadow(solar_scene, helio, -solar_scene->sunray_dir, estimate_index[0]);
-	if (!rela_block_grid_index.count(helio_index)) {
+
+	if (!block_grid_init[helio_index]) {
 		dda_handler.rayCastForBlock(solar_scene, helio, rela_block_grid_index[helio_index]);
 	}
 	dda_handler.getBlockHelioFromGrid(solar_scene, rela_block_grid_index[helio_index], estimate_index[1], helio);
@@ -271,7 +272,6 @@ void SdBkCalc::calcSceneFluxDistribution(vector<int>& test_helio_index, const do
 		}
 	}
 	delete gl;
-	cout << sum/DNI << endl;
 }
 
 
