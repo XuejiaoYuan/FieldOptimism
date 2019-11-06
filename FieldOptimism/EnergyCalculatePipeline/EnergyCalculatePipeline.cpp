@@ -54,7 +54,8 @@ double EnergyCalculatePipeline::handlerCore(vector<int>& time_param, SunRay& sun
 	Vector3d sunray_dir = sunray.changeSunRay(time_param);
 	double DNI = sunray.calcDNI(time_param);
 	solar_scene->changeHeliosNormal(sunray_dir);
-	
+	cout << solar_scene->layouts[0]->real_helio_num << endl;
+
 	// 2. ¼ÆËãÒõÓ°ÕÚµ²ÂÊ
 	//cout << "\t3.2 Calculate heliostats' shading and blocking factor" << endl;
 	sdbk_handler->calcSceneShadowBlock();
@@ -92,7 +93,10 @@ EnergyCalculatePipeline::~EnergyCalculatePipeline()
 
 double FluxCalculatePipeline::handlerFunc(SolarScene* solar_scene, vector<int>& time_param, SunRay& sunray, SdBkCalc* sdbk_handler) {
 	json flux = argumentParser->getConfig()["FluxParams"].as<json>();
-	vector<int> test_helio_index(flux["TestHelioIndex"].as<vector<int>>());
+	//vector<int> test_helio_index(flux["TestHelioIndex"].as<vector<int>>());
+	vector<int> test_helio_index;
+	for (int i = 0; i < solar_scene->helios.size(); ++i)
+		test_helio_index.push_back(i);
 
 	double DNI = sunray.calcDNI(time_param);
 	string time_str = "M" + to_string(time_param[0]) + "D" + to_string(time_param[1])

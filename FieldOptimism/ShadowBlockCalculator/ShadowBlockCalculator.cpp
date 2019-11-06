@@ -265,12 +265,17 @@ void SdBkCalc::calcSceneFluxDistribution(vector<int>& test_helio_index, const do
 		
 		vector<vector<Vector3d>> recv_vertex = recvs[0]->getRecvVertex(helio->focus_center);
 		vector<Vector3d> recv_normal = recvs[0]->getNormalList(helio->focus_center);
+		double res = 0;
 		for (int i = 0; i < helio->cos_phi.size(); i++) {
 			if (helio->cos_phi[i] > Epsilon) {
-				sum += calcHelio2RecvEnergy(recv_vertex[i], recv_normal[i], rows_cols, helio, helio->focus_center, DNI, helio->cos_phi[i]);
+				res += calcHelio2RecvEnergy(recv_vertex[i], recv_normal[i], rows_cols, helio, helio->focus_center, DNI, helio->cos_phi[i]);
 			}
 		}
+		sum += res;
+		cout << res/DNI << endl;
 	}
+
+	cout << sum << endl;
 	delete gl;
 }
 

@@ -45,8 +45,10 @@ protected:
 
 	void DEPipeline();
 	virtual void initialization();
+	virtual void initializationHelper(shared_ptr<uniform_real_distribution<double>>& distribution, const int idx);
 	virtual json mutation(uniform_int_distribution<int>& distribution, const int idx);
 	virtual json crossover(json& z, const int idx);
+	virtual bool constraintCheck(json& newX);
 	virtual bool seletction(json& newX, const int idx);
 	vector<int> getRandomIndex(uniform_int_distribution<int>& distribution, const int idx);
 };
@@ -69,9 +71,10 @@ public:
 	}
 
 protected:
+	void initializationHelper(shared_ptr<uniform_real_distribution<double>>& distribution, const int idx);
 	json mutation(uniform_int_distribution<int>& distribution, const int idx);
-	virtual void crossover() {};
-	virtual void seletction() {};
+	json crossover(json& z, const int idx);
+	bool constraintCheck(json& newX);
 };
 
 class RadialDifferentialEvolution:public DifferentialEvolution {

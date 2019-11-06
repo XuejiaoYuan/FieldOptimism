@@ -88,7 +88,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <CudaCompile Include="EnergyCalculatePipeline\ReceiverEnergyCalculator\CylinderReceiverFluxIntegral\CylinderRecvFluxIntegral.cu" />
-    <CudaCompile Include="EnergyCalculatePipeline\ReceiverEnergyCalculator\ReceiverEnergyCalculator.cu" />
     <CudaCompile Include="EnergyCalculatePipeline\ReceiverEnergyCalculator\RectangleReceiverFluxIntegral\RectRecvFluxIntegral.cu" />
     <CudaCompile Include="GaussLegendre\GaussLegendre.cu" />
   </ItemGroup>
@@ -107,7 +106,7 @@
     <ClInclude Include="DifferentialEvolution\DifferentialEvolution.h" />
     <ClInclude Include="EnergyCalculatePipeline\EnergyCalculatePipeline.h" />
     <ClInclude Include="EnergyCalculatePipeline\ReceiverEnergyCalculator\CylinderReceiverFluxIntegral\CylinderRecvFluxIntegral.cuh" />
-    <ClInclude Include="EnergyCalculatePipeline\ReceiverEnergyCalculator\ReceiverEnergyCalculator.cuh" />
+    <ClInclude Include="EnergyCalculatePipeline\ReceiverEnergyCalculator\ReceiverEnergyCalculator.h" />
     <ClInclude Include="EnergyCalculatePipeline\ReceiverEnergyCalculator\RectangleReceiverFluxIntegral\RectRecvFluxIntegral.cuh" />
     <ClInclude Include="FieldSimulationController\FieldSimulationController.h" />
     <ClInclude Include="GaussLegendre\GaussLegendre.cuh" />
@@ -132,6 +131,7 @@
     <ClCompile Include="DeviceArgument\ReceiverDeviceArgument\ReceiverDeviceArgument.cpp" />
     <ClCompile Include="DifferentialEvolution\DifferentialEvolution.cpp" />
     <ClCompile Include="EnergyCalculatePipeline\EnergyCalculatePipeline.cpp" />
+    <ClCompile Include="EnergyCalculatePipeline\ReceiverEnergyCalculator\ReceiverEnergyCalculator.cpp" />
     <ClCompile Include="FieldSimulationController\FieldSimulationController.cpp" />
     <ClCompile Include="GaussLegendre\GaussLegendre.cpp" />
     <ClCompile Include="GridDDA\GridDDA.cpp" />

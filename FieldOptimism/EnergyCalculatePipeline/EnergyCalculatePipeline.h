@@ -2,7 +2,7 @@
 #include "../Tool/ArgumentParser/ArgumentParser.h"
 #include "../ShadowBlockCalculator/ShadowBlockCalculator.h"
 #include "../SigmaFitting/SigmaFitting.h"
-#include "ReceiverEnergyCalculator/ReceiverEnergyCalculator.cuh"
+#include "ReceiverEnergyCalculator/ReceiverEnergyCalculator.h"
 
 enum EnergyCalcMode
 {

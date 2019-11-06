@@ -73,6 +73,7 @@ void Layout::createHelioAndLayout(ArgumentParser& argumentParser, json& field_ar
 			x_start += helio_interval.x();
 		}
 	}
+	real_helio_num = helios.size();
 }
 
 
@@ -102,6 +103,7 @@ void CrossRectLayout::createHelioAndLayout(ArgumentParser& argumentParser, json&
 			x_start += helio_interval.x();
 		}
 	}
+	real_helio_num = helios.size();
 }
 
 
@@ -109,11 +111,11 @@ void FermatLayout::createHelioAndLayout(ArgumentParser& argumentParser, json& fi
 	vector<double> recv_dis;
 	vector<int> n_rows, n_cols;
 	Heliostat h_tmp  = argumentParser.getHelio();
-	double dm = sqrt(pow(h_tmp.helio_size.x(), 2) + pow(h_tmp.helio_size.z(), 2)) + dsep;	// 定日镜对角线长度
-	helio_interval = Vector2d(dm, dm);
 	dsep = field_args["dsep"].as_double();
+	double dm = sqrt(pow(h_tmp.helio_size.x(), 2) + pow(h_tmp.helio_size.z(), 2)) * dsep;	// 定日镜对角线长度
+	helio_interval = Vector2d(dm, dm);
 	real_helio_num = argumentParser.getNumOfHelio();
-
+	cout << real_helio_num << endl;
 	calcCircleParams(recv_dis, n_rows, n_cols, field_args, dm);
 
 	for (int i = 0; i < n_rows.size(); ++i) {
@@ -122,9 +124,10 @@ void FermatLayout::createHelioAndLayout(ArgumentParser& argumentParser, json& fi
 			break;
 	}
 
-	layout_bound_pos = Vector2d(-recv_dis.back(), -recv_dis.back());
-	layout_size = Vector2d(2 * recv_dis.back(), 2 * recv_dis.back());
+	layout_bound_pos = Vector2d(-recv_dis.back() - dm / 2., -recv_dis.back() - dm / 2.);
+	layout_size = Vector2d(2 * recv_dis.back() + dm, 2 * recv_dis.back() + dm);
 	initLayoutParams();
+	cout << real_helio_num << endl;
 }
 
 
@@ -171,6 +174,8 @@ void FermatLayout::calcCircleParams(vector<double>& recv_dis, vector<int>& n_row
 			helio_gap[i] *= dm;
 		if (n_cols.empty()) {
 			n_cols.push_back(int(2 * PI / (dm / recv_dis.front())));
+			if (n_cols.front() == 0)
+				throw runtime_error("[INFO] error field parameters!!!");
 		}
 		else {
 			n_cols.push_back(n_cols.back() * 2);

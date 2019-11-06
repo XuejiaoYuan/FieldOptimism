@@ -10,9 +10,6 @@
     <CudaCompile Include="EnergyCalculatePipeline\ReceiverEnergyCalculator\RectangleReceiverFluxIntegral\RectRecvFluxIntegral.cu">
       <Filter>EnergyCalculatePipeline\ReceiverEnergyCalculator\RectangleReceiverFluxIntegral</Filter>
     </CudaCompile>
-    <CudaCompile Include="EnergyCalculatePipeline\ReceiverEnergyCalculator\ReceiverEnergyCalculator.cu">
-      <Filter>EnergyCalculatePipeline\ReceiverEnergyCalculator</Filter>
-    </CudaCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Common">
@@ -158,7 +155,7 @@
     <ClInclude Include="EnergyCalculatePipeline\ReceiverEnergyCalculator\RectangleReceiverFluxIntegral\RectRecvFluxIntegral.cuh">
       <Filter>EnergyCalculatePipeline\ReceiverEnergyCalculator\RectangleReceiverFluxIntegral</Filter>
     </ClInclude>
-    <ClInclude Include="EnergyCalculatePipeline\ReceiverEnergyCalculator\ReceiverEnergyCalculator.cuh">
+    <ClInclude Include="EnergyCalculatePipeline\ReceiverEnergyCalculator\ReceiverEnergyCalculator.h">
       <Filter>EnergyCalculatePipeline\ReceiverEnergyCalculator</Filter>
     </ClInclude>
   </ItemGroup>
@@ -223,6 +220,9 @@
     </ClCompile>
     <ClCompile Include="EnergyCalculatePipeline\EnergyCalculatePipeline.cpp">
       <Filter>EnergyCalculatePipeline</Filter>
+    </ClCompile>
+    <ClCompile Include="EnergyCalculatePipeline\ReceiverEnergyCalculator\ReceiverEnergyCalculator.cpp">
+      <Filter>EnergyCalculatePipeline\ReceiverEnergyCalculator</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

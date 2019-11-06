@@ -3,6 +3,8 @@
 #include "../../../DeviceArgument/HeliostatDeviceArgument/HeliostatDeviceArgument.h"
 #include "../../../GaussLegendre/GaussLegendre.cuh"
 
+void calcRectRecvEnergySum(int m, int n, int helioNum, IntegralHelioDeviceArgumet& h_args, ReceiverDeviceArgument& r_args, GaussLegendre& gl, float* d_helio_energy);
+
 __global__ void calcRectRecvFluxSum(IntegralHelioDeviceArgumet h_args, ReceiverDeviceArgument r_args, GaussLegendre gl, float* d_total_energy, const int m, const int n);
 
 __global__ void calcHelioRectRecvFlux(IntegralHelioDeviceArgumet h_args, ReceiverDeviceArgument r_args, GaussLegendre gl, float* d_helio_energy, const int m, const int n);

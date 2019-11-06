@@ -21,7 +21,7 @@ class Receiver;
 
 class Heliostat {
 public:
-	Heliostat(const HelioType& _type) :helio_type(_type), helio_normal(Vector3d(0, 0, 0)), sd_bk(0), sigma(0) {};
+	Heliostat(const HelioType& _type) :helio_type(_type), helio_normal(Vector3d(0, 0, 0)), sd_bk(0), sigma(0), energy(0) {};
 	void initHelio(json& config);
 	void initFluxParam(const vector<Receiver*>& recvs);
 	void changeSurfaceNormal(const Vector3d& sunray_dir, const ModelType& type, const bool& calc_sigma);
@@ -49,6 +49,7 @@ public:
 	float3 centerBias;			// 由于阴影遮挡导致的重心偏移位置
 	double rotate_theta;			// 定日镜投影到image plane产生的轴旋转角度
 	Vector3d focus_center;			// 定日镜在接收器平面聚焦中心
+	double energy;					// 定日镜在接收器平面积分（不含DNI）
 
 protected:
 	vector<double> sigma_list;	// dis, sigma_sun, sigma_bq, sigma_ast, sigma_t, cos_rev
