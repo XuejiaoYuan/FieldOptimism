@@ -1,6 +1,5 @@
 e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\x64\debug\vc140.pdb
 e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\x64\debug\vc140.idb
-e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\x64\debug\layout.obj
 e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\x64\debug\receiver.obj
 e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\x64\debug\solarscene.obj
 e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\x64\debug\sunray.obj
@@ -9,6 +8,7 @@ e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\x
 e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\x64\debug\receiverdeviceargument.obj
 e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\x64\debug\differentialevolution.obj
 e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\x64\debug\energycalculatepipeline.obj
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\x64\debug\receiverenergycalculator.obj
 e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\x64\debug\fieldsimulationcontroller.obj
 e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\x64\debug\gausslegendre.obj
 e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\x64\debug\griddda.obj
@@ -21,8 +21,8 @@ e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\x
 e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\x64\debug\spa.obj
 e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\x64\debug\timer.obj
 e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\x64\debug\heliostat.obj
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\x64\debug\layout.obj
 x64\debug\cylinderrecvfluxintegral.cu.obj
-x64\debug\receiverenergycalculator.cu.obj
 x64\debug\rectrecvfluxintegral.cu.obj
 x64\debug\gausslegendre.cu.obj
 e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\x64\debug\fieldoptimism.lib
@@ -32,12 +32,10 @@ e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\x64\debug\field
 e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\x64\debug\fieldoptimism.pdb
 e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\x64\debug\cylinderrecvfluxintegral.cu.cache
 e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\x64\debug\gausslegendre.cu.cache
-e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\x64\debug\receiverenergycalculator.cu.cache
 e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\x64\debug\rectrecvfluxintegral.cu.cache
 e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\x64\debug\cylinderrecvfluxintegral.cu.obj
 e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\x64\debug\fieldoptimism.device-link.obj
 e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\x64\debug\gausslegendre.cu.obj
-e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\x64\debug\receiverenergycalculator.cu.obj
 e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\x64\debug\rectrecvfluxintegral.cu.obj
 e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\x64\debug\fieldoptimism.tlog\cl.command.1.tlog
 e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\x64\debug\fieldoptimism.tlog\cl.read.1.tlog

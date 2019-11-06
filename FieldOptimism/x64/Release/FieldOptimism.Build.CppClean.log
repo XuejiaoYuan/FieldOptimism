@@ -20,8 +20,8 @@ e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\x
 e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\x64\release\layout.obj
 e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\x64\release\heliostat.obj
 e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\x64\release\timer.obj
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\x64\release\receiverenergycalculator.obj
 x64\release\cylinderrecvfluxintegral.cu.obj
-x64\release\receiverenergycalculator.cu.obj
 x64\release\rectrecvfluxintegral.cu.obj
 x64\release\gausslegendre.cu.obj
 e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\x64\release\fieldoptimism.lib

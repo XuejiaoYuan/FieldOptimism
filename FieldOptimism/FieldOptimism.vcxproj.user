@@ -5,7 +5,7 @@
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <LocalDebuggerCommandArguments>Inputfiles\InputJson\FieldOptimism\FermatField\FermatField2.json -o</LocalDebuggerCommandArguments>
+    <LocalDebuggerCommandArguments>Inputfiles\InputJson\FieldOptimism\FermatField\FermatField.json -o</LocalDebuggerCommandArguments>
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
   </PropertyGroup>
 </Project>

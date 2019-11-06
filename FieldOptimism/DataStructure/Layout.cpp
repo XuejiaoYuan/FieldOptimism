@@ -115,7 +115,6 @@ void FermatLayout::createHelioAndLayout(ArgumentParser& argumentParser, json& fi
 	double dm = sqrt(pow(h_tmp.helio_size.x(), 2) + pow(h_tmp.helio_size.z(), 2)) * dsep;	// 定日镜对角线长度
 	helio_interval = Vector2d(dm, dm);
 	real_helio_num = argumentParser.getNumOfHelio();
-	cout << real_helio_num << endl;
 	calcCircleParams(recv_dis, n_rows, n_cols, field_args, dm);
 
 	for (int i = 0; i < n_rows.size(); ++i) {
@@ -127,7 +126,6 @@ void FermatLayout::createHelioAndLayout(ArgumentParser& argumentParser, json& fi
 	layout_bound_pos = Vector2d(-recv_dis.back() - dm / 2., -recv_dis.back() - dm / 2.);
 	layout_size = Vector2d(2 * recv_dis.back() + dm, 2 * recv_dis.back() + dm);
 	initLayoutParams();
-	cout << real_helio_num << endl;
 }
 
 
@@ -167,7 +165,7 @@ void FermatLayout::calcCircleParams(vector<double>& recv_dis, vector<int>& n_row
 	int sz = helio_gap.size();
 	for (int i = 0; i < sz || h_cnt < real_helio_num; ++i) {
 		if (i>=sz && h_cnt < real_helio_num) {
-			field_args["gap"].push_back(helio_gap.back());
+			field_args["gap"].push_back(helio_gap.back()/dm);
 			helio_gap.push_back(helio_gap.back());
 		}
 		else

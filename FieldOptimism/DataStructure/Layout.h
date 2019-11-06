@@ -25,9 +25,6 @@ public:
         layout_size = Vector2d(0, 0);
 		layout_row_col = Vector2i(0, 0);
     }
-	virtual ~Layout() {
-		cout << "delete layout" << endl;
-	}
 	virtual void createHelioAndLayout(ArgumentParser& argumentParser, json& field_args, vector<Heliostat*>& helios);
 	void storeHelioToLayout(vector<Heliostat*>& helios);
 

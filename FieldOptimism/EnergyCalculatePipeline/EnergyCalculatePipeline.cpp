@@ -22,9 +22,11 @@ double EnergyCalculatePipeline::handler(json& field_args) {
 				for (int t = 0; t < 60; t += minute_gap) {
 					//cout << "[Time: " << m << "." << d << ' ' << h << ":" << t << "]" << endl;
 					time_params = { m, d, h, t };
-					total_sum += handlerCore(time_params, argumentParser->getSunray(), &sdbk_handler);
+					handlerCore(time_params, argumentParser->getSunray(), &sdbk_handler);
 				}
-	return total_sum;
+
+	// 4. 剔除无效定日镜
+	return removeHeliostat();
 }
 
 
@@ -48,13 +50,13 @@ void EnergyCalculatePipeline::initSolarScene(json& field_args) {
 	solar_scene->setModelStatus(argumentParser->getModelType(), argumentParser->getCalcSigma());
 }
 
-double EnergyCalculatePipeline::handlerCore(vector<int>& time_param, SunRay& sunray, SdBkCalc* sdbk_handler) {
+void EnergyCalculatePipeline::handlerCore(vector<int>& time_param, SunRay& sunray, SdBkCalc* sdbk_handler) {
 	// 1. 调整镜场定日镜朝向
 	//cout << "\t3.1 Adjust heliostats' normal" << endl;
 	Vector3d sunray_dir = sunray.changeSunRay(time_param);
 	double DNI = sunray.calcDNI(time_param);
 	solar_scene->changeHeliosNormal(sunray_dir);
-	cout << solar_scene->layouts[0]->real_helio_num << endl;
+	solar_scene->DNI = DNI;
 
 	// 2. 计算阴影遮挡率
 	//cout << "\t3.2 Calculate heliostats' shading and blocking factor" << endl;
@@ -62,12 +64,10 @@ double EnergyCalculatePipeline::handlerCore(vector<int>& time_param, SunRay& sun
 
 	// 3. 计算镜场能量
 	//cout << "\t3.3 Calculate field energy" << endl;
-	double res = handlerFunc(solar_scene, time_param, sunray, sdbk_handler);
-
-	return res;
+	handlerFunc(solar_scene, time_param, sunray, sdbk_handler);
 }
 
-double EnergyCalculatePipeline::handlerFunc(SolarScene* solar_scene, vector<int>& time_param, SunRay& sunray, SdBkCalc* sdbk_handler) {
+void EnergyCalculatePipeline::handlerFunc(SolarScene* solar_scene, vector<int>& time_param, SunRay& sunray, SdBkCalc* sdbk_handler) {
 	// 1. Get guass legendre calculation handler
 	json gaussian_params = argumentParser->getConfig()["FluxParams"]["GaussianParams"].as<json>();
 	int M = gaussian_params.get_with_default("M").as<int>();
@@ -81,8 +81,16 @@ double EnergyCalculatePipeline::handlerFunc(SolarScene* solar_scene, vector<int>
 	if (solar_scene->getModelType() == bHFLCAL)
 		calcCenterMode = true;
 	ReceiverEnergyCalculator recv_energy_calc(solar_scene, gl_hander, m, n, calcCenterMode);
-	float res = recv_energy_calc.calcRecvEnergySum();
-	return res * sunray.current_DNI;
+	recv_energy_calc.calcRecvEnergySum();
+}
+
+double EnergyCalculatePipeline::removeHeliostat() {
+	sort(solar_scene->helios.begin(), solar_scene->helios.end(), [](Heliostat* a, Heliostat* b) {return a->energy > b->energy; });
+	double total_sum = 0;
+	for (int i = 0; i < solar_scene->layouts[0]->real_helio_num; ++i) {
+		total_sum += solar_scene->helios[i]->energy;
+	}
+	return total_sum;
 }
 
 
@@ -91,7 +99,7 @@ EnergyCalculatePipeline::~EnergyCalculatePipeline()
 	delete solar_scene;
 }
 
-double FluxCalculatePipeline::handlerFunc(SolarScene* solar_scene, vector<int>& time_param, SunRay& sunray, SdBkCalc* sdbk_handler) {
+void FluxCalculatePipeline::handlerFunc(SolarScene* solar_scene, vector<int>& time_param, SunRay& sunray, SdBkCalc* sdbk_handler) {
 	json flux = argumentParser->getConfig()["FluxParams"].as<json>();
 	//vector<int> test_helio_index(flux["TestHelioIndex"].as<vector<int>>());
 	vector<int> test_helio_index;
@@ -113,5 +121,4 @@ double FluxCalculatePipeline::handlerFunc(SolarScene* solar_scene, vector<int>& 
 
 	sdbk_handler->setOutputPath(argumentParser->getOutputPath() + time_str);
 	sdbk_handler->calcSceneFluxDistribution(test_helio_index, DNI, flux.get_with_default("GaussianParams").as<json>());
-	return 0;
 }

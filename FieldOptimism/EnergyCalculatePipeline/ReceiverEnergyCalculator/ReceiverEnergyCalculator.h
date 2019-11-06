@@ -13,7 +13,7 @@ class ReceiverEnergyCalculator
 public:
 	ReceiverEnergyCalculator(SolarScene *&solar_scene, GaussLegendre* gl_handler, int m, int n, bool calcCenterMode = false) :
 		m(m), n(n), solar_scene(solar_scene), gl_handler(gl_handler), calcCenterMode(calcCenterMode), h_helio_energy(nullptr), d_helio_energy(nullptr) {}
-	float calcRecvEnergySum();
+	void calcRecvEnergySum();
 	~ReceiverEnergyCalculator() {
 		solar_scene = nullptr;
 		gl_handler = nullptr;
@@ -37,6 +37,6 @@ private:
 	float *h_helio_energy, *d_helio_energy;
 	vector<float> helio_energy;
 	void setDeviceHelioEnergy();
-	float calcHelioEnergySum();
+	void storeHeliostatEnergy();
 };
 

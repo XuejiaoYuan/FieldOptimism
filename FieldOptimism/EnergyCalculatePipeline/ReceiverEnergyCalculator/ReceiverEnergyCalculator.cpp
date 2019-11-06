@@ -1,6 +1,6 @@
 #include "ReceiverEnergyCalculator.h"
 
-float ReceiverEnergyCalculator::calcRecvEnergySum()
+void ReceiverEnergyCalculator::calcRecvEnergySum()
 {
 	ReceiverType recv_type = solar_scene->recvs[0]->recv_type;
 	
@@ -34,10 +34,9 @@ float ReceiverEnergyCalculator::calcRecvEnergySum()
 		throw runtime_error("[Error RecvEnergyCalculator] Wrong receiver type!!!\n");
 	}
 
-	// 2.4 Calculate energy sum 
-	float res = calcHelioEnergySum();
+	// 2.4 Store heliostat energy
+	storeHeliostatEnergy();
 
-	return res;
 }
 
 void ReceiverEnergyCalculator::setDeviceHelioEnergy() {
@@ -49,19 +48,15 @@ void ReceiverEnergyCalculator::setDeviceHelioEnergy() {
 	cudaMemcpy(d_helio_energy, h_helio_energy, sizeof(float)*helioNum, cudaMemcpyHostToDevice);
 }
 
-float ReceiverEnergyCalculator::calcHelioEnergySum() {
+void ReceiverEnergyCalculator::storeHeliostatEnergy() {
 	int helioNum = solar_scene->helios.size();
 	cudaMemcpy(h_helio_energy, d_helio_energy, sizeof(float)*helioNum, cudaMemcpyDeviceToHost);
-	float sum = 0;
+	
 	for (int i = 0; i < helioNum; ++i) {
-		sum += h_helio_energy[i];
-		solar_scene->helios[i]->energy += h_helio_energy[i];
-	}
-	sort(solar_scene->helios.begin(), solar_scene->helios.end(), [](Heliostat* a, Heliostat* b) {return a->energy > b->energy; });
-	for (int i = solar_scene->layouts[0]->real_helio_num; i < helioNum; ++i) {
-		sum -= solar_scene->helios.back()->energy;
-		solar_scene->helios.pop_back();
+		solar_scene->helios[i]->energy += h_helio_energy[i] * solar_scene->DNI;
+		if (h_helio_energy[i] < 0) {
+			cout << "pause" << endl;
+		}
 	}
 	delete[] h_helio_energy;
-	return sum;
 }

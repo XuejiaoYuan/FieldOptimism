@@ -34,7 +34,7 @@ json DifferentialEvolution::fieldOptimism(ArgumentParser & _argumentParser)
 	
 	// 3. Iteration
 	cout << "    2.3 Start iteration" << endl;
-	fstream out(argumentParser->getOutputPath() + "de_process.txt", ios_base::out | ios_base::app);
+	fstream out(argumentParser->getOutputPath() + "H" + to_string(argumentParser->getNumOfHelio()) + "de_process.txt", ios_base::out | ios_base::app);
 	for (int i = 0; i < config["DEParams"]["Iterations"].as<int>(); ++i) {
 		double old_maxCost = m_maxCostPerAgent[m_bestAgentIndex];
 		out << "E: " << setprecision(12) << old_maxCost << "\nParams: " << m_population[m_bestAgentIndex] << endl;
@@ -129,8 +129,9 @@ json DifferentialEvolution::crossover(json& z, const int idx) {
 bool DifferentialEvolution::seletction(json& newX, const int idx) {
 	// 1. 检查是否超过约束条件
 	bool status = constraintCheck(newX);
-	if (!status) 
+	if (!status) {
 		return false;
+	}
 
 	// 2. 计算新的cost并选择是否保留newX
 	EnergyCalculatePipeline *e_handler = NULL;
@@ -264,11 +265,15 @@ bool FermatDifferentialEvolution::constraintCheck(json& newX) {
 	for (auto& key : m_paramKeys) {
 		if (key == "gap") {
 			for (auto& val : newX[key].as<vector<double>>())
-				if (!m_constraints[key].check(val))
+				if (!m_constraints[key].check(val)) {
+					//cout << key << ": " << val << endl;
 					return false;
+				}
 		}
-		else if (!m_constraints[key].check(newX[key].as<double>()))
+		else if (!m_constraints[key].check(newX[key].as<double>())) {
+			//cout << key << ": " << newX[key].as<double>() << endl;
 			return false;
+		}
 	}
 	return true;
 }
