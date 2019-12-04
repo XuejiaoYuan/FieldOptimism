@@ -5,6 +5,12 @@ void Receiver::initRecv(json& config) {
 	initRecvCore();
 }
 
+void Receiver::initRecv(fstream & in, InputMode& input_mode)
+{
+	readRecvFromScn(in, input_mode);
+	initRecvCore();
+}
+
 void Receiver::initRecvCore() {
 	focus_center.push_back(recv_pos + Vector3d(recv_normal.array() * recv_size.array() / 2));
 	recv_normal_list.push_back(recv_normal);
@@ -24,6 +30,30 @@ void Receiver::readRecvFromJson(json& config) {
 	}
 }
 
+void Receiver::readRecvFromScn(fstream& in, InputMode& input_mode) {
+	string line, word;
+	stringstream line_stream;
+	while (getline(in, line)) {
+		line_stream.clear();
+		line_stream.str(line);
+		line_stream >> word;
+		if (word == "end") {
+			input_mode = Initial;
+			break;
+		}
+		else if (word == "pos")
+			line_stream >> recv_pos.x() >> recv_pos.y() >> recv_pos.z();
+		else if (word == "size")				// 接收器边长，高度，厚度
+			line_stream >> recv_size.x() >> recv_size.y() >> recv_size.z();
+		else if (word == "num")
+			line_stream >> recv_face_num;
+		else if (word == "norm")
+			line_stream >> recv_normal.x() >> recv_normal.y() >> recv_normal.z();
+		else
+			line_stream >> recv_face;
+	}
+}
+
 vector<Vector3d> Receiver::getRecvVertexCore(Vector3d & center, double half_l, double half_w, Vector3d & recv_normal)
 {
 	Vector3d down_cor(0, -1, 0);
@@ -38,11 +68,14 @@ vector<Vector3d> Receiver::getRecvVertexCore(Vector3d & center, double half_l, d
 }
 
 
+//void PolyhedronRecv::initRecv(json& config) {
+//	readRecvFromJson(config);
+//	initRecvCore();
+//}
 
-void PolyhedronRecv::initRecv(json& config) {
-	readRecvFromJson(config);
-	initRecvCore();
-}
+//void PolyhedronRecv::initRecv(fstream& in, InputMode& input_mode) {
+//
+//}
 
 void PolyhedronRecv::initRecvCore() {
 	Matrix3d m;
@@ -66,6 +99,10 @@ void PolyhedronRecv::initRecvCore() {
 
 void CylinderRecv::initRecv(json& config) {
 	readRecvFromJson(config);
+}
+
+void CylinderRecv::initRecv(fstream& in, InputMode& input_mode) {
+	readRecvFromScn(in, input_mode);
 }
 
 Vector3d CylinderRecv::getFocusCenter(Vector3d& helio_pos)
@@ -96,4 +133,3 @@ void CylinderRecv::readRecvFromJson(json & config)
 		rows_cols = Vector2i(recv_size.y() / recv_pixel_length + 0.5, PI*recv_size.x() / recv_pixel_length + 0.5);
 	}
 }
-

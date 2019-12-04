@@ -1,5 +1,4 @@
 e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\x64\release\vc140.pdb
-e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\x64\release\spa.obj
 e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\x64\release\clipper.obj
 e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\x64\release\argumentparser.obj
 e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\x64\release\sigmafitting.obj
@@ -9,6 +8,7 @@ e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\x
 e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\x64\release\griddda.obj
 e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\x64\release\gausslegendre.obj
 e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\x64\release\fieldsimulationcontroller.obj
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\x64\release\receiverenergycalculator.obj
 e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\x64\release\energycalculatepipeline.obj
 e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\x64\release\differentialevolution.obj
 e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\x64\release\receiverdeviceargument.obj
@@ -20,8 +20,9 @@ e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\x
 e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\x64\release\layout.obj
 e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\x64\release\heliostat.obj
 e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\x64\release\timer.obj
-e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\x64\release\receiverenergycalculator.obj
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\x64\release\spa.obj
 x64\release\cylinderrecvfluxintegral.cu.obj
+x64\release\rectrecvdiscreteflux.cu.obj
 x64\release\rectrecvfluxintegral.cu.obj
 x64\release\gausslegendre.cu.obj
 e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\x64\release\fieldoptimism.lib
@@ -32,12 +33,12 @@ e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\x64\release\fie
 e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\x64\release\fieldoptimism.pdb
 e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\x64\release\cylinderrecvfluxintegral.cu.cache
 e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\x64\release\gausslegendre.cu.cache
-e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\x64\release\receiverenergycalculator.cu.cache
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\x64\release\rectrecvdiscreteflux.cu.cache
 e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\x64\release\rectrecvfluxintegral.cu.cache
 e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\x64\release\cylinderrecvfluxintegral.cu.obj
 e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\x64\release\fieldoptimism.device-link.obj
 e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\x64\release\gausslegendre.cu.obj
-e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\x64\release\receiverenergycalculator.cu.obj
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\x64\release\rectrecvdiscreteflux.cu.obj
 e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\x64\release\rectrecvfluxintegral.cu.obj
 e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\x64\release\fieldoptimism.tlog\cl.command.1.tlog
 e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\x64\release\fieldoptimism.tlog\cl.read.1.tlog

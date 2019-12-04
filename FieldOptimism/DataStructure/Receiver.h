@@ -37,6 +37,7 @@ public:
 	int recv_face_num;
 	Vector2i rows_cols;
 	virtual void initRecv(json& config);
+	virtual void initRecv(fstream& in, InputMode& input_mode);
 	
 	virtual vector<Vector3d> getFocusCenter() {
 		return focus_center;
@@ -53,6 +54,7 @@ protected:
 	vector<Vector3d> recv_normal_list;
 	vector<vector<Vector3d>> recv_vertex;
 	virtual void readRecvFromJson(json& config);
+	virtual void readRecvFromScn(fstream& in, InputMode& input_mode);
 	vector<Vector3d> getRecvVertexCore(Vector3d& center, double half_l, double half_w, Vector3d& recv_normal);
 	void initRecvCore();
 };
@@ -66,6 +68,7 @@ class CylinderRecv :public Receiver {
 public:
 	CylinderRecv() :Receiver(CylinderRecvType) {};
 	void initRecv(json& config);
+	void initRecv(fstream& in, InputMode& input_mode);
 	Vector3d getFocusCenter(Vector3d& helio_pos);
 	vector<vector<Vector3d>> getRecvVertex(Vector3d& focus_center = Vector3d(0, 0, 0));
 	Vector2i getRowsCols(const double recv_pixel_length) { return Vector2i(recv_size.x() / recv_pixel_length, PI*recv_size.z() / recv_pixel_length); }
@@ -79,7 +82,8 @@ private:
 class PolyhedronRecv :public Receiver {
 public:
 	PolyhedronRecv() : Receiver(PolyhedronRecvType) {};
-	void initRecv(json& config);
+	//void initRecv(json& config);
+	//void initRecv(fstream& in, InputMode& input_mode);
 
 private:
 	void initRecvCore();

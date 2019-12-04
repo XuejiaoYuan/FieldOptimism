@@ -17,6 +17,7 @@ typedef enum {
 	HFLCAL, Gracia, iHFLCAL, bHFLCAL
 }ModelType;
 
+
 class Receiver;
 
 class Heliostat {
@@ -29,7 +30,6 @@ public:
 	vector<Vector3d> vertex;		//Heliostat's vertex
 	HelioType helio_type;			//Heliostat's type
 	Vector3d helio_pos;           //The position of the heliostat's center
-	Vector3d helio_poly_pos;		//The poly postion of the heliostat's center
 	Vector3d helio_size;          //Heliostat's size:length, thickness, width 
 	Vector2d helio_gap;           //Heliostat's slice gap: x, z
 	Vector2i helio_matrix;          //Heliostat's slice matrix: row, col
@@ -42,6 +42,7 @@ public:
 	double mAA;					// Heliostat's atomospheric attenuation factor
 	double cos_w;				// Heliostat's incidence cosine efficiency
 	vector<double> cos_phi;		// Receiver cosine efficiencies
+	double dm;					// Heliostat's diagonal length
 	double S;					// Heliostat's surface area
 	double l_w_ratio;			// Heliostat's projection length and width on image plane
 	double sigma;				// Heliostat's sigma

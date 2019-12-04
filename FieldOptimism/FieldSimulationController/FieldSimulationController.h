@@ -2,9 +2,9 @@
 #include "../EnergyCalculatePipeline/EnergyCalculatePipeline.h"
 #include "../DifferentialEvolution/DifferentialEvolution.h"
 
-enum ControllerType
+enum ControllerMode
 {
-	FieldOptimismType, FluxSimulationType
+	FieldOptimismMode, HelioFluxSimulationMode, FieldFluxSimulationMode, EnergyCalculateMode
 };
 
 class BaseController
@@ -13,13 +13,22 @@ public:
 	virtual void handler(int argc, char** argv) = 0;
 };
 
+class EnergyCalculateController: public BaseController {
+public:
+	void handler(int argc, char** argv);
+};
 
 class FieldOptimismController :public BaseController{
 public:
 	void handler(int argc, char** argv);
 };
 
-class FluxSimulationController : public BaseController{
+class HelioFluxSimulationController : public BaseController{
+public:
+	void handler(int argc, char** argv);
+};
+
+class FieldFluxSimulationController : public BaseController {
 public:
 	void handler(int argc, char** argv);
 };
@@ -27,13 +36,17 @@ public:
 
 class ControllerCreator {
 public:
-	static BaseController* getController(ControllerType type) {
+	static BaseController* getController(ControllerMode type) {
 		switch (type)
 		{
-		case FieldOptimismType:
+		case FieldOptimismMode:
 			return new FieldOptimismController();
-		case FluxSimulationType:
-			return new FluxSimulationController();
+		case HelioFluxSimulationMode:
+			return new HelioFluxSimulationController();
+		case FieldFluxSimulationMode:
+			return new FieldFluxSimulationController();
+		case EnergyCalculateMode:
+			return new EnergyCalculateController();
 		default:
 			return NULL;
 		}

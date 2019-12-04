@@ -9,7 +9,7 @@ public:
 	float3* d_recv_vertexes;		// 接收器顶点坐标
 	float3* d_recv_focus_pos;		// 接收器中心点坐标
 	float3* d_recv_normal;			// 接收器法向量坐标
-	int numberOfReceivers;
+	int numberOfReceivers;			// 接收器平面数量（现只支持一个接收器）
 	ReceiverDeviceArgument() :numberOfReceivers(0), d_recv_vertexes(nullptr), d_recv_focus_pos(nullptr), d_recv_normal(nullptr) {}
 	~ReceiverDeviceArgument() {
 		d_recv_vertexes = nullptr;

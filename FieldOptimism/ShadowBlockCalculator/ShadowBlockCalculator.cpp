@@ -125,6 +125,8 @@ float SdBkCalc::calcHelio2RecvEnergy(vector<Vector3d>& recv_v, Vector3d& recv_n,
 	Heliostat* helio, Vector3d& fc_center, double DNI, double cos_phi) {
 	int rows = rows_cols.x();
 	int cols = rows_cols.y();
+	//int rows = 240;
+	//int cols = 240;
 	Vector3d row_gap = (recv_v[1] - recv_v[0]) / rows;
 	Vector3d col_gap = (recv_v[3] - recv_v[0]) / cols;
 
@@ -173,7 +175,7 @@ float SdBkCalc::calcHelio2RecvEnergy(vector<Vector3d>& recv_v, Vector3d& recv_n,
 
 	vector<string> model_name = {"m1", "m2", "m3", "m4"};
 	_mkdir(output_path.c_str());
-	//fstream outFile(output_path + model_name[model_type] + '_' + to_string(helio->helio_index) + ".txt", ios_base::out);
+	fstream outFile(output_path + model_name[model_type] + '_' + to_string(helio->helio_index) + ".txt", ios_base::out);
 	for (int i = 0; i < rows; ++i) {
 		for (int j = 0; j < cols; ++j) {
 			Vector3d start_v = recv_v[0] + i*row_gap + j*col_gap;
@@ -193,17 +195,18 @@ float SdBkCalc::calcHelio2RecvEnergy(vector<Vector3d>& recv_v, Vector3d& recv_n,
 			else {
 				GeometryFunc::calcIntersection(reverse_dir, fc_center, start_v, reverse_dir, inter_v);
 				Vector3d proj_v = GeometryFunc::mulMatrix(inter_v, world2local) - i_center_bias;
-				helio->rotate_theta = 0;
+				//helio->rotate_theta = 0;
 				trans_v.x() = proj_v.x()*cos(helio->rotate_theta) + proj_v.z()*sin(helio->rotate_theta);
 				trans_v.z() = proj_v.z()*cos(helio->rotate_theta) - proj_v.x()*sin(helio->rotate_theta);
 				res = DNI*(1 - helio->sd_bk)*cos_phi*helio->flux_param * gl->flux_func(trans_v.x(), trans_v.z(), sigma, helio->l_w_ratio);
 			}
 			sum += res *grid_area /cos_phi;
-			//outFile << start_v.x() << ' ' << start_v.y() << ' ' << res << endl;
+			outFile << start_v.x() << ' ' << start_v.y() << ' ' << res << endl;
 		}
 	}
-	//outFile << i_center_bias.x() << ' ' << i_center_bias.z() << endl;
-	//outFile.close();
+
+	outFile << i_center_bias.x() << ' ' << i_center_bias.z() << endl;
+	outFile.close();
 	return sum;
 }
 
@@ -238,6 +241,7 @@ double SdBkCalc::calcHelioShadowBlock(int helio_index)
 
 	if (!block_grid_init[helio_index]) {
 		dda_handler.rayCastForBlock(solar_scene, helio, rela_block_grid_index[helio_index]);
+		block_grid_init[helio_index] = true;
 	}
 	dda_handler.getBlockHelioFromGrid(solar_scene, rela_block_grid_index[helio_index], estimate_index[1], helio);
 
@@ -255,13 +259,28 @@ void SdBkCalc::calcSceneFluxDistribution(vector<int>& test_helio_index, const do
 	Vector2i rows_cols = solar_scene->recvs[0]->rows_cols;
 	double sum = 0;
 	for (int h_index : test_helio_index) {
+
 		Heliostat* helio = solar_scene->helios[h_index];
+		//if (helio->sd_bk > Epsilon) {
+		//	system("pause");
+		//	cout << helio->sd_bk << endl;
+		//}
 		int fc_index = helio->focus_center_index;
 		vector<Receiver*> recvs = solar_scene->recvs;
 		Vector3d reverse_dir = (helio->helio_pos - helio->focus_center).normalized();		// The normal of image plane
 		
 		Matrix4d world2localM, local2worldM;
 		GeometryFunc::getImgPlaneMatrixs(reverse_dir, helio->focus_center, local2worldM, world2localM, 1);
+		fstream outFile("Outputfiles/RectField/flux_param_100.txt", ios_base::out | ios_base::app);
+		outFile << h_index << endl;
+		outFile << "0 0" << endl;
+		for (int i = 0; i < 4; ++i) {
+			Vector3d inter_v;
+			GeometryFunc::calcIntersection(reverse_dir, helio->focus_center, helio->vertex[i], -reverse_dir, inter_v);
+			inter_v = GeometryFunc::mulMatrix(inter_v, world2localM);
+			outFile << inter_v.x() << ' ' << inter_v.z() << endl;
+		}
+		outFile.close();
 		
 		vector<vector<Vector3d>> recv_vertex = recvs[0]->getRecvVertex(helio->focus_center);
 		vector<Vector3d> recv_normal = recvs[0]->getNormalList(helio->focus_center);
@@ -272,7 +291,7 @@ void SdBkCalc::calcSceneFluxDistribution(vector<int>& test_helio_index, const do
 			}
 		}
 		sum += res;
-		cout << res/DNI << endl;
+		cout << res << endl;
 	}
 
 	cout << sum << endl;
@@ -629,8 +648,8 @@ void SdBkCalcTest::getStartEndIndex(Heliostat* helio, int& start, int& end) {
 		break;
 	}
 		
-	case FermatLayoutType: {
-		FermatLayout* layout = dynamic_cast<FermatLayout*>(solar_scene->layouts[0]);
+	case RadialStaggerLayoutType: {
+		RadialStaggerLayout* layout = dynamic_cast<RadialStaggerLayout*>(solar_scene->layouts[0]);
 		vector<MatrixXd> helio_index_store = layout->getHelioIndex();
 		int cur_region = 0;
 		int sum = 0;
@@ -668,7 +687,7 @@ void SdBkCalcTest::getStartEndIndex(Heliostat* helio, int& start, int& end) {
 		break;
 	}
 		
-	case RadialLayoutType:
+	case SpiralLayoutType:
 
 		break;
 	default:

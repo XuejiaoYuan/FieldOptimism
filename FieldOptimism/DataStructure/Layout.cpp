@@ -20,7 +20,7 @@ void Layout::loadFieldArgs(ArgumentParser& argumentParser, json& field_args, dou
 	cols = argumentParser.getConfig()["Layout"]["cols"].as<int>();
 	z_start = field_args["z_start"].as_double();
 	double interval_ratio_x = field_args["interval_ratio_x"].as_double();
-	double interval_ratio_y = field_args["interval_ratio_z"].as_double();
+	double interval_ratio_y = field_args["interval_ratio_y"].as_double();
 	Vector3d helio_size = argumentParser.getHelio().helio_size;
 	double dm = sqrt(pow(helio_size.x(), 2) + pow(helio_size.z(), 2));
 	helio_interval = Vector2d(dm*interval_ratio_x, dm*interval_ratio_y);
@@ -42,8 +42,37 @@ void Layout::storeHelioToLayoutCore(Heliostat* helio) {
 }
 
 void Layout::storeHelioToLayout(vector<Heliostat*>& helios) {
+	helio_layout.clear();
+	helio_layout.resize(layout_row_col.x(), vector<vector<Heliostat*>>(layout_row_col.y()));
+
 	for (int i = 0; i < helios.size(); i++)
 		storeHelioToLayoutCore(helios[i]);
+}
+
+void Layout::initLayout(fstream & in, InputMode & input_mode){
+	stringstream line_stream;
+	string line, word, _;
+	int helio_num, helio_type;
+	while (getline(in, line)) {
+		line_stream.clear();
+		line_stream.str(line);
+		line_stream >> word;
+		if (word == "end") {
+			input_mode = Initial;
+			break;
+		}
+		else if (word == "pos")
+			line_stream >> layout_bound_pos.x() >> _ >> layout_bound_pos.y();
+		else if (word == "size")
+			line_stream >> layout_size.x() >> _ >> layout_size.y();
+		else if (word == "inter")
+			line_stream >> helio_interval.x() >> _ >> helio_interval.y();
+		else if (word == "n")
+			line_stream >> real_helio_num;
+		else
+			line_stream >> helio_type;
+	}
+	initLayoutParams();
 }
 
 void Layout::createHelioAndLayout(ArgumentParser& argumentParser, json& field_args, vector<Heliostat*>& helios) {
@@ -107,7 +136,7 @@ void CrossRectLayout::createHelioAndLayout(ArgumentParser& argumentParser, json&
 }
 
 
-void FermatLayout::createHelioAndLayout(ArgumentParser& argumentParser, json& field_args, vector<Heliostat*>& helios) {
+void RadialStaggerLayout::createHelioAndLayout(ArgumentParser& argumentParser, json& field_args, vector<Heliostat*>& helios) {
 	vector<double> recv_dis;
 	vector<int> n_rows, n_cols;
 	Heliostat h_tmp  = argumentParser.getHelio();
@@ -129,7 +158,7 @@ void FermatLayout::createHelioAndLayout(ArgumentParser& argumentParser, json& fi
 }
 
 
-bool FermatLayout::setCircleHelios(Heliostat& h_tmp, const int idx, vector<double>& recv_dis, vector<int>& rows, const double gap,
+bool RadialStaggerLayout::setCircleHelios(Heliostat& h_tmp, const int idx, vector<double>& recv_dis, vector<int>& rows, const double gap,
 	const int col, vector<Heliostat*>& helios, const vector<Receiver*>& recvs)
 {
 	Heliostat* helio;
@@ -158,7 +187,7 @@ bool FermatLayout::setCircleHelios(Heliostat& h_tmp, const int idx, vector<doubl
 	return true;
 }
 
-void FermatLayout::calcCircleParams(vector<double>& recv_dis, vector<int>& n_rows, vector<int>& n_cols, json& field_args, double dm) {
+void RadialStaggerLayout::calcCircleParams(vector<double>& recv_dis, vector<int>& n_rows, vector<int>& n_cols, json& field_args, double dm) {
 	recv_dis.push_back(field_args["helio_recv_dis"].as_double());
 	helio_gap = field_args["gap"].as<vector<double>>();
 	int h_cnt = 0;
@@ -184,3 +213,69 @@ void FermatLayout::calcCircleParams(vector<double>& recv_dis, vector<int>& n_row
 	}
 }
 
+void SpiralLayout::createHelioAndLayout(ArgumentParser & argumentParser, json & field_args, vector<Heliostat*>& helios)
+{
+	double a = field_args["a"].as_double();
+	double b = field_args["b"].as_double();
+	int test_helio_num = field_args["test_helio_num"].as<int>();
+	real_helio_num = argumentParser.getNumOfHelio();
+
+	int i = 1;
+	double eta = pow(2. / (1 + sqrt(5)), 2);
+	vector<Receiver*>& recvs = argumentParser.getReceivers();
+	vector<Vector3d>& fc_centers = argumentParser.getReceivers()[0]->getFocusCenter();
+	vector<Vector3d>& recv_norms = argumentParser.getReceivers()[0]->getNormalList();
+	Heliostat* helio;
+	Heliostat h_tmp = argumentParser.getHelio();
+	Vector2d min_pos(INT_MAX, INT_MAX);
+	Vector2d max_pos(INT_MIN, INT_MIN);
+
+	Vector3d helio_size = argumentParser.getHelio().helio_size;
+	double dm = sqrt(pow(helio_size.x(), 2) + pow(helio_size.z(), 2));
+
+	while (helios.size() < test_helio_num) {
+		double r = a* pow(i, b);
+		double theta = 2 * PI * eta * i;
+		if (i > 1) {
+			double front_r = a*pow(i - 1, b);
+			double t = 2 * PI*eta;
+			double dis = sqrt(front_r*front_r + r*r - 2 * front_r*r*cos(t));
+			if (dis < dm) {
+				++i;
+				continue;
+			}
+		}
+		double pos_x = r*cos(theta);
+		double pos_z = r*sin(theta);
+		bool status = false;
+		for (int j = 0; j < fc_centers.size(); ++j) {
+			Vector2d dir(pos_x - fc_centers[j].x(), pos_z - fc_centers[j].z());
+			Vector2d n(recv_norms[j].x(), recv_norms[j].z());
+			dir = dir.normalized();
+			n = n.normalized();
+			if (dir.dot(n) > Epsilon) {
+				status = true;
+				break;
+			}
+		}
+		if (status) {
+			helio = new Heliostat(h_tmp);
+			helio->helio_index = helios.size();
+			helio->helio_pos = Vector3d(pos_x, h_tmp.helio_pos.y(), pos_z);
+			helio->initFluxParam(recvs);
+			helios.push_back(helio);
+			helio = nullptr;
+			min_pos[0] = (min_pos[0] > pos_x ? pos_x : min_pos[0]);
+			min_pos[1] = (min_pos[1] > pos_z ? pos_z : min_pos[1]);
+			max_pos[0] = (max_pos[0] < pos_x ? pos_x : max_pos[0]);
+			max_pos[1] = (max_pos[1] < pos_z ? pos_z : max_pos[1]);
+		}
+		++i;
+	}
+
+	helio_interval = Vector2d(dm, dm);
+	layout_bound_pos = min_pos - helio_interval/2.;
+	layout_size = max_pos - min_pos + helio_interval;
+
+	initLayoutParams();
+}

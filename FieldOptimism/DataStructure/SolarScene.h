@@ -16,6 +16,7 @@ class SolarScene {
 public:
     SolarScene():model_type(HFLCAL), calc_sigma(true){}
 	~SolarScene();
+	void initSolarScene(string scn_path);
 	bool changeHeliosNormal(const Vector3d&sunray_dir);		//change the surface normal of heiliostats
 	void saveSolarScene(string scene_savepath);
 	void saveHeSolarScene(string scene_savepath);

@@ -27,6 +27,7 @@ public:
     }
 	virtual void createHelioAndLayout(ArgumentParser& argumentParser, json& field_args, vector<Heliostat*>& helios);
 	void storeHelioToLayout(vector<Heliostat*>& helios);
+	void initLayout(fstream& in, InputMode& input_mode);
 
 	Vector2d helio_interval;					//Interval between heliostat's center
     int real_helio_num;								//The real number of heliostat in the field.(Optimization result)
@@ -57,9 +58,9 @@ public:
 	void createHelioAndLayout(ArgumentParser& argumentParser, json& field_args, vector<Heliostat*>& helios);
 };
 
-class FermatLayout:public Layout{
+class RadialStaggerLayout:public Layout{
 public:
-    FermatLayout():Layout(FermatLayoutType){}
+	RadialStaggerLayout():Layout(RadialStaggerLayoutType){}
 	void createHelioAndLayout(ArgumentParser& argumentParser, json& field_args, vector<Heliostat*>& helios);
 
 	vector<MatrixXd> getHelioIndex() { cerr << "Not implement!" << endl; return{}; };
@@ -72,9 +73,10 @@ private:
 	void calcCircleParams(vector<double>& recv_dis, vector<int>& n_rows, vector<int>& n_cols, json& field_args, double dm);
 };
 
-class RadialLayout:public Layout{
+class SpiralLayout:public Layout{
 public:
-    RadialLayout():Layout(RadialLayoutType){}
+    SpiralLayout():Layout(SpiralLayoutType){}
+	void createHelioAndLayout(ArgumentParser& argumentPaser, json& field_args, vector<Heliostat*>& helios);
 };
 
 class LayoutCreator{
@@ -85,10 +87,10 @@ public:
                 return new RectLayout();
 			case CrossRectLayoutType:
 				return new CrossRectLayout();
-            case FermatLayoutType:
-                return new FermatLayout();
-            case RadialLayoutType:
-                return new RadialLayout();
+            case RadialStaggerLayoutType:
+                return new RadialStaggerLayout();
+            case SpiralLayoutType:
+                return new SpiralLayout();
             default:
                 return nullptr;
         }

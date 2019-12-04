@@ -14,9 +14,16 @@ void DifferentialEvolution::initParams(json& de_config) {
 	json constraints = de_config["constraints"].as<json>();
 	for (string& param : m_paramKeys) {
 		json con = constraints.get_with_default(param).as<json>();
-		m_constraints[param] = Constraint(param, 
-			con.get_with_default("lower", 0), con.get_with_default("upper", 1.0), con.get_with_default("is_constrained", false)
-		);
+
+		bool is_constrained = con.get_with_default("is_constrained", false);
+		if (is_constrained) {
+			double lower = con.get_with_default("lower").as<double>();
+			double upper = con.get_with_default("upper").as<double>();
+			m_constraints[param] = Constraint(param, lower, upper, is_constrained);
+		}
+		else
+			m_constraints[param] = Constraint(param, 0, 1, false);
+		
 	}
 }
 
@@ -72,11 +79,8 @@ void DifferentialEvolution::initialization() {
 	shared_ptr<uniform_real_distribution<double>> distribution;
 	for (int i = 0; i < m_populationSize; ++i) {
 		initializationHelper(distribution, i);
-		cout << m_population[i] << endl;
-		Timer::resetStart();
 		EnergyCalculatePipeline* e_handler = EnergyCalculateCreator::getPipeline(SceneEnergyMode, *argumentParser);
 		m_maxCostPerAgent[i] = e_handler->handler(m_population[i]);
-		Timer::printDuration("T");
 		if (m_maxCostPerAgent[i] > m_maxCost) {
 			m_maxCost = m_maxCostPerAgent[i];
 			m_bestAgentIndex = i;
@@ -137,10 +141,8 @@ bool DifferentialEvolution::seletction(json& newX, const int idx) {
 	EnergyCalculatePipeline *e_handler = NULL;
 	try
 	{
-		Timer::resetStart();
 		e_handler = EnergyCalculateCreator::getPipeline(SceneEnergyMode, *argumentParser);
 		double new_cost = e_handler->handler(newX);
-		Timer::printDuration("T");
 		if (new_cost > m_maxCostPerAgent[idx]) {
 			m_population[idx] = newX;
 			m_maxCostPerAgent[idx] = new_cost;
@@ -175,7 +177,7 @@ vector<int> DifferentialEvolution::getRandomIndex(uniform_int_distribution<int>&
 	return ids;
 }
 
-void FermatDifferentialEvolution::initializationHelper(shared_ptr<uniform_real_distribution<double>>& distribution, const int idx) {
+void RadialStaggerDifferentialEvolution::initializationHelper(shared_ptr<uniform_real_distribution<double>>& distribution, const int idx) {
 	for (auto& constraint : m_constraints) {
 		distribution = make_shared<uniform_real_distribution<double>>(uniform_real_distribution<double>(constraint.second.lower, constraint.second.upper));
 		if (constraint.first == "gap")
@@ -185,7 +187,7 @@ void FermatDifferentialEvolution::initializationHelper(shared_ptr<uniform_real_d
 	}
 }
 
-json FermatDifferentialEvolution::mutation(uniform_int_distribution<int>& distribution, const int idx) {
+json RadialStaggerDifferentialEvolution::mutation(uniform_int_distribution<int>& distribution, const int idx) {
 	vector<int> ids = getRandomIndex(distribution, idx);
 
 	// 变异操作
@@ -222,7 +224,7 @@ json FermatDifferentialEvolution::mutation(uniform_int_distribution<int>& distri
 	return z;
 }
 
-json FermatDifferentialEvolution::crossover(json& z, const int idx) {
+json RadialStaggerDifferentialEvolution::crossover(json& z, const int idx) {
 	// 3. 设置随机变量
 	uniform_real_distribution<double> distributionParam(0, m_paramKeys.size());
 	int R = distributionParam(m_generator);
@@ -261,7 +263,7 @@ json FermatDifferentialEvolution::crossover(json& z, const int idx) {
 	return newX;
 }
 
-bool FermatDifferentialEvolution::constraintCheck(json& newX) {
+bool RadialStaggerDifferentialEvolution::constraintCheck(json& newX) {
 	for (auto& key : m_paramKeys) {
 		if (key == "gap") {
 			for (auto& val : newX[key].as<vector<double>>())

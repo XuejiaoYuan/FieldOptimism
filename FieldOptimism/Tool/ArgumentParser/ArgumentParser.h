@@ -39,6 +39,8 @@ public:
 	int getMinuteGap() { return minute_gap; }
 	SunRay getSunray() { return sunray; }
 
+	json config;
+
 private:
 	string config_path;
 
@@ -48,7 +50,6 @@ private:
 	string output_fn;
 
 	// config
-	json config;
 
 	// Scene
 	LayoutType layout_type;

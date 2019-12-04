@@ -64,9 +64,9 @@ public:
 class CrossRectDifferentialEvolution :public RectDifferentialEvolution {
 };
 
-class FermatDifferentialEvolution:public DifferentialEvolution {
+class RadialStaggerDifferentialEvolution:public DifferentialEvolution {
 public:
-	FermatDifferentialEvolution() {
+	RadialStaggerDifferentialEvolution() {
 		m_paramKeys = { "dsep", "gap", "helio_recv_dis" };
 	}
 
@@ -77,12 +77,11 @@ protected:
 	bool constraintCheck(json& newX);
 };
 
-class RadialDifferentialEvolution:public DifferentialEvolution {
+class SpiralDifferentialEvolution:public DifferentialEvolution {
 public:
-	virtual void initialization() {};
-	virtual void mutation() {};
-	virtual void crossover() {};
-	virtual void seletction() {};
+	SpiralDifferentialEvolution() {
+		m_paramKeys = { "a", "b", "test_helio_num" };
+	}
 };
 
 class DECreator {
@@ -94,12 +93,12 @@ public:
 			return new RectDifferentialEvolution();
 		case CrossRectLayoutType:
 			return new CrossRectDifferentialEvolution();
-		case FermatLayoutType:
-			return new FermatDifferentialEvolution();
-		case RadialLayoutType:
-			return new RadialDifferentialEvolution();
+		case RadialStaggerLayoutType:
+			return new RadialStaggerDifferentialEvolution();
+		case SpiralLayoutType:
+			return new SpiralDifferentialEvolution();
 		default:
-			return new RectDifferentialEvolution();
+			throw runtime_error("[ERROR] Wrong differential evolution mode!!!");
 		}
 	}
 };

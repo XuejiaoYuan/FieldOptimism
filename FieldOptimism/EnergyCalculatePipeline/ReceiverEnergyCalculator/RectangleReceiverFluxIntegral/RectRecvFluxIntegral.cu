@@ -1,6 +1,7 @@
 #include "RectRecvFluxIntegral.cuh"
 
 void calcRectRecvEnergySum(int m, int n, int helioNum, IntegralHelioDeviceArgumet& h_args, ReceiverDeviceArgument& r_args, GaussLegendre& gl_handler, float* d_helio_energy){
+
 	int nThreads = 512;
 	dim3 nBlocks;
 	GeometryFunc::setThreadsBlocks(nBlocks, nThreads, helioNum*m*n);
@@ -56,7 +57,7 @@ __device__ float calcRecvFluxIntegralCore(IntegralHelioDeviceArgumet& h_args, Re
 	float3 reverse_dir = imgplane_normal;		// The normal of image plane
 	float3* recv_v = r_args.d_recv_vertexes + 4 * recvIndex;
 	float4* imgplane_m = h_args.d_imgplane_world2local + 4 * helioIndex;
-	float2 proj_v[4], trans_v[4];
+	float2 proj_v[4];
 	float3 inter_v;
 
 	float3 h_center_bias = make_float3(0, 0, 0);

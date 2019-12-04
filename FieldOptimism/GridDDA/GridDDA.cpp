@@ -61,17 +61,22 @@ double GridDDA::GridDDACore(Vector3d& dir, Heliostat* helio, Layout* layout, set
 			// 5. 确定layout下各网格的矩阵间隔
 	Vector2d& cellDimension = layout->helio_interval;
 
-	int helio_col = static_cast<int>((Hloc.x() - layout->layout_first_helio_center.x()) / cellDimension.x());			// smaller x is, smaller col is
-	int helio_row = static_cast<int>((Hloc.z() - layout->layout_first_helio_center.y()) / cellDimension.y());			// smaller z is, smaller row is
+	//int helio_col = static_cast<int>((Hloc.x() - layout->layout_first_helio_center.x()) / cellDimension.x());			// smaller x is, smaller col is
+	//int helio_row = static_cast<int>((Hloc.z() - layout->layout_first_helio_center.y()) / cellDimension.y());			// smaller z is, smaller row is
 
 
 	// 4. DDA求交
 	for (int i = 0; i < 2; ++i) {
 		// 4.0 设置光线范围
-		int minCol = static_cast<int>((boundBox[2 * i].x() - layout->layout_first_helio_center.x()) / cellDimension.x());
+		/*int minCol = static_cast<int>((boundBox[2 * i].x() - layout->layout_first_helio_center.x()) / cellDimension.x());
 		int minRow = static_cast<int>((boundBox[2 * i].y() - layout->layout_first_helio_center.y()) / cellDimension.y());
 		int maxCol = static_cast<int>((boundBox[2 * i + 1].x() - layout->layout_first_helio_center.x()) / cellDimension.x() + 0.5);
-		int maxRow = static_cast<int>((boundBox[2 * i + 1].y() - layout->layout_first_helio_center.y()) / cellDimension.y() + 0.5);
+		int maxRow = static_cast<int>((boundBox[2 * i + 1].y() - layout->layout_first_helio_center.y()) / cellDimension.y() + 0.5);*/
+
+		int minCol = static_cast<int>((boundBox[2 * i].x() - layout->layout_bound_pos.x()) / cellDimension.x());
+		int minRow = static_cast<int>((boundBox[2 * i].y() - layout->layout_bound_pos.y()) / cellDimension.y());
+		int maxCol = static_cast<int>((boundBox[2 * i + 1].x() - layout->layout_bound_pos.x()) / cellDimension.x() + 0.5);
+		int maxRow = static_cast<int>((boundBox[2 * i + 1].y() - layout->layout_bound_pos.y()) / cellDimension.y() + 0.5);
 
 		minCol = std::max(0, minCol);
 		minRow = std::max(0, minRow);

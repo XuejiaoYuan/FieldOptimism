@@ -10,6 +10,9 @@
     <CudaCompile Include="EnergyCalculatePipeline\ReceiverEnergyCalculator\RectangleReceiverFluxIntegral\RectRecvFluxIntegral.cu">
       <Filter>EnergyCalculatePipeline\ReceiverEnergyCalculator\RectangleReceiverFluxIntegral</Filter>
     </CudaCompile>
+    <CudaCompile Include="EnergyCalculatePipeline\ReceiverEnergyCalculator\RectangleReceiverDiscreteFlux\RectRecvDiscreteFlux.cu">
+      <Filter>EnergyCalculatePipeline\ReceiverEnergyCalculator\RectangleReceiverDiscreteFlux</Filter>
+    </CudaCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Common">
@@ -74,6 +77,9 @@
     </Filter>
     <Filter Include="EnergyCalculatePipeline\ReceiverEnergyCalculator\RectangleReceiverFluxIntegral">
       <UniqueIdentifier>{545907a9-443e-4b59-88a1-c104f9c53d5a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="EnergyCalculatePipeline\ReceiverEnergyCalculator\RectangleReceiverDiscreteFlux">
+      <UniqueIdentifier>{0c58a1b9-5bd9-435a-bc97-ab181e6c7822}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -157,6 +163,9 @@
     </ClInclude>
     <ClInclude Include="EnergyCalculatePipeline\ReceiverEnergyCalculator\ReceiverEnergyCalculator.h">
       <Filter>EnergyCalculatePipeline\ReceiverEnergyCalculator</Filter>
+    </ClInclude>
+    <ClInclude Include="EnergyCalculatePipeline\ReceiverEnergyCalculator\RectangleReceiverDiscreteFlux\RectRecvDiscreteFlux.cuh">
+      <Filter>EnergyCalculatePipeline\ReceiverEnergyCalculator\RectangleReceiverDiscreteFlux</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

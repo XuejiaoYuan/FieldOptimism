@@ -18,7 +18,6 @@ bool SolarScene::changeHeliosNormal(const Vector3d & sunray_dir)
 	return true;
 }
 
-
 void SolarScene::saveSolarScene(string scene_savepath)
 {
 	fstream outFile(scene_savepath +"scene_T" + to_string(layouts[0]->layout_type) + "_H" + to_string(helios.size()) + ".scn", ios::out);
@@ -75,7 +74,6 @@ void SolarScene::saveSolarScene(string scene_savepath)
 	outFile << endl;
 	outFile.close();
 }
-
 
 void SolarScene::saveHeSolarScene(string scene_savepath) {
 	fstream outFile(scene_savepath + "he_scene_T" + to_string(layouts[0]->layout_type) + "_H" + to_string(helios.size()) + ".scn", ios::out);
@@ -136,4 +134,94 @@ SolarScene::~SolarScene() {
 	helios.clear();
 
 	// Receiver will be deleted later
+}
+
+
+void SolarScene::initSolarScene(string scn_path)
+{
+	fstream in(scn_path, ios_base::in);
+	if (in.fail()) {
+		cerr << "[ERROR] Can't open scn file!!!" << endl;
+		return;
+	}
+
+	string line, word;
+	stringstream line_stream;
+	InputMode input_mode = Initial;
+	int row = 0;
+	int col = 0;
+	Layout* layout;
+	int layout_type;
+	Vector2d helio_gap;
+	Vector2i helio_matrix;
+	while (getline(in, line)) {
+		line_stream.clear();
+		line_stream.str(line);
+		line_stream >> word;
+
+		if (word == "#") {
+			line_stream >> word;
+			if (word == "Receiver") {
+				input_mode = ReceiverMode;
+				continue;
+			}
+			else if (word == "Heliostats") {
+				input_mode = HeliostatMode;
+				continue;
+			}
+			else if (word == "Grid") {
+				input_mode = LayoutMode;
+				continue;
+			}
+		}
+
+		switch (input_mode)
+		{
+		case ReceiverMode: {
+			int recv_type;
+			ReceiverCreator recv_creator;
+			line_stream >> recv_type;
+			Receiver* recv = recv_creator.getReceiver((ReceiverType)recv_type);
+			recv->initRecv(in, input_mode);
+			recvs.push_back(recv);
+			break;
+		}
+		case HeliostatMode: {
+			if (word == "gap")
+				line_stream >> helio_gap.x() >> helio_gap.y();
+			else if (word == "matrix")
+				line_stream >> helio_matrix.x() >> helio_matrix.y();
+			else {
+				Heliostat* helio = new Heliostat(RectangularHelioType);
+				helio->helio_index = helios.size();
+				helio->helio_gap = helio_gap;
+				helio->helio_matrix = helio_matrix;
+				line_stream >> helio->helio_pos.x() >> helio->helio_pos.y() >> helio->helio_pos.z();
+
+				getline(in, line);
+				line_stream.clear();
+				line_stream.str(line);
+				line_stream >> helio->helio_size.x() >> helio->helio_size.y() >> helio->helio_size.z();
+				helio->initFluxParam(recvs);
+				helios.push_back(helio);
+				helio = nullptr;
+			}
+			break;
+		}
+		case LayoutMode: {
+			line_stream >> layout_type;
+			LayoutCreator layout_creator;
+			layout = layout_creator.getLayout((LayoutType)layout_type);
+			layout->initLayout(in, input_mode);
+			layouts.push_back(layout);
+			break;
+		}
+		case Initial:
+			break;
+		default:
+			break;
+		}
+	}
+
+	in.close();
 }

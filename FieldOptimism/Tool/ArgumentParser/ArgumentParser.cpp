@@ -23,21 +23,27 @@ bool ArgumentParser::parser(int argc, char** argv) {
 		_mkdir(output_path.c_str());
 		sunray.calcSunRay(sunray_fn);
 		
-		auto scene = config.get_with_default("Scene");
-		layout_type = (LayoutType)(scene["LayoutType"].as<int>());
-		num_of_helio = scene["NumOfHelio"].as<int>();
-		model_type = (ModelType)(scene["ModelType"].as<int>());
-		calc_sigma = scene["CalcSigma"].as<bool>();
-
-		auto helio = config.get_with_default("Heliostat");
-		heliostat = HeliostatCreator::getHeliostat((HelioType)helio["type"].as<int>());
-		heliostat->initHelio(helio);
-
-		auto recv = config.get_with_default("Receiver");
-		Receiver *receiver = ReceiverCreator::getReceiver((ReceiverType)recv["type"].as<int>());		// Only handle one receiver
-		receiver->initRecv(recv);
-		recvs.push_back(receiver);
-
+		json scene = config.get_with_default("Scene", json());
+		if(!scene.empty()){
+			layout_type = (LayoutType)(scene["LayoutType"].as<int>());
+			num_of_helio = scene["NumOfHelio"].as<int>();
+			model_type = (ModelType)(scene["ModelType"].as<int>());
+			calc_sigma = scene["CalcSigma"].as<bool>();
+		}
+		
+		json helio = config.get_with_default("Heliostat", json());
+		if (!helio.empty()) {
+			heliostat = HeliostatCreator::getHeliostat((HelioType)helio["type"].as<int>());
+			heliostat->initHelio(helio);
+		}
+		
+		json recv = config.get_with_default("Receiver", json());
+		if (!recv.empty()) {
+			Receiver *receiver = ReceiverCreator::getReceiver((ReceiverType)recv["type"].as<int>());		// Only handle one receiver
+			receiver->initRecv(recv);
+			recvs.push_back(receiver);
+		}
+		
 		getTimeParams();	
 	}
 	catch (const std::exception&)

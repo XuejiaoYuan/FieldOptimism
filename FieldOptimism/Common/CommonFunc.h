@@ -54,5 +54,11 @@ using namespace jsoncons;
 //#define CALC_TIME
 
 typedef enum {
-	RectLayoutType, CrossRectLayoutType, FermatLayoutType, RadialLayoutType
+	RectLayoutType, CrossRectLayoutType, RadialStaggerLayoutType, SpiralLayoutType
 }LayoutType;
+
+
+typedef enum {
+	Initial, GroundMode, ReceiverMode, LayoutMode, HeliostatMode
+}InputMode;
+
