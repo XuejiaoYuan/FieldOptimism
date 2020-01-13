@@ -22,7 +22,7 @@ public:
         layout_type = _layout_type;
 		helio_interval = Vector2d(0, 0);
 		layout_bound_pos = Vector2d(0, 0);
-        layout_size = Vector2d(0, 0);
+        layout_size = Vector3d(0, 0, 0);
 		layout_row_col = Vector2i(0, 0);
     }
 	virtual void createHelioAndLayout(ArgumentParser& argumentParser, json& field_args, vector<Heliostat*>& helios);
@@ -34,7 +34,7 @@ public:
     LayoutType layout_type;						//Heliostat field's layout type
 	Vector2d layout_bound_pos;					// The bounding box of layout
 	Vector2d layout_first_helio_center;			// The first heliostat center's position in the field
-	Vector2d layout_size;						//Size of the layout, length/thickness/width
+	Vector3d layout_size;						//Size of the layout, length/width/thickness
 	Vector2i layout_row_col;					//The rows and cols of the layout
 	vector<vector<vector<Heliostat*>>> helio_layout;				//List the index of heliostats in the field
 
@@ -64,19 +64,23 @@ public:
 	void createHelioAndLayout(ArgumentParser& argumentParser, json& field_args, vector<Heliostat*>& helios);
 
 	vector<MatrixXd> getHelioIndex() { cerr << "Not implement!" << endl; return{}; };
-	double dsep;						// 定日镜包围盒安全距离
+	//double dsep;						// 定日镜包围盒安全距离
+	vector<double> dsep;
 	vector<double> helio_gap;
 
 private:
 	bool setCircleHelios(Heliostat& h_tmp, const int idx, vector<double>& recv_dis, vector<int>& rows, const double gap,
-		const int col, vector<Heliostat*>& helios, const vector<Receiver*>& recvs);
-	void calcCircleParams(vector<double>& recv_dis, vector<int>& n_rows, vector<int>& n_cols, json& field_args, double dm);
+		const int col, vector<Heliostat*>& helios, const vector<Receiver*>& recvs, const int test_helio_num);
+	void calcCircleParams(int real_helio_num, vector<double>& recv_dis, vector<int>& n_rows, vector<int>& n_cols, json& field_args, double dm);
 };
 
 class SpiralLayout:public Layout{
 public:
     SpiralLayout():Layout(SpiralLayoutType){}
 	void createHelioAndLayout(ArgumentParser& argumentPaser, json& field_args, vector<Heliostat*>& helios);
+private:
+	bool checkHelioDistance(double dm, double pre_theta, double cur_theta, double pre_r, double cur_r);
+	double calcHeliostatHeight(double x, double y, double h);
 };
 
 class LayoutCreator{

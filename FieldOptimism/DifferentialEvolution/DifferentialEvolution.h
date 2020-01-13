@@ -33,17 +33,23 @@ protected:
 	int randomSeed;
 	int m_populationSize;
 	int m_bestAgentIndex;
+	int H;
+	int k;
 	double m_F;
 	double m_CR;
 	double m_maxCost;
+	double m_p;
 	ArgumentParser* argumentParser;
 	vector<string> m_paramKeys;
 	unordered_map<string, Constraint> m_constraints;
 	default_random_engine m_generator;
 	vector<json> m_population;
 	vector<double> m_maxCostPerAgent;
+	vector<double> M_CR, M_F;
+	vector<double> S_CR, S_F;
+	vector<double> w_dis;
 
-	void DEPipeline();
+	bool DEPipeline();
 	virtual void initialization();
 	virtual void initializationHelper(shared_ptr<uniform_real_distribution<double>>& distribution, const int idx);
 	virtual json mutation(uniform_int_distribution<int>& distribution, const int idx);
@@ -51,6 +57,10 @@ protected:
 	virtual bool constraintCheck(json& newX);
 	virtual bool seletction(json& newX, const int idx);
 	vector<int> getRandomIndex(uniform_int_distribution<int>& distribution, const int idx);
+	vector<int> getCRandF();
+	bool updateMCRandMF();
+
+	bool adaptive = true;
 };
 
 
@@ -67,7 +77,7 @@ class CrossRectDifferentialEvolution :public RectDifferentialEvolution {
 class RadialStaggerDifferentialEvolution:public DifferentialEvolution {
 public:
 	RadialStaggerDifferentialEvolution() {
-		m_paramKeys = { "dsep", "gap", "helio_recv_dis" };
+		m_paramKeys = { "dsep", "gap", "helio_recv_dis", "test_helio_num", "circle_dis"};
 	}
 
 protected:
@@ -75,12 +85,13 @@ protected:
 	json mutation(uniform_int_distribution<int>& distribution, const int idx);
 	json crossover(json& z, const int idx);
 	bool constraintCheck(json& newX);
+	bool adaptiveKey(string s) { return (s == "dsep" || s == "gap" || s == "circle_dis"); }
 };
 
 class SpiralDifferentialEvolution:public DifferentialEvolution {
 public:
 	SpiralDifferentialEvolution() {
-		m_paramKeys = { "a", "b", "test_helio_num" };
+		m_paramKeys = { "a", "b", "test_helio_num", "helio_recv_dis", "eta", "dsep"};
 	}
 };
 

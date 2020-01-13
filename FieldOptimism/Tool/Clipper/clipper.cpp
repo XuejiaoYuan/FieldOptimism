@@ -47,6 +47,8 @@
 #include <cstdlib>
 #include <ostream>
 #include <functional>
+#include <chrono>
+//#include "../Timer/Timer.h"
 
 namespace ClipperLib {
 
@@ -1569,8 +1571,16 @@ bool Clipper::ExecuteInternal()
     cInt botY, topY;
     if (!PopScanbeam(botY)) return false;
     InsertLocalMinimaIntoAEL(botY);
+	std::chrono::time_point<std::chrono::steady_clock> start=std::chrono::high_resolution_clock::now();
     while (PopScanbeam(topY) || LocalMinimaPending())
     {
+		
+		auto elapsed = std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::high_resolution_clock::now() - start);
+		auto time = double(elapsed.count())*std::chrono::microseconds::period::num / std::chrono::microseconds::period::den;
+		if (time > 60) {
+			succeeded = false;
+			break;
+		}
       ProcessHorizontals();
 	    ClearGhostJoins();
       if (!ProcessIntersections(topY))

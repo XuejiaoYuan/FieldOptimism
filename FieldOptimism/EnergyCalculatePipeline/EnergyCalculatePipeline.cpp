@@ -7,19 +7,9 @@
 //
 double EnergyCalculatePipeline::handler(json& field_args) {
 	// 1. 初始化镜场
-	//cout << "2. Initialize solar scene" << endl;
 	initSolarScene(field_args);
 	
 	double res = traverseTimeHandler();
-	//for (int i = 0; i < 120; ++i) {
-	//	for (int j = 10; j <= 250; j += 20) {
-	//		solar_scene->recvs[0]->rows_cols = Vector2i(j, j);
-	//		fstream out(argumentParser->getOutputFn(), ios_base::out | ios_base::app);
-	//		out << j << ' ';
-	//		out.close();
-	//		double res = traverseTimeHandler();
-	//	}
-	//}
 
 	return res;
 }
@@ -30,38 +20,19 @@ double EnergyCalculatePipeline::handler(json& field_args) {
 double EnergyCalculatePipeline::handler()
 {
 	// 1. 初始化镜场
-	//cout << "2. Initialize solar scene" << endl;
 	solar_scene->initSolarScene(argumentParser->getConfig()["Path"]["ScnPath"].as<string>());
 	solar_scene->setModelStatus(argumentParser->getModelType(), argumentParser->getCalcSigma());
 
 	double res = traverseTimeHandler();
-	// [Test] test gpu calculate time
-	//for (int i = 0; i < 300; ++i) {
-	//	for (int m = 1; m <= 5; ++m) {
-	//		for (int M = 2; M <= 20; ++M) {
-	//			for (auto& h : solar_scene->helios)
-	//				h->energy = 0;
-
-	//			argumentParser->config["FluxParams"]["GaussianParams"]["M"] = M;
-	//			argumentParser->config["FluxParams"]["GaussianParams"]["N"] = M;
-	//			argumentParser->config["FluxParams"]["GaussianParams"]["m"] = m;
-	//			argumentParser->config["FluxParams"]["GaussianParams"]["n"] = m;
-
-	//			double res = traverseTimeHandler();
-	//			fstream out(argumentParser->getOutputFn(), ios_base::out | ios_base::app);
-	//			out << m << ' ' << M << ' ' << setprecision(16) << res/solar_scene->DNI << endl;
-	//			out.close();
-	//		}
-	//	}
-	//}
 	
-	saveSolarScene();
-
+	saveHeliostatEnergy();
 	return res;
 }
 
-void EnergyCalculatePipeline::saveSolarScene()
-{
+//
+// [能量计算接口] 计算全镜场各定日镜的总能量
+//
+void EnergyCalculatePipeline::saveHeliostatEnergy() {
 	fstream out(argumentParser->getOutputFn(), ios_base::out);
 	vector<Heliostat*> tmp = solar_scene->helios;
 	sort(tmp.begin(), tmp.end(), [](Heliostat* a, Heliostat* b) {return a->energy > b->energy; });
@@ -70,9 +41,21 @@ void EnergyCalculatePipeline::saveSolarScene()
 		out << h->helio_pos.x() << ' ' << h->helio_pos.y() << ' ' << h->helio_pos.z() << ' ' << setprecision(16) << h->energy << endl;
 	}
 	out.close();
-
 }
 
+//
+// [能量计算接口] 保存优化镜场结果
+//
+void EnergyCalculatePipeline::saveSolarScene()
+{
+	sort(solar_scene->helios.begin(), solar_scene->helios.end(), [](Heliostat* a, Heliostat* b) { return a->energy > b->energy; });
+	solar_scene->helios.resize(argumentParser->getNumOfHelio());
+	solar_scene->saveSolarScene(argumentParser->getOutputFn());
+}
+
+//
+// [能量计算接口] 按采样时间计算镜场能量
+//
 double EnergyCalculatePipeline::traverseTimeHandler() {
 	// 2. 设置采样时间
 	vector<int> months = argumentParser->getTimeParams(MonthType);
@@ -84,57 +67,66 @@ double EnergyCalculatePipeline::traverseTimeHandler() {
 	//cout << "3. Start simulate flux density distribution" << endl;
 	vector<int> time_params;
 	SdBkCalc sdbk_handler(solar_scene);
+	bool status = true;
 	for (auto& m : months)
 		for (auto& d : days)
 			for (auto& h : hours)
 				for (int t = 0; t < 60; t += minute_gap) {
 					//cout << "[Time: " << m << "." << d << ' ' << h << ":" << t << "]" << endl;
 					time_params = { m, d, h, t };
-					oneTimeHandlerCore(time_params, argumentParser->getSunray(), &sdbk_handler);
+					status = oneTimeHandlerCore(time_params, argumentParser->getSunray(), &sdbk_handler);
+					if (!status) break;
 				}
 
 	// 4. 剔除无效定日镜
+	if (!status)
+		return 0;
 	return removeHeliostat();
 }
 
+//
+// [能量计算接口] 创建新镜场
+//
 void EnergyCalculatePipeline::initSolarScene(json& field_args) {
 	// 1. 设置唯一Receiver
-	//cout << "\t2.1 Create receiver" << endl;
 	solar_scene->recvs = argumentParser->getReceivers();
 
 	// 2. 设置Layout
-	//cout << "\t2.2 Create layout" << endl;
 	Layout* layout = LayoutCreator::getLayout(argumentParser->getLayoutType());
 	solar_scene->layouts.push_back(layout);
 
 	// 3. 设置镜面仿真模型
-	//cout << "\t2.4 Initialize simulation model" << endl;
 	solar_scene->setModelStatus(argumentParser->getModelType(), argumentParser->getCalcSigma());
 
 	// 4. 设置Heliostat在Layout的布局
-	//cout << "\t2.3 Create heliostats" << endl;
 	solar_scene->layouts[0]->createHelioAndLayout(*argumentParser, field_args, solar_scene->helios);
 	//solar_scene->saveSolarScene(argumentParser->getOutputPath());
 
 }
 
-void EnergyCalculatePipeline::oneTimeHandlerCore(vector<int>& time_param, SunRay& sunray, SdBkCalc* sdbk_handler) {
+// 
+// [能量计算接口] 计算某采样时刻下的镜场能量
+//
+bool EnergyCalculatePipeline::oneTimeHandlerCore(vector<int>& time_param, SunRay& sunray, SdBkCalc* sdbk_handler) {
 	// 1. 调整镜场定日镜朝向
-	//cout << "\t3.1 Adjust heliostats' normal" << endl;
 	Vector3d sunray_dir = sunray.changeSunRay(time_param);
 	double DNI = sunray.calcDNI(time_param);
 	solar_scene->changeHeliosNormal(sunray_dir);
 	solar_scene->DNI = DNI;
 
 	// 2. 计算阴影遮挡率
-	//cout << "\t3.2 Calculate heliostats' shading and blocking factor" << endl;
-	sdbk_handler->calcSceneShadowBlock();
+	bool status = sdbk_handler->calcSceneShadowBlock();
 
 	// 3. 计算镜场能量
-	//cout << "\t3.3 Calculate field energy" << endl;
-	handlerFunc(solar_scene, time_param, sunray, sdbk_handler);
+	if(status)
+		handlerFunc(solar_scene, time_param, sunray, sdbk_handler);
+
+	return status;
 }
 
+//
+// [能量计算接口] 计算镜场采样时刻下的镜场能量核心函数
+//
 void EnergyCalculatePipeline::handlerFunc(SolarScene* solar_scene, vector<int>& time_param, SunRay& sunray, SdBkCalc* sdbk_handler) {
 	
 	// 1. Get guass legendre calculation handler
@@ -151,14 +143,11 @@ void EnergyCalculatePipeline::handlerFunc(SolarScene* solar_scene, vector<int>& 
 		calcCenterMode = true;
 	ReceiverEnergyCalculator recv_energy_calc(solar_scene, gl_hander, m, n, calcCenterMode);
 	recv_energy_calc.calcRecvEnergySum();
-
-	//double t = Timer::getDuration();
-	//fstream out(argumentParser->getOutputFn(), ios_base::out | ios_base::app);
-	//out << t << ' ';
-	//out.close();
-
 }
 
+//
+//[能量计算接口] 剔除多余定日镜
+//
 double EnergyCalculatePipeline::removeHeliostat() {
 	vector<Heliostat*> tmp = solar_scene->helios;
 	sort(tmp.begin(), tmp.end(), [](Heliostat* a, Heliostat* b) {return a->energy > b->energy; });
@@ -175,6 +164,9 @@ EnergyCalculatePipeline::~EnergyCalculatePipeline()
 	delete solar_scene;
 }
 
+//
+// [定日镜辐射能计算接口] 计算测试定日镜的辐射能密度分布结果
+//
 void HelioFluxCalculatePipeline::handlerFunc(SolarScene* solar_scene, vector<int>& time_param, SunRay& sunray, SdBkCalc* sdbk_handler) {
 	json flux = argumentParser->getConfig()["FluxParams"].as<json>();
 	vector<int> test_helio_index(flux["TestHelioIndex"].as<vector<int>>());
@@ -183,6 +175,7 @@ void HelioFluxCalculatePipeline::handlerFunc(SolarScene* solar_scene, vector<int
 	string time_str = "M" + to_string(time_param[0]) + "D" + to_string(time_param[1])
 		+ "H" + to_string(time_param[2]) + "m" + to_string(time_param[3]) + "/";
 
+	// 若有光线跟踪峰值，则使用单点拟合计算sigma
 	if (!solar_scene->isCalcSigma()) {
 		SigmaFitting sg_handler;
 		vector<Heliostat*> rt_helio;
@@ -197,9 +190,10 @@ void HelioFluxCalculatePipeline::handlerFunc(SolarScene* solar_scene, vector<int
 }
 
 
+//
+// [镜场辐射能计算接口] 计算全镜场在接收器平面的辐射能密度分布
+//
 void FieldFluxCalculatePipeline::handlerFunc(SolarScene* solar_scene, vector<int>& time_param, SunRay& sunray, SdBkCalc* sdbk_handler) {
-	//Timer::resetStart();
-
 	// 1. Get guass legendre calculation handler
 	json flux = argumentParser->getConfig()["FluxParams"].as<json>();
 	json gaussian_params = flux["GaussianParams"].as<json>();
@@ -224,18 +218,7 @@ void FieldFluxCalculatePipeline::handlerFunc(SolarScene* solar_scene, vector<int
 	if (solar_scene->getModelType() == bHFLCAL)
 		calcCenterMode = true;
 	ReceiverEnergyCalculator recv_energy_calc(solar_scene, gl_hander, m, n, calcCenterMode);
-	vector<float> res = recv_energy_calc.calcRecvFluxDistribution();
-
-	//double sum = 0;
-	//for (int i = 0; i < res.size(); ++i)
-	//	sum += res[i];
-	//double t = Timer::getDuration();
-	//fstream out(argumentParser->getOutputFn(), ios_base::out | ios_base::app);
-	//double grid_area = solar_scene->recvs[0]->recv_size.x() / solar_scene->recvs[0]->rows_cols.x() *
-	//	solar_scene->recvs[0]->recv_size.y() / solar_scene->recvs[0]->rows_cols.y();
-	//out << t << ' ' << setprecision(16) << sum*grid_area << endl;
-	//out.close();
-	
+	vector<float> res = recv_energy_calc.calcRecvFluxDistribution();	
 
 	// 3. Save receiver discrete flux 
 	int recvFaceNum = solar_scene->recvs[0]->recv_face_num;

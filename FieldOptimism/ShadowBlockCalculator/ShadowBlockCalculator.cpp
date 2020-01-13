@@ -51,17 +51,26 @@ double SdBkCalc::helioClipper(Heliostat * helio, const vector<Vector3d>& dir, co
 	Paths solution;													// solution represents the shadowing / blocking area
 	c.AddPaths(subj, ptSubject, true);
 	c.AddPaths(clips, ptClip, true);
-	c.Execute(ctIntersection, solution, pftNonZero, pftNonZero);
-
+	//c.Execute(ctIntersection, solution, pftNonZero, pftNonZero);
+	bool status = c.Execute(ctIntersection, solution, pftNonZero, pftEvenOdd);
+	if (!status)
+		return -1;
 	// ¼ÆËãÊ£ÓàÃæ»ý
 	c.Clear();
 	c.AddPaths(subj, ptSubject, true);
 	c.AddPaths(solution, ptClip, true);
-	c.Execute(ctDifference, solution, pftNonZero, pftNonZero);
+	//c.Execute(ctDifference, solution, pftNonZero, pftNonZero);
+	bool status2 = c.Execute(ctDifference, solution, pftNonZero, pftEvenOdd);
+	if (!status2)
+		return - 1;
 
 	Vector3d h_local_centerBias;
-	double area = PolygonCenterCalculator::calcPolygonCenter(solution, h_local_centerBias, calcCenterMode);
+	double area = PolygonCenterCalculator::calcPolygonCenter(helio->helio_index, solution, h_local_centerBias, calcCenterMode);
+	//PolygonCenterCalculator::calcPolygonCenter_Delaunay(helio, solution, h_local_centerBias, calcCenterMode);
 	if (calcCenterMode) {
+		helio->transformM(2, 0) = -h_local_centerBias.x();
+		helio->transformM(2, 1) = -h_local_centerBias.z();
+
 		h_local_centerBias = GeometryFunc::mulMatrix(h_local_centerBias, helio->local2worldM);
 		helio->centerBias = make_float3(h_local_centerBias.x(), h_local_centerBias.y(), h_local_centerBias.z());
 	}
@@ -125,8 +134,6 @@ float SdBkCalc::calcHelio2RecvEnergy(vector<Vector3d>& recv_v, Vector3d& recv_n,
 	Heliostat* helio, Vector3d& fc_center, double DNI, double cos_phi) {
 	int rows = rows_cols.x();
 	int cols = rows_cols.y();
-	//int rows = 240;
-	//int cols = 240;
 	Vector3d row_gap = (recv_v[1] - recv_v[0]) / rows;
 	Vector3d col_gap = (recv_v[3] - recv_v[0]) / cols;
 
@@ -195,7 +202,6 @@ float SdBkCalc::calcHelio2RecvEnergy(vector<Vector3d>& recv_v, Vector3d& recv_n,
 			else {
 				GeometryFunc::calcIntersection(reverse_dir, fc_center, start_v, reverse_dir, inter_v);
 				Vector3d proj_v = GeometryFunc::mulMatrix(inter_v, world2local) - i_center_bias;
-				//helio->rotate_theta = 0;
 				trans_v.x() = proj_v.x()*cos(helio->rotate_theta) + proj_v.z()*sin(helio->rotate_theta);
 				trans_v.z() = proj_v.z()*cos(helio->rotate_theta) - proj_v.x()*sin(helio->rotate_theta);
 				res = DNI*(1 - helio->sd_bk)*cos_phi*helio->flux_param * gl->flux_func(trans_v.x(), trans_v.z(), sigma, helio->l_w_ratio);
@@ -210,22 +216,6 @@ float SdBkCalc::calcHelio2RecvEnergy(vector<Vector3d>& recv_v, Vector3d& recv_n,
 	return sum;
 }
 
-
-inline double calc_mAA(double dis) {
-	double mAA;
-	if (dis <= 1000)
-		mAA = (double)(0.99321 - 0.0001176 * dis + 1.97 * 1e-8 * dis * dis);      //d<1000
-	else
-		mAA = exp(-0.0001106 * dis);
-	return mAA;
-}
-
- 
-inline double random_double() {
-	static std::default_random_engine e(time(NULL));
-	static std::uniform_real_distribution<double> u(0, 1);
-	return u(e);
-}
 
 
 //
@@ -261,10 +251,6 @@ void SdBkCalc::calcSceneFluxDistribution(vector<int>& test_helio_index, const do
 	for (int h_index : test_helio_index) {
 
 		Heliostat* helio = solar_scene->helios[h_index];
-		//if (helio->sd_bk > Epsilon) {
-		//	system("pause");
-		//	cout << helio->sd_bk << endl;
-		//}
 		int fc_index = helio->focus_center_index;
 		vector<Receiver*> recvs = solar_scene->recvs;
 		Vector3d reverse_dir = (helio->helio_pos - helio->focus_center).normalized();		// The normal of image plane
@@ -299,14 +285,22 @@ void SdBkCalc::calcSceneFluxDistribution(vector<int>& test_helio_index, const do
 }
 
 
-void SdBkCalc::calcSceneShadowBlock()
+bool SdBkCalc::calcSceneShadowBlock()
 {
 	vector<Heliostat*> helios = solar_scene->helios;
 
+	bool status = true;
 #pragma omp parallel for
 	for (int i = 0; i < helios.size(); i++) {
-		calcHelioShadowBlock(i);
+		double res = calcHelioShadowBlock(i);
+		if (res < 0) {
+			status = false;
+			break;
+		}
+		
 	}
+
+	return status;
 }
 
 
@@ -484,26 +478,20 @@ void SdBkCalcTest::normalSdBk() {
 	unordered_set<int> sd_set, bk_set;
 	int sd_ac = 0;
 	int bk_ac = 0;
-//#pragma omp parallel for
 	for (int i = 0; i < solar_scene->helios.size(); ++i) {
 		auto h = solar_scene->helios[i];
 		if (h->helio_index != helio_index) {
 			if (h->helio_normal.dot(sd_dir) > Epsilon) {
 				if (checkHelioDis(sd_dir, cur_h, cur_h->helio_pos, h->helio_pos)) {
-					//#pragma omp critical
 					if (gt_sd_helio_index.count(h->helio_index)) {
-					//#pragma omp critical
 						++sd_ac;
-						
 					}
 					sd_set.insert(h->helio_index);
 				}
 			}
 			if (h->helio_normal.dot(bk_dir) > Epsilon) {
 				if (checkHelioDis(bk_dir, cur_h, cur_h->helio_pos, h->helio_pos)) {
-					//#pragma omp critical
 					if (gt_bk_helio_index.count(h->helio_index)) {
-					//#pragma omp critical
 						++bk_ac;
 						
 					}
@@ -592,7 +580,6 @@ void SdBkCalcTest::neighRowSdBk() {
 	int start = 0;
 	int end = 0;
 	getStartEndIndex(cur_h, start, end);
-//#pragma omp parallel for
 	for (; start <= end; ++start) {
 		auto h = solar_scene->helios[start];
 		if (start != helio_index) {
@@ -600,10 +587,8 @@ void SdBkCalcTest::neighRowSdBk() {
 				checkEffectRegion(Vector3d(-1, 0, 0), cur_h->helio_pos, h->helio_pos, diameter) ||
 				checkEffectRegion(Vector3d( 0, 0, 1), cur_h->helio_pos, h->helio_pos, diameter) ||
 				checkEffectRegion(Vector3d(0, 0, -1), cur_h->helio_pos, h->helio_pos, diameter)) {
-				//#pragma omp critical
 				
 				if (gt_sd_helio_index.count(h->helio_index) || gt_bk_helio_index.count(h->helio_index)) {
-					//#pragma omp critical
 					++sdbk_ac;
 				}
 				sdbk_set.insert(h->helio_index);
@@ -718,7 +703,6 @@ void SdBkCalcTest::improvedNeighSdBk() {
 	int start = 0;
 	int end = 0;
 	getStartEndIndex(cur_h, start, end);
-//#pragma omp parallel for
 	for (; start <= end; ++start) {
 		auto h = solar_scene->helios[start];
 		if (checkEffectRegion(Vector3d( 1, 0, 0), cur_h->helio_pos, h->helio_pos, diameter) ||
@@ -727,7 +711,6 @@ void SdBkCalcTest::improvedNeighSdBk() {
 			checkEffectRegion(Vector3d(0, 0, -1), cur_h->helio_pos, h->helio_pos, diameter)) {
 			if (checkCenterDist(cur_h, h, sd_dir)) {
 				if (gt_sd_helio_index.count(start)) {
-//#pragma omp critical
 					++sd_ac;
 				}
 				sd_set.insert(start);

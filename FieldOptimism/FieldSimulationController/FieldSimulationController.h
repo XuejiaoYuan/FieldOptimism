@@ -4,6 +4,7 @@
 
 enum ControllerMode
 {
+	// 镜场优化，计算采样定日镜辐射能密度，计算全镜场辐射能密度，计算全镜场能量
 	FieldOptimismMode, HelioFluxSimulationMode, FieldFluxSimulationMode, EnergyCalculateMode
 };
 

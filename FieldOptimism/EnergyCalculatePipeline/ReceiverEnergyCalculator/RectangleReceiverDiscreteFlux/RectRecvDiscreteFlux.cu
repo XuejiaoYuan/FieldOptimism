@@ -46,11 +46,13 @@ __device__ float calcRectRecvDiscreteFluxCore(IntegralHelioDeviceArgumet& h_args
 	float3 h_center_bias = make_float3(0, 0, 0);
 	float3 i_center_bias = make_float3(0, 0, 0);
 	float rotate_theta = 0;
+	float shear_theta = 0;
 	if (h_args.d_center_bias) {
 		h_center_bias = h_args.d_center_bias[helioIndex];
 		GeometryFunc::calcIntersection(reverse_dir, focus_pos, h_center_bias, -reverse_dir, i_center_bias);
 		i_center_bias = GeometryFunc::multMatrix(i_center_bias, imgplane_m);
 		rotate_theta = h_args.d_rotate_theta[helioIndex];
+		shear_theta = h_args.d_shear_theta[helioIndex];
 	}
 
 	for (int i = 0; i < 4; ++i) {
@@ -65,7 +67,8 @@ __device__ float calcRectRecvDiscreteFluxCore(IntegralHelioDeviceArgumet& h_args
 	float l_w_ratio = gauss_param.x;
 	float sigma = gauss_param.y;
 	float2 start_v = proj_v[0] + i*row_gap + j*col_gap;
-	float2 trans_v = start_v - make_float2(i_center_bias.x, i_center_bias.z);
+	start_v -= make_float2(i_center_bias.x, i_center_bias.z);
+	float2 trans_v;
 	trans_v.x = start_v.x*cos(rotate_theta) + start_v.y*sin(rotate_theta);
 	trans_v.y = start_v.y*cos(rotate_theta) - start_v.x*sin(rotate_theta);
 

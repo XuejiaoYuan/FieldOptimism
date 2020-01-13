@@ -24,12 +24,11 @@ void FieldOptimismController::handler(int argc, char ** argv)
 	DifferentialEvolution* de_handler = DECreator::getDE(argumentParser.getLayoutType());
 	json field_args = de_handler->fieldOptimism(argumentParser);
 
-	// 3. Save field result
+		// 3. Save field result
 	cout << "3. Saving result" << endl;
 	EnergyCalculatePipeline* e_handler = EnergyCalculateCreator::getPipeline(SceneEnergyMode, argumentParser);
 	double new_cost = e_handler->handler(field_args);
 	e_handler->saveSolarScene();
-
 }
 
 void HelioFluxSimulationController::handler(int argc, char** argv) {

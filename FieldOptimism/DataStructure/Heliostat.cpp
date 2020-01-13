@@ -46,14 +46,16 @@ void Heliostat::initFluxParam(const vector<Receiver*>& recvs)
 	//sigma_list[3] = sqrt(S) * (1 - cos_w) / (4 * sigma_list[0]);	// sigma_ast
 	sigma_list[4] = 0;												// sigma_t
 	sigma_list[5] = abs(res[1]);									// cos_rev
+
+	Vector3d reverse_dir = (helio_pos - focus_center).normalized();
+	GeometryFunc::getImgPlaneMatrixs(reverse_dir, focus_center, imgLocal2WorldM, imgWorld2LocalM, 1);
 }
 
 void Heliostat::calcFluxParam(const ModelType& type, const bool& calc_sigma)
 {
+	
+
 	if (type == bHFLCAL) {
-		// 测试改进模型时
-		// 1. l_w_ratio对模型分布有影响
-		// 2. rotate_theta对模型转向有影响
 		Vector3d reverse_sunray_dir = (helio_pos - focus_center).normalized();
 		vector<Vector3d> inter_v(3);
 		Vector3d row_dir = (vertex[1] - vertex[0]).normalized();
@@ -71,24 +73,12 @@ void Heliostat::calcFluxParam(const ModelType& type, const bool& calc_sigma)
 		double cos_eta_col = col_dir.dot(img_x_axis);
 		double cos_eta_row = row_dir.dot(img_y_axis);
 		rotate_theta = acos(abs(cos_eta_col));
-		double distortion_theta = acos(abs(cos_eta_row));
-		//double distortion_theta = 0;
+		distortion_theta = acos(abs(cos_eta_row));
 
 		if (col_dir.dot(img_y_axis) < 0) rotate_theta = -rotate_theta;
 		if (row_dir.dot(img_x_axis) < 0) distortion_theta = -distortion_theta;
 
 		//rotate_theta += distortion_theta;
-
-		//double ip_w = (inter_v[1] - inter_v[0]).norm();
-		//double ip_l = (inter_v[2] - inter_v[0]).norm();
-	
-		//double w_l = ip_l / ip_w;
-		//l_w_ratio = 1 +  abs(log10(2 - 0.5*w_l));
-		//l_w_ratio = 1 + abs(log10(2 - 0.5*w_l));
-		//l_w_ratio = sqrt(w_l);
-
-		//l_w_ratio = 1 + log10(1./w_l);
-		//l_w_ratio = 1;
 
 		for (int i = 0; i<3; ++i)
 			double t = GeometryFunc::calcIntersection(reverse_sunray_dir, focus_center, vertex[i], -reverse_sunray_dir, inter_v[i]);
@@ -109,9 +99,9 @@ void Heliostat::calcFluxParam(const ModelType& type, const bool& calc_sigma)
 		double ip_l = (inter_v[2] - inter_v[0]).norm();
 
 		double w_l = ip_l / ip_w;
-		//l_w_ratio = 1 + log10(w_l);
+		l_w_ratio = 1 + log10(w_l);
 		//l_w_ratio = sqrt(w_l);
-		l_w_ratio = 1 + 0.5*log2(w_l);
+		//l_w_ratio = 1 + 0.5*log2(w_l);
 	}
 	else {
 		// 计算全镜场能量时：

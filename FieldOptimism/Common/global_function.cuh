@@ -12,15 +12,20 @@ namespace GeometryFunc
 			v.w() = 0;
 
 		RowVector4d res = v*matrix;
-		// double res[4] = { 0 };
-		//for (int i = 0; i<4; i++)
-		//	for (int j = 0; j<4; j++)
-		//		res(i) += v(j) * matrix[j][i];
-
 		if (res(3) > Epsilon)
 			res /= res(3);
 		return Vector3d(res(0), res(1), res(2));
+	}
 
+	inline Vector2d multMatrix(const Vector2d& vertex, const Matrix3d& matrix, bool point = true) {
+		RowVector3d v(vertex.x(), vertex.y(), 1);
+		if (!point)
+			v.z() = 0;
+
+		RowVector3d res = v*matrix;
+		if (res(2) > Epsilon)
+			res /= res(2);
+		return Vector2d(res(0), res(1));
 	}
 
 	__device__ 
@@ -33,6 +38,19 @@ namespace GeometryFunc
 
 		if (res.w > Epsilon) res /= res.w;
 		return make_float3(res.x, res.y, res.z);
+	}
+
+	__device__
+		inline float2 multMatrix(const float2& vertex, const float3* matrix, bool point = true) {
+		double v[3] = { vertex.x, vertex.y, point ? 1 : 0 };
+		float3 res = make_float3(0, 0, 0);
+
+		for (int i = 0; i < 3; ++i)		// TODO check wether right
+			res += v[i] * matrix[i];
+
+		if (res.z > Epsilon) res /= res.z;
+		return make_float2(res.x, res.y);
+
 	}
 
 	inline float3 convert3(const Vector3d& a) {
@@ -71,21 +89,50 @@ namespace GeometryFunc
 	}
 
 
+	//inline bool inProjArea(const vector<Vector3d>& v, const Vector3d& p) {
+	//	Vector3d pre_n, cur_n, edg, line;
+	//	int n = v.size();
+	//	for (int l = 0; l < n; l++) {
+	//		edg = v[(l + 1) % n] - v[l];
+	//		line = p - v[l];
+	//		if (l == 0) {
+	//			pre_n = edg.cross(line);
+	//			continue;
+	//		}
+	//		cur_n = edg.cross(line);
+	//		if (pre_n.dot(cur_n) < Epsilon)
+	//			return false;
+	//		pre_n = cur_n;
+	//	}
+	//	return true;
+	//}
+	
+	inline int dcmp(double x) {
+		if (fabs(x) < 1e-6)
+			return 0;
+		else
+			return x < 0 ? -1 : 1;
+	}
+
+	inline bool onSegment(const Vector3d& p1, const Vector3d& p2, const Vector3d& q) {
+		Vector3d k1 = p1 - q;
+		Vector3d k2 = p2 - q;
+		return dcmp(k1.x()*k2.y() - k2.x()*k1.y()) == 0 && dcmp((p1 - q).dot(p2 - q)) <= 0;
+	}
+
 	inline bool inProjArea(const vector<Vector3d>& v, const Vector3d& p) {
-		Vector3d pre_n, cur_n, edg, line;
-		for (int l = 0; l < 4; l++) {
-			edg = v[(l + 1) % 4] - v[l];
-			line = p - v[l];
-			if (l == 0) {
-				pre_n = edg.cross(line);
-				continue;
-			}
-			cur_n = edg.cross(line);
-			if (pre_n.dot(cur_n) < Epsilon)
-				return false;
-			pre_n = cur_n;
+		bool flag = false; 
+		Vector3d P1, P2; 
+		int n = v.size();
+		for (int i = 0, j = n-1; i < n; j = i++)
+		{
+			P1 = v[i];
+			P2 = v[j];
+			if (onSegment(P1, P2, p)) return true; 
+			if ((dcmp(P1.y() - p.y())>0 != dcmp(P2.y() - p.y())>0) && dcmp(p.x() - (p.y() - P1.y())*(P1.x() - P2.x()) / (P1.y() - P2.y()) - P1.x())<0)
+				flag = !flag;
 		}
-		return true;
+		return flag;
 	}
 
 	__device__ __host__ 
@@ -168,6 +215,16 @@ namespace GeometryFunc
 		local2worldM(3, 3) = 1;
 
 		world2localM = local2worldM.inverse();
+	}
+
+	inline void getTransformMatrix(const vector<Vector2d>& origin_p, const vector<Vector2d>& trans_p, Matrix3d& transformM) {
+		double delta = origin_p[0].x()*origin_p[1].y() - origin_p[1].x()*origin_p[0].y();
+		transformM(1, 0) = (origin_p[0].x()*trans_p[1].x() - trans_p[0].x()*origin_p[1].x()) / delta;
+		cout << transformM(1, 0) << endl;
+		transformM(0, 0) = (trans_p[1].x() - transformM(1, 0)* origin_p[0].y()) / origin_p[0].x();
+		transformM(1, 1) = (origin_p[0].x()*trans_p[1].y() - trans_p[0].y()*origin_p[1].x()) / delta;
+		transformM(0, 1) = (trans_p[1].y() - transformM(1, 1)* origin_p[0].y()) / origin_p[0].x();
+		transformM(2, 2) = 1;
 	}
 
 	__host__ __device__

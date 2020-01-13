@@ -38,6 +38,8 @@ public:
 	unsigned int focus_center_index;	//Focus center index of reciver
 	Matrix4d local2worldM;		//Heliostat's transform matrixs
 	Matrix4d world2localM;
+	Matrix4d imgLocal2WorldM;	// Heliostat's image plane transform matrixs
+	Matrix4d imgWorld2LocalM;
 	double sd_bk;				// Heliostat's shadow and block ratio
 	double mAA;					// Heliostat's atomospheric attenuation factor
 	double cos_w;				// Heliostat's incidence cosine efficiency
@@ -49,6 +51,8 @@ public:
 	double flux_param;			// flux_param = 0.5 * S * cos_w * rou * l_w_ration * mAA / pi
 	float3 centerBias;			// 由于阴影遮挡导致的重心偏移位置
 	double rotate_theta;			// 定日镜投影到image plane产生的轴旋转角度
+	double distortion_theta;		
+	Matrix3d transformM;
 	Vector3d focus_center;			// 定日镜在接收器平面聚焦中心
 	double energy;					// 定日镜在接收器平面积分（不含DNI）
 

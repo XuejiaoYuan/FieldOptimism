@@ -1,6 +1,8 @@
 #include "GridDDA.h"
 
-
+//
+// [网格DDA计算接口] 
+//
 bool GridDDA::checkBoundingBox(const Vector3d & Hloc, const Vector3d & Hnormal, const Vector3d & HIloc, const Vector3d & dir, double diameter)
 {
 	Vector3d dist = HIloc - Hloc;
@@ -10,12 +12,18 @@ bool GridDDA::checkBoundingBox(const Vector3d & Hloc, const Vector3d & Hnormal, 
 	return true;
 }
 
+//
+// [网格DDA计算接口] 计算定日镜的相关定日镜
+//
 void GridDDA::rayCastForBlock(SolarScene * solar_scene, Heliostat * helio, set<vector<int>>& rela_grid_index)
 {
 	Vector3d bk_dir = (helio->focus_center - helio->helio_pos).normalized();
 	double radius = GridDDACore(bk_dir, helio, solar_scene->layouts[0], rela_grid_index);
 }
 
+//
+// [网格DDA计算接口] 确定网格中包含的定日镜
+//
 void GridDDA::getBlockHelioFromGrid(SolarScene * solar_scene, set<vector<int>>& rela_grid_label, unordered_set<int>& rela_helio_index, Heliostat* helio)
 {
 	Vector3d dir = (helio->focus_center - helio->helio_pos).normalized();
@@ -29,7 +37,9 @@ void GridDDA::rayCastForShadow(SolarScene* solar_scene, Heliostat * helio, Vecto
 	getHelioFromGridCore(solar_scene, relative_grid_label, rela_helio_index, dir, helio);
 }
 
-
+//
+// [网格计算接口] 基于DDA算法确定光线穿过的网格
+//
 double GridDDA::GridDDACore(Vector3d& dir, Heliostat* helio, Layout* layout, set<vector<int>>& relative_grid_label)
 {
 	Vector2d ray_dir(dir.x(), dir.z());
@@ -46,7 +56,8 @@ double GridDDA::GridDDACore(Vector3d& dir, Heliostat* helio, Layout* layout, set
 	};
 
 	// 3. 确定光线在场地中y反向移动距离及最终离开网格位置
-	double dis = 2 * radius / dir.y();
+	//double dis = 2 * radius / dir.y();
+	double dis = layout->layout_size.z() / dir.y();
 	Vector2d upper_v[2] = {
 		Vector2d((radius + dis)*dir.x(), (radius + dis)*dir.z()) + proj_origin[0],
 		Vector2d((radius + dis)*dir.x(), (radius + dis)*dir.z()) + proj_origin[1]
@@ -68,11 +79,6 @@ double GridDDA::GridDDACore(Vector3d& dir, Heliostat* helio, Layout* layout, set
 	// 4. DDA求交
 	for (int i = 0; i < 2; ++i) {
 		// 4.0 设置光线范围
-		/*int minCol = static_cast<int>((boundBox[2 * i].x() - layout->layout_first_helio_center.x()) / cellDimension.x());
-		int minRow = static_cast<int>((boundBox[2 * i].y() - layout->layout_first_helio_center.y()) / cellDimension.y());
-		int maxCol = static_cast<int>((boundBox[2 * i + 1].x() - layout->layout_first_helio_center.x()) / cellDimension.x() + 0.5);
-		int maxRow = static_cast<int>((boundBox[2 * i + 1].y() - layout->layout_first_helio_center.y()) / cellDimension.y() + 0.5);*/
-
 		int minCol = static_cast<int>((boundBox[2 * i].x() - layout->layout_bound_pos.x()) / cellDimension.x());
 		int minRow = static_cast<int>((boundBox[2 * i].y() - layout->layout_bound_pos.y()) / cellDimension.y());
 		int maxCol = static_cast<int>((boundBox[2 * i + 1].x() - layout->layout_bound_pos.x()) / cellDimension.x() + 0.5);
@@ -141,6 +147,9 @@ double GridDDA::GridDDACore(Vector3d& dir, Heliostat* helio, Layout* layout, set
 	return radius;
 }
 
+//
+// [网格计算接口] 由当前定日镜确定相关定日镜
+//
 void GridDDA::getHelioFromGridCore(SolarScene * solar_scene, set<vector<int>>& rela_grid_label, unordered_set<int>& rela_helio_index, Vector3d & dir, Heliostat * helio)
 {
 	double radius = sqrt(pow(helio->helio_size.x(), 2) + pow(helio->helio_size.z(), 2)) / 2.0;

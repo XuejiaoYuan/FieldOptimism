@@ -15,13 +15,12 @@ public:
 		rela_block_grid_index.resize(solar_scene->helios.size());
 		block_grid_init.resize(solar_scene->helios.size(), false);
 	}
-	void calcSceneShadowBlock();
+	bool calcSceneShadowBlock();
 	void calcSceneFluxDistribution(vector<int>& test_helio_index, const double DNI, json& config);
 	void setOutputPath(string& _output_path) { output_path = _output_path; }
 	
 protected:
 	GaussLegendreCPU* gl;
-	//map<int, set<vector<int>>> rela_block_grid_index;
 	vector<set<vector<int>>> rela_block_grid_index;
 	vector<bool> block_grid_init;
 	SolarScene* solar_scene;

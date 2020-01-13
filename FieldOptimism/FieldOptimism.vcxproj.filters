@@ -81,6 +81,12 @@
     <Filter Include="EnergyCalculatePipeline\ReceiverEnergyCalculator\RectangleReceiverDiscreteFlux">
       <UniqueIdentifier>{0c58a1b9-5bd9-435a-bc97-ab181e6c7822}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Tool\Delaunay">
+      <UniqueIdentifier>{c70c7b0c-f729-4ede-874c-b875c29bb2c8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tool\PCA">
+      <UniqueIdentifier>{3781186b-b2af-4e1b-88eb-1bee0c1ac493}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Common\CommonFunc.h">
@@ -167,6 +173,12 @@
     <ClInclude Include="EnergyCalculatePipeline\ReceiverEnergyCalculator\RectangleReceiverDiscreteFlux\RectRecvDiscreteFlux.cuh">
       <Filter>EnergyCalculatePipeline\ReceiverEnergyCalculator\RectangleReceiverDiscreteFlux</Filter>
     </ClInclude>
+    <ClInclude Include="Tool\Delaunay\triangle.h">
+      <Filter>Tool\Delaunay</Filter>
+    </ClInclude>
+    <ClInclude Include="Tool\PCA\PCA.h">
+      <Filter>Tool\PCA</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DataStructure\Heliostat.cpp">
@@ -232,6 +244,12 @@
     </ClCompile>
     <ClCompile Include="EnergyCalculatePipeline\ReceiverEnergyCalculator\ReceiverEnergyCalculator.cpp">
       <Filter>EnergyCalculatePipeline\ReceiverEnergyCalculator</Filter>
+    </ClCompile>
+    <ClCompile Include="Tool\Delaunay\triangle.cpp">
+      <Filter>Tool\Delaunay</Filter>
+    </ClCompile>
+    <ClCompile Include="Tool\PCA\PCA.cpp">
+      <Filter>Tool\PCA</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

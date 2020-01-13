@@ -1,10 +1,23 @@
-﻿  Layout.cpp
-e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\../Common/global_function.cuh(28): warning C4838: 从“int”转换到“double”需要收缩转换
-e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\../Common/global_function.cuh(32): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
-e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\../Common/global_function.cuh(39): warning C4244: “参数”: 从“const double”转换到“float”，可能丢失数据
-e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\../Common/global_function.cuh(43): warning C4244: “参数”: 从“const double”转换到“float”，可能丢失数据
-e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\../Common/global_function.cuh(62): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
-e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\../Common/global_function.cuh(180): warning C4267: “初始化”: 从“size_t”转换到“int”，可能丢失数据
+﻿  Heliostat.cpp
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\../Common/global_function.cuh(33): warning C4838: 从“int”转换到“double”需要收缩转换
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\../Common/global_function.cuh(37): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\../Common/global_function.cuh(45): warning C4838: 从“int”转换到“double”需要收缩转换
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\../Common/global_function.cuh(49): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\../Common/global_function.cuh(57): warning C4244: “参数”: 从“const double”转换到“float”，可能丢失数据
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\../Common/global_function.cuh(61): warning C4244: “参数”: 从“const double”转换到“float”，可能丢失数据
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\../Common/global_function.cuh(80): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\../Common/global_function.cuh(126): warning C4267: “初始化”: 从“size_t”转换到“int”，可能丢失数据
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\../Common/global_function.cuh(237): warning C4267: “初始化”: 从“size_t”转换到“int”，可能丢失数据
+  Layout.cpp
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\../Common/global_function.cuh(33): warning C4838: 从“int”转换到“double”需要收缩转换
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\../Common/global_function.cuh(37): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\../Common/global_function.cuh(45): warning C4838: 从“int”转换到“double”需要收缩转换
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\../Common/global_function.cuh(49): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\../Common/global_function.cuh(57): warning C4244: “参数”: 从“const double”转换到“float”，可能丢失数据
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\../Common/global_function.cuh(61): warning C4244: “参数”: 从“const double”转换到“float”，可能丢失数据
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\../Common/global_function.cuh(80): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\../Common/global_function.cuh(126): warning C4267: “初始化”: 从“size_t”转换到“int”，可能丢失数据
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\../Common/global_function.cuh(237): warning C4267: “初始化”: 从“size_t”转换到“int”，可能丢失数据
 DataStructure\Layout.cpp(10): warning C4244: “=”: 从“double”转换到“int”，可能丢失数据
 DataStructure\Layout.cpp(11): warning C4244: “=”: 从“double”转换到“int”，可能丢失数据
 DataStructure\Layout.cpp(35): warning C4244: “=”: 从“double”转换到“int”，可能丢失数据
@@ -14,15 +27,249 @@ DataStructure\Layout.cpp(97): warning C4267: “=”: 从“size_t”转换到�
 DataStructure\Layout.cpp(105): warning C4267: “=”: 从“size_t”转换到“int”，可能丢失数据
 DataStructure\Layout.cpp(127): warning C4267: “=”: 从“size_t”转换到“unsigned int”，可能丢失数据
 DataStructure\Layout.cpp(135): warning C4267: “=”: 从“size_t”转换到“int”，可能丢失数据
-DataStructure\Layout.cpp(173): warning C4267: “=”: 从“size_t”转换到“unsigned int”，可能丢失数据
-DataStructure\Layout.cpp(194): warning C4267: “初始化”: 从“size_t”转换到“int”，可能丢失数据
-DataStructure\Layout.cpp(211): warning C4244: “参数”: 从“double”转换到“int”，可能丢失数据
-DataStructure\Layout.cpp(263): warning C4267: “=”: 从“size_t”转换到“unsigned int”，可能丢失数据
+DataStructure\Layout.cpp(175): warning C4267: “=”: 从“size_t”转换到“unsigned int”，可能丢失数据
+DataStructure\Layout.cpp(200): warning C4267: “初始化”: 从“size_t”转换到“int”，可能丢失数据
+DataStructure\Layout.cpp(270): warning C4244: “初始化”: 从“double”转换到“int”，可能丢失数据
+DataStructure\Layout.cpp(297): warning C4267: “=”: 从“size_t”转换到“unsigned int”，可能丢失数据
+  Receiver.cpp
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\../Common/global_function.cuh(33): warning C4838: 从“int”转换到“double”需要收缩转换
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\../Common/global_function.cuh(37): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\../Common/global_function.cuh(45): warning C4838: 从“int”转换到“double”需要收缩转换
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\../Common/global_function.cuh(49): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\../Common/global_function.cuh(57): warning C4244: “参数”: 从“const double”转换到“float”，可能丢失数据
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\../Common/global_function.cuh(61): warning C4244: “参数”: 从“const double”转换到“float”，可能丢失数据
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\../Common/global_function.cuh(80): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\../Common/global_function.cuh(126): warning C4267: “初始化”: 从“size_t”转换到“int”，可能丢失数据
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\../Common/global_function.cuh(237): warning C4267: “初始化”: 从“size_t”转换到“int”，可能丢失数据
+  SolarScene.cpp
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\../Common/global_function.cuh(33): warning C4838: 从“int”转换到“double”需要收缩转换
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\../Common/global_function.cuh(37): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\../Common/global_function.cuh(45): warning C4838: 从“int”转换到“double”需要收缩转换
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\../Common/global_function.cuh(49): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\../Common/global_function.cuh(57): warning C4244: “参数”: 从“const double”转换到“float”，可能丢失数据
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\../Common/global_function.cuh(61): warning C4244: “参数”: 从“const double”转换到“float”，可能丢失数据
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\../Common/global_function.cuh(80): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\../Common/global_function.cuh(126): warning C4267: “初始化”: 从“size_t”转换到“int”，可能丢失数据
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\../Common/global_function.cuh(237): warning C4267: “初始化”: 从“size_t”转换到“int”，可能丢失数据
+DataStructure\SolarScene.cpp(57): warning C4101: “matrix”: 未引用的局部变量
+DataStructure\SolarScene.cpp(56): warning C4101: “gap”: 未引用的局部变量
+DataStructure\SolarScene.cpp(197): warning C4267: “=”: 从“size_t”转换到“unsigned int”，可能丢失数据
+DataStructure\SolarScene.cpp(182): warning C4101: “recv_creator”: 未引用的局部变量
+DataStructure\SolarScene.cpp(214): warning C4101: “layout_creator”: 未引用的局部变量
+  HeliostatDeviceArgument.cpp
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\../Common/global_function.cuh(33): warning C4838: 从“int”转换到“double”需要收缩转换
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\../Common/global_function.cuh(37): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\../Common/global_function.cuh(45): warning C4838: 从“int”转换到“double”需要收缩转换
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\../Common/global_function.cuh(49): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\../Common/global_function.cuh(57): warning C4244: “参数”: 从“const double”转换到“float”，可能丢失数据
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\../Common/global_function.cuh(61): warning C4244: “参数”: 从“const double”转换到“float”，可能丢失数据
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\../Common/global_function.cuh(80): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\../Common/global_function.cuh(126): warning C4267: “初始化”: 从“size_t”转换到“int”，可能丢失数据
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\../Common/global_function.cuh(237): warning C4267: “初始化”: 从“size_t”转换到“int”，可能丢失数据
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\deviceargument\heliostatdeviceargument\HeliostatDeviceArgument.h(68): warning C4244: “=”: 从“double”转换到“int”，可能丢失数据
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\deviceargument\heliostatdeviceargument\HeliostatDeviceArgument.h(69): warning C4244: “=”: 从“double”转换到“int”，可能丢失数据
+DeviceArgument\HeliostatDeviceArgument\HeliostatDeviceArgument.cpp(4): warning C4244: “=”: 从“double”转换到“int”，可能丢失数据
+DeviceArgument\HeliostatDeviceArgument\HeliostatDeviceArgument.cpp(5): warning C4244: “=”: 从“double”转换到“int”，可能丢失数据
+DeviceArgument\HeliostatDeviceArgument\HeliostatDeviceArgument.cpp(49): warning C4267: “=”: 从“size_t”转换到“int”，可能丢失数据
+DeviceArgument\HeliostatDeviceArgument\HeliostatDeviceArgument.cpp(68): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
+DeviceArgument\HeliostatDeviceArgument\HeliostatDeviceArgument.cpp(95): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
+DeviceArgument\HeliostatDeviceArgument\HeliostatDeviceArgument.cpp(96): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
+DeviceArgument\HeliostatDeviceArgument\HeliostatDeviceArgument.cpp(104): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
+DeviceArgument\HeliostatDeviceArgument\HeliostatDeviceArgument.cpp(136): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
+DeviceArgument\HeliostatDeviceArgument\HeliostatDeviceArgument.cpp(137): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
+DeviceArgument\HeliostatDeviceArgument\HeliostatDeviceArgument.cpp(143): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
+  CylinderReceiverDeviceArgument.cpp
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\../Common/global_function.cuh(33): warning C4838: 从“int”转换到“double”需要收缩转换
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\../Common/global_function.cuh(37): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\../Common/global_function.cuh(45): warning C4838: 从“int”转换到“double”需要收缩转换
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\../Common/global_function.cuh(49): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\../Common/global_function.cuh(57): warning C4244: “参数”: 从“const double”转换到“float”，可能丢失数据
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\../Common/global_function.cuh(61): warning C4244: “参数”: 从“const double”转换到“float”，可能丢失数据
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\../Common/global_function.cuh(80): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\../Common/global_function.cuh(126): warning C4267: “初始化”: 从“size_t”转换到“int”，可能丢失数据
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\../Common/global_function.cuh(237): warning C4267: “初始化”: 从“size_t”转换到“int”，可能丢失数据
+DeviceArgument\ReceiverDeviceArgument\CylinderReceiverDeviceArgument.cpp(5): warning C4267: “=”: 从“size_t”转换到“int”，可能丢失数据
+  ReceiverDeviceArgument.cpp
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\../Common/global_function.cuh(33): warning C4838: 从“int”转换到“double”需要收缩转换
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\../Common/global_function.cuh(37): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\../Common/global_function.cuh(45): warning C4838: 从“int”转换到“double”需要收缩转换
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\../Common/global_function.cuh(49): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\../Common/global_function.cuh(57): warning C4244: “参数”: 从“const double”转换到“float”，可能丢失数据
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\../Common/global_function.cuh(61): warning C4244: “参数”: 从“const double”转换到“float”，可能丢失数据
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\../Common/global_function.cuh(80): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\../Common/global_function.cuh(126): warning C4267: “初始化”: 从“size_t”转换到“int”，可能丢失数据
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\../Common/global_function.cuh(237): warning C4267: “初始化”: 从“size_t”转换到“int”，可能丢失数据
+DeviceArgument\ReceiverDeviceArgument\ReceiverDeviceArgument.cpp(11): warning C4267: “=”: 从“size_t”转换到“int”，可能丢失数据
+  DifferentialEvolution.cpp
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\../Common/global_function.cuh(33): warning C4838: 从“int”转换到“double”需要收缩转换
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\../Common/global_function.cuh(37): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\../Common/global_function.cuh(45): warning C4838: 从“int”转换到“double”需要收缩转换
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\../Common/global_function.cuh(49): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\../Common/global_function.cuh(57): warning C4244: “参数”: 从“const double”转换到“float”，可能丢失数据
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\../Common/global_function.cuh(61): warning C4244: “参数”: 从“const double”转换到“float”，可能丢失数据
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\../Common/global_function.cuh(80): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\../Common/global_function.cuh(126): warning C4267: “初始化”: 从“size_t”转换到“int”，可能丢失数据
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\../Common/global_function.cuh(237): warning C4267: “初始化”: 从“size_t”转换到“int”，可能丢失数据
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\griddda\../DeviceArgument/HeliostatDeviceArgument/HeliostatDeviceArgument.h(68): warning C4244: “=”: 从“double”转换到“int”，可能丢失数据
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\griddda\../DeviceArgument/HeliostatDeviceArgument/HeliostatDeviceArgument.h(69): warning C4244: “=”: 从“double”转换到“int”，可能丢失数据
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\energycalculatepipeline\receiverenergycalculator\../../GaussLegendre/GaussLegendre.cuh(17): warning C4244: “return”: 从“double”转换到“float”，可能丢失数据
+DifferentialEvolution\DifferentialEvolution.cpp(162): warning C4244: “参数”: 从“unsigned __int64”转换到“double”，可能丢失数据
+DifferentialEvolution\DifferentialEvolution.cpp(163): warning C4244: “初始化”: 从“double”转换到“int”，可能丢失数据
+DifferentialEvolution\DifferentialEvolution.cpp(358): warning C4244: “参数”: 从“unsigned __int64”转换到“double”，可能丢失数据
+DifferentialEvolution\DifferentialEvolution.cpp(359): warning C4244: “初始化”: 从“double”转换到“int”，可能丢失数据
+DifferentialEvolution\DifferentialEvolution.cpp(370): warning C4267: “初始化”: 从“size_t”转换到“int”，可能丢失数据
+DifferentialEvolution\DifferentialEvolution.cpp(371): warning C4267: “初始化”: 从“size_t”转换到“int”，可能丢失数据
+  EnergyCalculatePipeline.cpp
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\../Common/global_function.cuh(33): warning C4838: 从“int”转换到“double”需要收缩转换
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\../Common/global_function.cuh(37): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\../Common/global_function.cuh(45): warning C4838: 从“int”转换到“double”需要收缩转换
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\../Common/global_function.cuh(49): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\../Common/global_function.cuh(57): warning C4244: “参数”: 从“const double”转换到“float”，可能丢失数据
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\../Common/global_function.cuh(61): warning C4244: “参数”: 从“const double”转换到“float”，可能丢失数据
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\../Common/global_function.cuh(80): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\../Common/global_function.cuh(126): warning C4267: “初始化”: 从“size_t”转换到“int”，可能丢失数据
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\../Common/global_function.cuh(237): warning C4267: “初始化”: 从“size_t”转换到“int”，可能丢失数据
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\griddda\../DeviceArgument/HeliostatDeviceArgument/HeliostatDeviceArgument.h(68): warning C4244: “=”: 从“double”转换到“int”，可能丢失数据
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\griddda\../DeviceArgument/HeliostatDeviceArgument/HeliostatDeviceArgument.h(69): warning C4244: “=”: 从“double”转换到“int”，可能丢失数据
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\energycalculatepipeline\receiverenergycalculator\../../GaussLegendre/GaussLegendre.cuh(17): warning C4244: “return”: 从“double”转换到“float”，可能丢失数据
+  ReceiverEnergyCalculator.cpp
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\../Common/global_function.cuh(33): warning C4838: 从“int”转换到“double”需要收缩转换
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\../Common/global_function.cuh(37): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\../Common/global_function.cuh(45): warning C4838: 从“int”转换到“double”需要收缩转换
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\../Common/global_function.cuh(49): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\../Common/global_function.cuh(57): warning C4244: “参数”: 从“const double”转换到“float”，可能丢失数据
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\../Common/global_function.cuh(61): warning C4244: “参数”: 从“const double”转换到“float”，可能丢失数据
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\../Common/global_function.cuh(80): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\../Common/global_function.cuh(126): warning C4267: “初始化”: 从“size_t”转换到“int”，可能丢失数据
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\../Common/global_function.cuh(237): warning C4267: “初始化”: 从“size_t”转换到“int”，可能丢失数据
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\energycalculatepipeline\receiverenergycalculator\../../GaussLegendre/GaussLegendre.cuh(17): warning C4244: “return”: 从“double”转换到“float”，可能丢失数据
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\energycalculatepipeline\receiverenergycalculator\../../DeviceArgument/HeliostatDeviceArgument/HeliostatDeviceArgument.h(68): warning C4244: “=”: 从“double”转换到“int”，可能丢失数据
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\energycalculatepipeline\receiverenergycalculator\../../DeviceArgument/HeliostatDeviceArgument/HeliostatDeviceArgument.h(69): warning C4244: “=”: 从“double”转换到“int”，可能丢失数据
+EnergyCalculatePipeline\ReceiverEnergyCalculator\ReceiverEnergyCalculator.cpp(15): warning C4267: “初始化”: 从“size_t”转换到“int”，可能丢失数据
+EnergyCalculatePipeline\ReceiverEnergyCalculator\ReceiverEnergyCalculator.cpp(55): warning C4267: “初始化”: 从“size_t”转换到“int”，可能丢失数据
+EnergyCalculatePipeline\ReceiverEnergyCalculator\ReceiverEnergyCalculator.cpp(80): warning C4267: “初始化”: 从“size_t”转换到“int”，可能丢失数据
+EnergyCalculatePipeline\ReceiverEnergyCalculator\ReceiverEnergyCalculator.cpp(89): warning C4267: “初始化”: 从“size_t”转换到“int”，可能丢失数据
+  FieldSimulationController.cpp
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\../Common/global_function.cuh(33): warning C4838: 从“int”转换到“double”需要收缩转换
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\../Common/global_function.cuh(37): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\../Common/global_function.cuh(45): warning C4838: 从“int”转换到“double”需要收缩转换
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\../Common/global_function.cuh(49): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\../Common/global_function.cuh(57): warning C4244: “参数”: 从“const double”转换到“float”，可能丢失数据
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\../Common/global_function.cuh(61): warning C4244: “参数”: 从“const double”转换到“float”，可能丢失数据
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\../Common/global_function.cuh(80): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\../Common/global_function.cuh(126): warning C4267: “初始化”: 从“size_t”转换到“int”，可能丢失数据
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\../Common/global_function.cuh(237): warning C4267: “初始化”: 从“size_t”转换到“int”，可能丢失数据
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\griddda\../DeviceArgument/HeliostatDeviceArgument/HeliostatDeviceArgument.h(68): warning C4244: “=”: 从“double”转换到“int”，可能丢失数据
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\griddda\../DeviceArgument/HeliostatDeviceArgument/HeliostatDeviceArgument.h(69): warning C4244: “=”: 从“double”转换到“int”，可能丢失数据
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\energycalculatepipeline\receiverenergycalculator\../../GaussLegendre/GaussLegendre.cuh(17): warning C4244: “return”: 从“double”转换到“float”，可能丢失数据
+  GridDDA.cpp
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\../Common/global_function.cuh(33): warning C4838: 从“int”转换到“double”需要收缩转换
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\../Common/global_function.cuh(37): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\../Common/global_function.cuh(45): warning C4838: 从“int”转换到“double”需要收缩转换
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\../Common/global_function.cuh(49): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\../Common/global_function.cuh(57): warning C4244: “参数”: 从“const double”转换到“float”，可能丢失数据
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\../Common/global_function.cuh(61): warning C4244: “参数”: 从“const double”转换到“float”，可能丢失数据
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\../Common/global_function.cuh(80): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\../Common/global_function.cuh(126): warning C4267: “初始化”: 从“size_t”转换到“int”，可能丢失数据
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\../Common/global_function.cuh(237): warning C4267: “初始化”: 从“size_t”转换到“int”，可能丢失数据
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\griddda\../DeviceArgument/HeliostatDeviceArgument/HeliostatDeviceArgument.h(68): warning C4244: “=”: 从“double”转换到“int”，可能丢失数据
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\griddda\../DeviceArgument/HeliostatDeviceArgument/HeliostatDeviceArgument.h(69): warning C4244: “=”: 从“double”转换到“int”，可能丢失数据
+  PolygonCenterCalculator.cpp
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\../Common/global_function.cuh(33): warning C4838: 从“int”转换到“double”需要收缩转换
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\../Common/global_function.cuh(37): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\../Common/global_function.cuh(45): warning C4838: 从“int”转换到“double”需要收缩转换
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\../Common/global_function.cuh(49): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\../Common/global_function.cuh(57): warning C4244: “参数”: 从“const double”转换到“float”，可能丢失数据
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\../Common/global_function.cuh(61): warning C4244: “参数”: 从“const double”转换到“float”，可能丢失数据
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\../Common/global_function.cuh(80): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\../Common/global_function.cuh(126): warning C4267: “初始化”: 从“size_t”转换到“int”，可能丢失数据
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\../Common/global_function.cuh(237): warning C4267: “初始化”: 从“size_t”转换到“int”，可能丢失数据
+PolygonCenterCalculator\PolygonCenterCalculator.cpp(8): warning C4267: “初始化”: 从“size_t”转换到“int”，可能丢失数据
+PolygonCenterCalculator\PolygonCenterCalculator.cpp(16): warning C4267: “初始化”: 从“size_t”转换到“int”，可能丢失数据
+PolygonCenterCalculator\PolygonCenterCalculator.cpp(36): warning C4267: “初始化”: 从“size_t”转换到“int”，可能丢失数据
+PolygonCenterCalculator\PolygonCenterCalculator.cpp(67): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
+PolygonCenterCalculator\PolygonCenterCalculator.cpp(80): warning C4267: “初始化”: 从“size_t”转换到“int”，可能丢失数据
+PolygonCenterCalculator\PolygonCenterCalculator.cpp(112): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
+PolygonCenterCalculator\PolygonCenterCalculator.cpp(135): warning C4267: “初始化”: 从“size_t”转换到“int”，可能丢失数据
+  ShadowBlockCalculator.cpp
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\../Common/global_function.cuh(33): warning C4838: 从“int”转换到“double”需要收缩转换
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\../Common/global_function.cuh(37): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\../Common/global_function.cuh(45): warning C4838: 从“int”转换到“double”需要收缩转换
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\../Common/global_function.cuh(49): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\../Common/global_function.cuh(57): warning C4244: “参数”: 从“const double”转换到“float”，可能丢失数据
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\../Common/global_function.cuh(61): warning C4244: “参数”: 从“const double”转换到“float”，可能丢失数据
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\../Common/global_function.cuh(80): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\../Common/global_function.cuh(126): warning C4267: “初始化”: 从“size_t”转换到“int”，可能丢失数据
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\../Common/global_function.cuh(237): warning C4267: “初始化”: 从“size_t”转换到“int”，可能丢失数据
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\griddda\../DeviceArgument/HeliostatDeviceArgument/HeliostatDeviceArgument.h(68): warning C4244: “=”: 从“double”转换到“int”，可能丢失数据
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\griddda\../DeviceArgument/HeliostatDeviceArgument/HeliostatDeviceArgument.h(69): warning C4244: “=”: 从“double”转换到“int”，可能丢失数据
+ShadowBlockCalculator\ShadowBlockCalculator.cpp(22): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
+ShadowBlockCalculator\ShadowBlockCalculator.cpp(23): warning C4244: “参数”: 从“float”转换到“ClipperLib::cInt”，可能丢失数据
+ShadowBlockCalculator\ShadowBlockCalculator.cpp(43): warning C4244: “参数”: 从“double”转换到“ClipperLib::cInt”，可能丢失数据
+ShadowBlockCalculator\ShadowBlockCalculator.cpp(75): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
+ShadowBlockCalculator\ShadowBlockCalculator.cpp(216): warning C4244: “return”: 从“double”转换到“float”，可能丢失数据
+ShadowBlockCalculator\ShadowBlockCalculator.cpp(657): warning C4018: “>”: 有符号/无符号不匹配
+ShadowBlockCalculator\ShadowBlockCalculator.cpp(658): warning C4244: “初始化”: 从“Eigen::EigenBase<Derived>::Index”转换到“int”，可能丢失数据
+          with
+          [
+              Derived=Eigen::Matrix<double,-1,-1,0,-1,-1>
+          ]
+ShadowBlockCalculator\ShadowBlockCalculator.cpp(662): warning C4244: “-=”: 从“Eigen::EigenBase<Derived>::Index”转换到“int”，可能丢失数据
+          with
+          [
+              Derived=Eigen::Matrix<double,-1,-1,0,-1,-1>
+          ]
+ShadowBlockCalculator\ShadowBlockCalculator.cpp(665): warning C4244: “初始化”: 从“Eigen::EigenBase<Derived>::Index”转换到“int”，可能丢失数据
+          with
+          [
+              Derived=Eigen::Matrix<double,-1,-1,0,-1,-1>
+          ]
+ShadowBlockCalculator\ShadowBlockCalculator.cpp(673): warning C4244: “=”: 从“double”转换到“int”，可能丢失数据
+ShadowBlockCalculator\ShadowBlockCalculator.cpp(676): warning C4267: “=”: 从“size_t”转换到“int”，可能丢失数据
+ShadowBlockCalculator\ShadowBlockCalculator.cpp(685): warning C4244: “初始化”: 从“Eigen::EigenBase<Derived>::Index”转换到“int”，可能丢失数据
+          with
+          [
+              Derived=Eigen::Matrix<double,-1,-1,0,-1,-1>
+          ]
+ShadowBlockCalculator\ShadowBlockCalculator.cpp(686): warning C4244: “=”: 从“double”转换到“int”，可能丢失数据
+  SigmaFitting.cpp
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\../Common/global_function.cuh(33): warning C4838: 从“int”转换到“double”需要收缩转换
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\../Common/global_function.cuh(37): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\../Common/global_function.cuh(45): warning C4838: 从“int”转换到“double”需要收缩转换
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\../Common/global_function.cuh(49): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\../Common/global_function.cuh(57): warning C4244: “参数”: 从“const double”转换到“float”，可能丢失数据
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\../Common/global_function.cuh(61): warning C4244: “参数”: 从“const double”转换到“float”，可能丢失数据
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\../Common/global_function.cuh(80): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\../Common/global_function.cuh(126): warning C4267: “初始化”: 从“size_t”转换到“int”，可能丢失数据
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\../Common/global_function.cuh(237): warning C4267: “初始化”: 从“size_t”转换到“int”，可能丢失数据
+  ArgumentParser.cpp
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\../Common/global_function.cuh(33): warning C4838: 从“int”转换到“double”需要收缩转换
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\../Common/global_function.cuh(37): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\../Common/global_function.cuh(45): warning C4838: 从“int”转换到“double”需要收缩转换
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\../Common/global_function.cuh(49): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\../Common/global_function.cuh(57): warning C4244: “参数”: 从“const double”转换到“float”，可能丢失数据
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\../Common/global_function.cuh(61): warning C4244: “参数”: 从“const double”转换到“float”，可能丢失数据
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\../Common/global_function.cuh(80): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\../Common/global_function.cuh(126): warning C4267: “初始化”: 从“size_t”转换到“int”，可能丢失数据
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\../Common/global_function.cuh(237): warning C4267: “初始化”: 从“size_t”转换到“int”，可能丢失数据
+  main.cpp
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\../Common/global_function.cuh(33): warning C4838: 从“int”转换到“double”需要收缩转换
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\../Common/global_function.cuh(37): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\../Common/global_function.cuh(45): warning C4838: 从“int”转换到“double”需要收缩转换
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\../Common/global_function.cuh(49): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\../Common/global_function.cuh(57): warning C4244: “参数”: 从“const double”转换到“float”，可能丢失数据
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\../Common/global_function.cuh(61): warning C4244: “参数”: 从“const double”转换到“float”，可能丢失数据
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\../Common/global_function.cuh(80): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\../Common/global_function.cuh(126): warning C4267: “初始化”: 从“size_t”转换到“int”，可能丢失数据
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\datastructure\../Common/global_function.cuh(237): warning C4267: “初始化”: 从“size_t”转换到“int”，可能丢失数据
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\griddda\../DeviceArgument/HeliostatDeviceArgument/HeliostatDeviceArgument.h(68): warning C4244: “=”: 从“double”转换到“int”，可能丢失数据
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\griddda\../DeviceArgument/HeliostatDeviceArgument/HeliostatDeviceArgument.h(69): warning C4244: “=”: 从“double”转换到“int”，可能丢失数据
+e:\xjyuan\003 zju\002 solar\004 codes\190326_solar\fieldoptimism\fieldoptimism\energycalculatepipeline\receiverenergycalculator\../../GaussLegendre/GaussLegendre.cuh(17): warning C4244: “return”: 从“double”转换到“float”，可能丢失数据
     正在创建库 E:\xjYuan\003 ZJU\002 Solar\004 Codes\190326_Solar\FieldOptimism\x64\Release\FieldOptimism.lib 和对象 E:\xjYuan\003 ZJU\002 Solar\004 Codes\190326_Solar\FieldOptimism\x64\Release\FieldOptimism.exp
   正在生成代码
-  37 of 8289 functions ( 0.4%) were compiled, the rest were copied from previous compilation.
+  36 of 8513 functions ( 0.4%) were compiled, the rest were copied from previous compilation.
     1 functions were new in current compilation
-    42 functions had inline decision re-evaluated but remain unchanged
+    38 functions had inline decision re-evaluated but remain unchanged
   已完成代码的生成
   FieldOptimism.vcxproj -> E:\xjYuan\003 ZJU\002 Solar\004 Codes\190326_Solar\FieldOptimism\x64\Release\FieldOptimism.exe
   FieldOptimism.vcxproj -> E:\xjYuan\003 ZJU\002 Solar\004 Codes\190326_Solar\FieldOptimism\x64\Release\FieldOptimism.pdb (Full PDB)

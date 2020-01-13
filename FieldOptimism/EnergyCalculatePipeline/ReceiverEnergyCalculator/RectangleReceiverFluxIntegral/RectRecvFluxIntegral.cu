@@ -4,7 +4,7 @@ void calcRectRecvEnergySum(int m, int n, int helioNum, IntegralHelioDeviceArgume
 
 	int nThreads = 512;
 	dim3 nBlocks;
-	GeometryFunc::setThreadsBlocks(nBlocks, nThreads, helioNum*m*n);
+	GeometryFunc::setThreadsBlocks(nBlocks, nThreads, helioNum*m*n*r_args.numberOfReceivers);
 
 	calcHelioRectRecvFlux << <nBlocks, nThreads >> > (h_args, r_args, gl_handler, d_helio_energy, m, n);
 	cudaDeviceSynchronize();

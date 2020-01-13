@@ -40,6 +40,9 @@ public:
 	SunRay getSunray() { return sunray; }
 
 	json config;
+	vector<int> months;
+	vector<int> days;
+	vector<int> hours;
 
 private:
 	string config_path;
@@ -67,9 +70,6 @@ private:
 	vector<Receiver*> recvs;
 
 	// Time
-	vector<int> months;
-	vector<int> days;
-	vector<int> hours;
 	int minute_gap;
 
 	void getTimeParams();

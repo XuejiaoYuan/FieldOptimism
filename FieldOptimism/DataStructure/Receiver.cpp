@@ -68,10 +68,10 @@ vector<Vector3d> Receiver::getRecvVertexCore(Vector3d & center, double half_l, d
 }
 
 
-//void PolyhedronRecv::initRecv(json& config) {
-//	readRecvFromJson(config);
-//	initRecvCore();
-//}
+void PolyhedronRecv::initRecv(json& config) {
+	readRecvFromJson(config);
+	initRecvCore();
+}
 
 //void PolyhedronRecv::initRecv(fstream& in, InputMode& input_mode) {
 //

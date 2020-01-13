@@ -35,17 +35,17 @@ void SolarScene::saveSolarScene(string scene_savepath)
 		outFile << "pos " << recv->recv_pos.x() << ' ' << recv->recv_pos.y() << ' ' << recv->recv_pos.z() << endl;
 		outFile << "size " << recv->recv_size.x() << ' ' << recv->recv_size.y() << ' ' << recv->recv_size.z() << endl;
 		outFile << "norm " << recv->recv_normal.x() << ' ' << recv->recv_normal.y() << ' ' << recv->recv_normal.z() << endl;
-		outFile << "face 0" << endl;
+		outFile << "num " << recv->recv_face_num << endl;
 	}
 	outFile << "end" << endl;
 
 	for (int i = 1; i <= layouts.size(); i++) {
-		outFile << "\n# Grid" << i << " attributes" << endl;
+		outFile << "\n# Grid" << " attributes" << endl;
 		Layout* layout = layouts[i - 1];
 		outFile << "Grid 0" << endl;
 		outFile << "pos " << layout->layout_bound_pos.x() << ' ' << 0 << ' ' << layout->layout_bound_pos.y() << endl;
 		// TODO: There may some error for QMCRT
-		outFile << "size " << layout->layout_size.x() << ' ' << layout->helio_interval.x() << ' ' << layout->layout_size.y() << endl;
+		outFile << "size " << layout->layout_size.x() << ' ' << layout->layout_size.y() << ' ' << layout->layout_size.z() << endl;
 		outFile << "inter " << layout->helio_interval.x() << ' ' << layout->helio_interval.x() << ' ' << layout->helio_interval.y() << endl;
 		outFile << "n " << helios.size() << endl;
 		outFile << "type 0" << endl;
@@ -182,6 +182,7 @@ void SolarScene::initSolarScene(string scn_path)
 			ReceiverCreator recv_creator;
 			line_stream >> recv_type;
 			Receiver* recv = recv_creator.getReceiver((ReceiverType)recv_type);
+			cout << recv_type << endl;
 			recv->initRecv(in, input_mode);
 			recvs.push_back(recv);
 			break;

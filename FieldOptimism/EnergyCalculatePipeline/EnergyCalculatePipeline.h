@@ -4,6 +4,9 @@
 #include "../SigmaFitting/SigmaFitting.h"
 #include "ReceiverEnergyCalculator/ReceiverEnergyCalculator.h"
 
+//
+// [能量计算] 计算场景能量，计算采样定日镜辐射能密度，计算全镜场辐射能密度
+//
 enum EnergyCalculatePipelineMode
 {
 	SceneEnergyMode, HelioFluxDensityMode, FieldFluxDensityMode
@@ -18,6 +21,7 @@ public:
 	double handler(json& field_args);
 	double handler();
 	void saveSolarScene();
+	void saveHeliostatEnergy();
 	virtual ~EnergyCalculatePipeline();
 
 protected:
@@ -25,7 +29,7 @@ protected:
 	ArgumentParser* argumentParser;
 	void initSolarScene(json& field_args);
 	double traverseTimeHandler();
-	void oneTimeHandlerCore(vector<int>& time_param, SunRay& sunray, SdBkCalc* sdbk_handler);
+	bool oneTimeHandlerCore(vector<int>& time_param, SunRay& sunray, SdBkCalc* sdbk_handler);
 	virtual void handlerFunc(SolarScene* solar_scene, vector<int>& time_param, SunRay& sunray, SdBkCalc* sdbkHandler);
 	virtual double removeHeliostat();
 };

@@ -56,7 +56,7 @@ protected:
 	virtual void readRecvFromJson(json& config);
 	virtual void readRecvFromScn(fstream& in, InputMode& input_mode);
 	vector<Vector3d> getRecvVertexCore(Vector3d& center, double half_l, double half_w, Vector3d& recv_normal);
-	void initRecvCore();
+	virtual void initRecvCore();
 };
 
 class RectangularRecv :public Receiver {
@@ -82,7 +82,7 @@ private:
 class PolyhedronRecv :public Receiver {
 public:
 	PolyhedronRecv() : Receiver(PolyhedronRecvType) {};
-	//void initRecv(json& config);
+	void initRecv(json& config);
 	//void initRecv(fstream& in, InputMode& input_mode);
 
 private:

@@ -1,5 +1,8 @@
 #include "ReceiverEnergyCalculator.h"
 
+//
+// [接收器能量计算接口] 计算接收器平面辐射能总量
+//
 void ReceiverEnergyCalculator::calcRecvEnergySum()
 {
 	ReceiverType recv_type = solar_scene->recvs[0]->recv_type;
@@ -39,6 +42,9 @@ void ReceiverEnergyCalculator::calcRecvEnergySum()
 
 }
 
+//
+// [接收器能量计算接口] 计算接收器平面辐射能密度分布
+//
 vector<float> ReceiverEnergyCalculator::calcRecvFluxDistribution()
 {
 	ReceiverType recv_type = solar_scene->recvs[0]->recv_type;
@@ -76,6 +82,9 @@ vector<float> ReceiverEnergyCalculator::calcRecvFluxDistribution()
 	return storeDeviceRecvFlux();
 }
 
+//
+// [接收器能量计算接口] 设置CUDA计算参数
+//
 void ReceiverEnergyCalculator::setDeviceHelioEnergy() {
 	int helioNum = solar_scene->helios.size();
 	h_helio_energy = new float[helioNum];
@@ -85,6 +94,9 @@ void ReceiverEnergyCalculator::setDeviceHelioEnergy() {
 	cudaMemcpy(d_helio_energy, h_helio_energy, sizeof(float)*helioNum, cudaMemcpyHostToDevice);
 }
 
+//
+// [接收器能量计算接口] 存储定日镜能量计算结果
+//
 void ReceiverEnergyCalculator::storeHeliostatEnergy() {
 	int helioNum = solar_scene->helios.size();
 	cudaMemcpy(h_helio_energy, d_helio_energy, sizeof(float)*helioNum, cudaMemcpyDeviceToHost);
@@ -95,6 +107,9 @@ void ReceiverEnergyCalculator::storeHeliostatEnergy() {
 	delete[] h_helio_energy;
 }
 
+//
+// [接收器能量计算接口] 设置CUDA计算参数
+//
 void ReceiverEnergyCalculator::setDeviceRecvFlux()
 {
 	int row = solar_scene->recvs[0]->rows_cols.x();
@@ -107,6 +122,9 @@ void ReceiverEnergyCalculator::setDeviceRecvFlux()
 	cudaMemcpy(d_recv_flux, h_recv_flux, sizeof(float)*recv_num*row*col, cudaMemcpyHostToDevice);
 }
 
+//
+// [接收器能量计算接口] 存储定日镜能量计算结果
+//
 vector<float> ReceiverEnergyCalculator::storeDeviceRecvFlux() {
 	vector<float> flux;
 	int row = solar_scene->recvs[0]->rows_cols.x();

@@ -50,7 +50,7 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;WIN64;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <OpenMPSupport>false</OpenMPSupport>
+      <OpenMPSupport>true</OpenMPSupport>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>DebugFastLink</GenerateDebugInformation>
@@ -119,6 +119,8 @@
     <ClInclude Include="SigmaFitting\SigmaFitting.h" />
     <ClInclude Include="Tool\ArgumentParser\ArgumentParser.h" />
     <ClInclude Include="Tool\Clipper\clipper.hpp" />
+    <ClInclude Include="Tool\Delaunay\triangle.h" />
+    <ClInclude Include="Tool\PCA\PCA.h" />
     <ClInclude Include="Tool\SPA\SPA.h" />
     <ClInclude Include="Tool\Timer\Timer.h" />
   </ItemGroup>
@@ -143,6 +145,8 @@
     <ClCompile Include="SigmaFitting\SigmaFitting.cpp" />
     <ClCompile Include="Tool\ArgumentParser\ArgumentParser.cpp" />
     <ClCompile Include="Tool\Clipper\clipper.cpp" />
+    <ClCompile Include="Tool\Delaunay\triangle.cpp" />
+    <ClCompile Include="Tool\PCA\PCA.cpp" />
     <ClCompile Include="Tool\SPA\SPA.cpp" />
     <ClCompile Include="Tool\Timer\Timer.cpp" />
   </ItemGroup>
